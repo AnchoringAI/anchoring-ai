@@ -1,0 +1,4 @@
+__pycache__/
+.idea
+celery_worker_log.txt
+src/vector_store
