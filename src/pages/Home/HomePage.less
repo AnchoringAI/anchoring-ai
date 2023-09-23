@@ -1,0 +1,119 @@
+.app-page {
+  background-color: #f7f7f7;
+  min-height: calc(100vh - 60px);
+}
+
+.app-card-container {
+  column-count: 2;
+  column-gap: 16px;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 60px;
+  padding: 20px;
+  position: relative;
+  overflow: auto;
+  background-color: #f7f7f7;
+
+  @media (min-width: 1260px) {
+    column-count: 3;
+  }
+
+  @media (min-width: 1670px) {
+    column-count: 4;
+  }
+}
+
+.app-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.app-card {
+  display: inline-block;
+  width: 320px;
+  margin: 16px 0;
+  padding: 0;
+  break-inside: avoid;
+
+  .ant-card-body {
+    padding: 16px;
+    width: 100%;
+  }
+
+  .built-by-container {
+    display: flex;
+    flex-direction: column;
+
+    .built-by {
+      display: flex;
+      align-items: center;
+      color: rgb(163, 163, 163);
+
+      .ant-dropdown-link.avatar {
+        margin-right: 8px;
+        height: 20px;
+        width: 20px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .card-divider {
+    border-color: rgb(245, 245, 245);
+    margin: 12px 0px;
+  }
+
+  .app-card-appname {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 16px;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &-text {
+      font-weight: 500;
+    }
+  }
+
+  .app-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 8px -4px 12px;
+
+    .ant-tag {
+      margin: 4px;
+      padding: 2px 8px;
+      font-weight: 500;
+      border: none;
+      background-color: rgb(245, 245, 245)
+    }
+  }
+
+  .app-card-username {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .app-card-createdat {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      margin-bottom: 0;
+      color: rgb(163, 163, 163);
+
+      .app-card-createdat-icon {
+        margin-right: 4px;
+      }
+    }
+
+    .open-button {
+      height: 24px;
+      width: 60px;
+      font-size: 12px;
+      line-height: 22px;
+      padding: 0;
+    }
+  }
+}

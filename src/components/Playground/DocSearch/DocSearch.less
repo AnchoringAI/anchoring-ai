@@ -1,0 +1,43 @@
+@alertColor: #721c24;
+@alertBackgroundColor: #f8d7da;
+@alertBorderColor: #f5c6cb;
+@runningColor: darkgray;
+
+.input-area {
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+
+  .left-buttons {
+    .insert-data-button {
+      margin-right: 10px;
+    }
+  }
+}
+
+.alert {
+  color: @alertColor;
+  background-color: @alertBackgroundColor;
+  border-color: @alertBorderColor;
+  padding: 10px 10px 10px 12px;
+  border-radius: 4px;
+}
+
+.running {
+  color: @runningColor;
+}
+
+.table-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}

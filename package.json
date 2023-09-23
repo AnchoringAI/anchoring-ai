@@ -1,0 +1,59 @@
+{
+  "name": "ant-design-example",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://127.0.0.1:5001",
+  "dependencies": {
+    "@craco/craco": "^7.1.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.4.7",
+    "color": "^4.2.3",
+    "craco-less": "^2.1.0-alpha.0",
+    "highlight.js": "^11.8.0",
+    "humps": "^2.0.1",
+    "moment": "^2.29.4",
+    "node-fetch": "^3.3.1",
+    "openai": "^3.2.1",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.0.2",
+    "react-markdown": "^8.0.7",
+    "react-router-dom": "^6.11.1",
+    "react-scripts": "^5.0.1",
+    "redux-thunk": "^2.4.2",
+    "rehype-highlight": "^6.0.0",
+    "remark-gfm": "^3.0.1",
+    "string-to-color": "^2.2.2",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
