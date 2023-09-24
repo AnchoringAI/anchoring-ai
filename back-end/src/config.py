@@ -17,11 +17,11 @@ class BaseConfig(object):
 
 
 class DevelopmentConfig(BaseConfig):
-    USERNAME = 'root'
-    PASSWORD = 'password'
+    USERNAME = 'llm_ops'
+    PASSWORD = '123'
     HOST = 'localhost'
     PORT = '3306'
-    DATABASE = 'llm_ops'
+    DATABASE = 'llm'
     DB_URI = 'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8'.format(
         USERNAME, PASSWORD, HOST, PORT, DATABASE)
     SQLALCHEMY_DATABASE_URI = DB_URI
