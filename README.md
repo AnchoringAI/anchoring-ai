@@ -41,62 +41,62 @@ git clone https://github.com/AnchoringAI/anchoring-ai.git
 
 1. Change your current directory to the `front-end` folder:
 
-\`\`\`bash
+```bash
 cd front-end
-\`\`\`
+```
 
 2. Install all necessary packages:
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 3. Start the front-end server:
 
-\`\`\`bash
+```bash
 npm start
-\`\`\`
+```
 
 ## Step 8: Set Up Back-end
 
 1. Change your current directory to the root directory and then navigate to `back-end`:
 
-\`\`\`bash
+```bash
 cd ..
 cd back-end
-\`\`\`
+```
 
 2. Install all required Python packages:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 ## Step 9: Run the Application
 
 1. Navigate to the `src` directory:
 
-\`\`\`bash
+```bash
 cd src
-\`\`\`
+```
 
 2. Start the Python application:
 
-\`\`\`bash
+```bash
 python3 app.py
-\`\`\`
+```
 
-3. (Optional) Start the Celery worker in the background:
+3. Start the Celery worker in the background:
 
-\`\`\`bash
+```bash
 python3 celery_worker.py >> logs/celery_worker_log.txt 2>&1
-\`\`\`
+```
 
 ## Database Configuration
 
 Below is a Python configuration class for setting up your database connection:
 
-\`\`\`python
+```python
 class DevelopmentConfig(BaseConfig):
     USERNAME = 'llm_ops'
     PASSWORD = '123'
@@ -105,7 +105,7 @@ class DevelopmentConfig(BaseConfig):
     DATABASE = 'llm'
     DB_URI = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}?charset=utf8'
     SQLALCHEMY_DATABASE_URI = DB_URI
-\`\`\`
+```
 
 Replace 'llm_ops', '123', 'localhost', '3306', and 'llm' with your own MySQL settings if needed.
 
