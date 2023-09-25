@@ -5,8 +5,8 @@
 
 .app-card-container {
   column-count: 2;
+  width: 720px;
   column-gap: 16px;
-  width: 80%;
   margin: 0 auto;
   margin-top: 60px;
   padding: 20px;
@@ -15,11 +15,13 @@
   background-color: #f7f7f7;
 
   @media (min-width: 1260px) {
+    width: 1080px;
     column-count: 3;
   }
 
   @media (min-width: 1670px) {
     column-count: 4;
+    width: 1440px;
   }
 }
 
@@ -77,6 +79,11 @@
     }
   }
 
+  .app-card-description {
+    font-size: 12px;
+    color: rgb(163, 163, 163);
+  }
+
   .app-card-tags {
     display: flex;
     flex-wrap: wrap;
@@ -87,7 +94,7 @@
       padding: 2px 8px;
       font-weight: 500;
       border: none;
-      background-color: rgb(245, 245, 245)
+      background-color: rgb(245, 245, 245);
     }
   }
 
