@@ -1,8 +1,27 @@
 # Anchoring AI
 
-## Introduction
+## Why Anchoring AI?
 
-Anchoring AI is a modern platform for teams to build, evaluate and host applications powered by large language models (LLMs).
+Anchoring AI is the next-generation platform for teams to build, evaluate and host applications powered by language models.
+
+We provide:
+
+- **No-Code Interface**: Quickly build apps with language models.
+- **Modular Design**: Easily add your own models, datasets and extensions.
+- **Drag-and-Drop**: Chain components to create powerful apps.
+- **Batch Processing**: Efficiently handle evaluations and repetitive tasks.
+- **Easy Sharing**: Streamline collaboration and sharing.
+- **Secure Access**: Customizable authentication for team management.
+- **Langchain Integration**: Seamless compatibility with Langchain (Python).
+- **Optimized Caching**: Reduce costs and boost performance.
+
+## Live Demo and Screenshots
+
+### Live Website
+You can check out our Alpha Release [here](https://platform.anchoring.ai/).
+
+### Screenshots
+[Project Screenshot]
 
 ## Installation Guide
 
