@@ -8,7 +8,7 @@ const modelComponents = {
   openai: "OpenAI Model",
   "text-input": "Text Input",
   "batch-input": "Batch Input",
-  "output": "Output",
+  output: "Output",
   "tag-parser": "Tag Parser",
   "doc-search": "Doc Search",
 };
@@ -19,6 +19,11 @@ const ComponentCard = (props) => {
   const [tempTitle, setTempTitle] = useState(props.component.title);
   const [isInput, setIsInput] = useState(props.component.isAppInput);
   const [isOutput, setIsOutput] = useState(props.component.isAppOutput);
+
+  const shouldRenderCard =
+    props.component.isAppInput ||
+    props.component.isAppOutput ||
+    props.isEditMode;
 
   useEffect(() => {
     if (modalVisible) {
@@ -39,7 +44,10 @@ const ComponentCard = (props) => {
   };
 
   return (
-    <div className="customCard" key={props.component.id}>
+    <div
+      className={`customCard ${shouldRenderCard ? "" : "non-editmode"}`}
+      key={props.component.id}
+    >
       <Row {...props.dragHandleProps} align="middle" justify="space-between">
         {(props.component.isAppInput ||
           (!props.component.isAppInput && props.isEditMode)) && (
@@ -75,34 +83,34 @@ const ComponentCard = (props) => {
         )}
       </Row>
       {modelComponents.hasOwnProperty(props.component.type) && (
-          <ModelInput
-            type={props.component.type}
-            id={props.component.id}
-            ref={(el) =>
-              (props.refMap[props.component.type].current[props.index] = el)
-            }
-            components={props.components}
-            index={props.index}
-            title={props.component.title}
-            isChangeSaved={props.isChangeSaved}
-            isEditMode={props.isEditMode}
-            onUpdateTitle={(newTitle) =>
-              props.updateComponentTitle(props.component.id, newTitle)
-            }
-            onUpdateOutput={(output) =>
-              props.updateComponentOutput(props.component.id, output)
-            }
-            onUpdateInput={(input) =>
-              props.updateComponentInput(props.component.id, input)
-            }
-            onUpdateUserInput={(userInput) =>
-              props.updateComponentUserInput(props.component.id, userInput)
-            }
-            onUpdateFileId={(fileId) =>
-              props.updateComponentFileId(props.component.id, fileId)
-            }
-          />
-        )}
+        <ModelInput
+          type={props.component.type}
+          id={props.component.id}
+          ref={(el) =>
+            (props.refMap[props.component.type].current[props.index] = el)
+          }
+          components={props.components}
+          index={props.index}
+          title={props.component.title}
+          isChangeSaved={props.isChangeSaved}
+          isEditMode={props.isEditMode}
+          onUpdateTitle={(newTitle) =>
+            props.updateComponentTitle(props.component.id, newTitle)
+          }
+          onUpdateOutput={(output) =>
+            props.updateComponentOutput(props.component.id, output)
+          }
+          onUpdateInput={(input) =>
+            props.updateComponentInput(props.component.id, input)
+          }
+          onUpdateUserInput={(userInput) =>
+            props.updateComponentUserInput(props.component.id, userInput)
+          }
+          onUpdateFileId={(fileId) =>
+            props.updateComponentFileId(props.component.id, fileId)
+          }
+        />
+      )}
       <Modal
         title="Component settings"
         open={modalVisible}
@@ -142,7 +150,9 @@ const ComponentCard = (props) => {
             <Switch
               checked={isOutput}
               onChange={(checked) => setIsOutput(checked)}
-              disabled={["batch-input", "output"].includes(props.component.type)}
+              disabled={["batch-input", "output"].includes(
+                props.component.type
+              )}
             />
           </Col>
         </Row>
