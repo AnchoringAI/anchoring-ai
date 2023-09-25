@@ -1,5 +1,8 @@
 # Anchoring AI
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Discord](https://img.shields.io/discord/1154665991305965628)](https://discord.gg/rZ6ne9HRq4)
+
 ## Why Anchoring AI?
 
 Anchoring AI is the next-generation platform for teams to build, evaluate and host applications powered by language models.
@@ -14,6 +17,14 @@ We provide:
 - **Secure Access**: Customizable authentication for team management.
 - **Langchain Integration**: Seamless compatibility with Langchain (Python).
 - **Optimized Caching**: Reduce costs and boost performance.
+
+Upcoming features:
+
+- **Expanded Language Model Support**: Integration with additional language models.
+- **Extended Capabilities**: Additional extensions and a new chat mode.
+- **Advanced Evaluation Metrics**: Custom modules for calculating evaluation metrics.
+- **Robust Security**: Strengthened security measures.
+- **Enhanced Modularity**: Improved standard components for increased flexibility.
 
 ## Live Demo and Screenshots
 
