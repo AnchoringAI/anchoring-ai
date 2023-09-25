@@ -39,6 +39,8 @@ const TitleCard = ({
   resourceId,
   tags,
   setTags,
+  description,
+  setDescription,
   onRunAllComponents,
   isRunning,
   onStopAllComponents,
@@ -72,6 +74,8 @@ const TitleCard = ({
     setModalTitle,
     modalTags,
     setModalTags,
+    modalDescription,
+    setModalDescription,
     handleSaveButtonClick,
     handleModalCancel,
     handleModalSave,
@@ -80,6 +84,8 @@ const TitleCard = ({
     setTitle,
     tags,
     setTags,
+    description,
+    setDescription,
     appId,
     setAppId,
     setIsReloading,
@@ -103,6 +109,15 @@ const TitleCard = ({
 
     const filteredTags = value.filter((tag) => tag.length <= 20);
     setModalTags(filteredTags);
+  };
+
+  const handleDescriptionChange = (value) => {
+    if (value.length >= 80) {
+      message.warning("Description cannot exceed 80 characters.");
+      return;
+    }
+
+    setModalDescription(value);
   };
 
   const handleEditClick = () => {
@@ -334,10 +349,19 @@ const TitleCard = ({
         </Radio.Group>
 
         <Input
+          addonBefore="Name"
           value={modalTitle}
           onChange={(e) => setModalTitle(e.target.value)}
           required
           placeholder="Application Name"
+        />
+        <Input
+          addonBefore="Description"
+          value={modalDescription}
+          maxLength={82}
+          className="description-input"
+          onChange={(e) => setModalDescription(e.target.value)}
+          placeholder="Add description (optional)"
         />
         <Select
           mode="tags"

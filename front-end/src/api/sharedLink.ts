@@ -11,6 +11,7 @@ interface App {
   appName: string;
   createdBy: User;
   tags: string[];
+  description: string;
   createdAt: Date;
   updatedAt: Date;
   chain: any;

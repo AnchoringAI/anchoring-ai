@@ -30,6 +30,7 @@ class TestAppAPI(unittest.TestCase):
             "app_name": "Test 1743",  # optional if update
             "created_by": "b6c326ed",  # Optional for updates. Will add permission system and JWT authentication in the future.
             "tags": ["Programming", "GPT-3.5", "Code Generation", "Unit Test"],
+            "description": "This is a test application",
             "published": False,
             "chain":
             [

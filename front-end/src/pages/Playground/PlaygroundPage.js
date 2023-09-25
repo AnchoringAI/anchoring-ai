@@ -25,6 +25,7 @@ const PlaygroundPage = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [title, setTitle] = useState("Application Name");
   const [tags, setTags] = useState([]);
+  const [description, setDescription] = useState("");
   const [appId, setAppId] = useState("");
   const [isEditMode, setIsEditMode] = useState(true);
   const [applicationVariables, setApplicationVariables] = useState([]);
@@ -86,6 +87,7 @@ const PlaygroundPage = () => {
       initialComponents = convertChains(loadedApplicationData.chain);
       setAppId(loadedApplicationData.appId);
       setTags(loadedApplicationData.tags);
+      setDescription(loadedApplicationData.description);
       setTitle(loadedApplicationData.appName);
       setCreatedBy(loadedApplicationData.createdBy);
       setIsPublished(loadedApplicationData.published);
@@ -507,6 +509,7 @@ const PlaygroundPage = () => {
       appName: title,
       createdBy: user.id,
       tags: tags,
+      description: description,
       chain: [],
     };
 
@@ -536,6 +539,7 @@ const PlaygroundPage = () => {
     componentParams,
     title,
     tags,
+    description,
     appId,
     user.id,
     dispatch,
@@ -635,6 +639,8 @@ const PlaygroundPage = () => {
                 setIsReloading={setIsReloading}
                 tags={tags}
                 setTags={setTags}
+                description={description}
+                setDescription={setDescription}
                 onRunAllComponents={runAllComponents}
                 onStopAllComponents={stopAllComponents}
                 isLoading={isLoading}

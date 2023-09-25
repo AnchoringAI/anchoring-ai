@@ -33,6 +33,7 @@ def get_app_list():
     app_name = params.get('app_name', None)
     created_by = params.get('created_by', None)
     tags = params.get('tags', None)
+    description = params.get('description', None)
     query = DbAppBuild.query.join(DbUser).filter(
         DbAppBuild.deleted_at.is_(None), (DbAppBuild.created_by == g.current_user_id) |
         (DbAppBuild.published == True))
@@ -66,6 +67,7 @@ def get_app_list():
         "created_by": a.created_by,
         "created_by_username": a.user.username,
         "tags": a.tags,
+        "description": a.description,
         "created_at": a.created_at,
         "updated_at": a.updated_at,
     }, apps))
@@ -108,13 +110,14 @@ def modify_application():
     app_name = data.get('app_name', None)
     created_by = g.current_user_id
     tags = data.get('tags', None)
+    description = data.get('description', None)
     published = data.get('published', False)
     chain = data.get('chain', None)
     
     if new:
         if app_name is None:
             return Response("Required fields missing!", status=400)
-        app_build = DbAppBuild(id, app_name, created_by, tags, published, chain)
+        app_build = DbAppBuild(id, app_name, created_by, tags, description, published, chain)
         db.session.add(app_build)
     else:
         app_build = DbAppBuild.query.filter(
@@ -129,6 +132,8 @@ def modify_application():
             app_build.app_name = app_name
         if tags is not None:
             app_build.tags = tags
+        if description is not None:
+            app_build.description = description
         if chain is not None:
             app_build.chain = chain
 

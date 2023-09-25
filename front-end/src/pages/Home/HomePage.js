@@ -95,6 +95,9 @@ const ApplicationHomePage = () => {
                 <div className="app-card-appname">
                   <span className="app-card-appname-text">{app.appName}</span>
                 </div>
+                {app.description && (
+                  <div className="app-card-description">{app.description}</div>
+                )}
                 {app.tags && app.tags.length > 0 && (
                   <div className="app-card-tags">
                     {app.tags.map((tag, index) => (

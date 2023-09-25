@@ -8,6 +8,8 @@ export default function useSaveModule(
   setTitle,
   tags,
   setTags,
+  description,
+  setDescription,
   appId,
   setAppId,
   setIsReloading,
@@ -17,6 +19,7 @@ export default function useSaveModule(
   const [saveType, setSaveType] = useState(2);
   const [modalTitle, setModalTitle] = useState(title);
   const [modalTags, setModalTags] = useState(tags);
+  const [modalDescription, setModalDescription] = useState(description);
   const [saveApplicationData, setSaveApplicationData] = useState(false);
   const [confirmSaving, setconfirmSaving] = useState(false);
 
@@ -27,6 +30,7 @@ export default function useSaveModule(
     setModalVisible(true);
     setModalTitle(title);
     setModalTags(tags);
+    setModalDescription(description);
   };
 
   const handleModalCancel = () => {
@@ -37,6 +41,7 @@ export default function useSaveModule(
     if (modalTitle.length <= 44) {
       setTitle(modalTitle);
       setTags(modalTags);
+      setDescription(modalDescription);
       setModalVisible(false);
       if (saveType === 2) {
         setAppId(null);
@@ -78,6 +83,8 @@ export default function useSaveModule(
     setModalTitle,
     modalTags,
     setModalTags,
+    modalDescription,
+    setModalDescription,
     handleSaveButtonClick,
     handleModalCancel,
     handleModalSave,

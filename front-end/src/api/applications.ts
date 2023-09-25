@@ -11,6 +11,7 @@ interface App {
   appName: string;
   createdBy: User;
   tags: string[];
+  description: string;
   createdAt: Date;
   updatedAt: Date;
   chain: any;
@@ -119,7 +120,8 @@ export const getApplications = async (
   size: number,
   app_name?: string,
   created_by?: string,
-  tags?: string[]
+  tags?: string[],
+  description?: string
 ): Promise<AppListResponse> => {
   let params: any = { page, size };
 
@@ -133,6 +135,10 @@ export const getApplications = async (
 
   if (tags) {
     params.tags = tags.join(",");
+  }
+
+  if (description) {
+    params.description = description;
   }
 
   const response: AxiosResponse = await api.get(`/list`, { params });

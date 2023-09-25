@@ -23,6 +23,7 @@ const ApplicationPage = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [title, setTitle] = useState("Application Name");
   const [tags, setTags] = useState([]);
+  const [description, setDescription] = useState("");
   const [appId, setAppId] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [applicationVariables, setApplicationVariables] = useState([]);
@@ -81,8 +82,9 @@ const ApplicationPage = () => {
     if (loadedApplicationData.appId) {
       initialComponents = convertChains(loadedApplicationData.chain);
       setAppId(loadedApplicationData.appId);
-      setTags(loadedApplicationData.tags);
       setTitle(loadedApplicationData.appName);
+      setTags(loadedApplicationData.tags);
+      setDescription(loadedApplicationData.description);
       setCreatedBy(loadedApplicationData.createdBy);
       setIsPublished(loadedApplicationData.published);
     } else {
@@ -367,6 +369,8 @@ const ApplicationPage = () => {
               setIsReloading={setIsReloading}
               tags={tags}
               setTags={setTags}
+              description={description}
+              setDescription={setDescription}
               onRunAllComponents={runAllComponents}
               onStopAllComponents={stopAllComponents}
               isLoading={isLoading}

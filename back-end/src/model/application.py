@@ -35,17 +35,19 @@ class DbAppBuild(DbBase):
     created_at = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     tags = db.Column(JSON, nullable=True)
+    description = db.Column(String(200), nullable=True)
     published = db.Column(db.Boolean, nullable=False, default=False)
     chain = db.Column(JSON, nullable=True)
     deleted_at = db.Column(DateTime, nullable=True)
 
     user = relationship("DbUser", backref='apps')
 
-    def __init__(self, id, app_name, created_by, tags, published, chain):
+    def __init__(self, id, app_name, created_by, tags, description, published, chain):
         self.id = id
         self.app_name = app_name
         self.created_by = created_by
         self.tags = tags
+        self.description = description
         self.published = published
         self.chain = chain
 
