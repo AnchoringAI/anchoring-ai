@@ -38,7 +38,7 @@ const ResponseCard = ({
           )}
         </div>
       }
-      className={`response-card ${!isLoading && !apiResponse ? "header-only" : `${!isEditMode ? "non-editmode" : ""}`}`}
+      className={`response-card ${(!isLoading && !apiResponse && !error) ? "header-only" : `${!isEditMode ? "non-editmode" : ""}`}`}
     >
       {isLoading && <p className="running">Waiting for responses...</p>}
       {!isLoading && apiResponse && (
