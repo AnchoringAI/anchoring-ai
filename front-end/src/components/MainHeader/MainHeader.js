@@ -106,7 +106,7 @@ const MainHeader = () => {
       <div className="input-group">
         <div className="icon-row">
           <a
-            href="https://github.com/AnchoringAI/anchoring-ai-frontend"
+            href="https://github.com/AnchoringAI/anchoring-ai"
             target="_blank"
             rel="noopener noreferrer"
             className="icon-container"
