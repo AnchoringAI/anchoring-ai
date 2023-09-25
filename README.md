@@ -1,18 +1,24 @@
-# anchoring-ai
+# Anchoring AI
+
+## Introduction
+
+Anchoring AI is a modern platform for teams to build, evaluate and host applications powered by large language models (LLMs).
+
+## Installation Guide
 
 This guide is primarily designed for Linux and macOS. Windows users can still follow along with some adjustments specified below.
 
-## Prerequisites
+### Prerequisites
 
 Before starting the installation, ensure you have administrator-level access to your system.
 
-> ## Note for Windows Users
+> ### Note for Windows Users
 >
 > 1. Install and start Redis which is not supported on Windows through Windows Subsystem for Linux (WSL).
 > 2. Comment out `uwsgi==2.0.21` in `back-end/requirements.txt` as this package is not supported for Windows.
 > 3. Add `--pool=solo` for the Celery worker args in `back-end/src/celery_worker.py` to support batch jobs.
 
-## Step 1: Install MySQL 8.0
+### Step 1: Install MySQL 8.0
 
 1. **Download MySQL 8.0**: Go to the [official MySQL downloads page](https://dev.mysql.com/downloads/mysql/) and download the MySQL 8.0 installer for your operating system.
 2. **Install MySQL**: Run the installer and follow the on-screen instructions to install MySQL.
@@ -32,7 +38,7 @@ Before starting the installation, ensure you have administrator-level access to 
     ```
     This should display the installed MySQL version.
 
-## Step 2: Install Redis 5.0.7
+### Step 2: Install Redis 5.0.7
 
 1. **Download Redis 5.0.7**: Visit the [official Redis downloads page](https://redis.io/download) and download the Redis 5.0.7 tarball or installer for your operating system.
 2. **Install Redis**: 
@@ -56,7 +62,7 @@ Before starting the installation, ensure you have administrator-level access to 
     ```
     If Redis is running, this will return "PONG".
 
-## Step 3: Install Node.js v18.16.0
+### Step 3: Install Node.js v18.16.0
 
 1. Download and install Node.js version 18.16.0 from the [official website](https://nodejs.org/en/download/).
 2. Verify the installation by running `node -v` in the terminal.
@@ -74,9 +80,9 @@ Run the following command in the terminal:
 git clone https://github.com/AnchoringAI/anchoring-ai.git
 ```
 
-## Step 6: Initialize and Configure Database
+### Step 6: Initialize and Configure Database
 
-### Initialize Database
+#### Initialize Database
 
 1. Open your terminal and navigate to the `scripts` directory within your project:
 
@@ -104,7 +110,7 @@ git clone https://github.com/AnchoringAI/anchoring-ai.git
     source init_db.sql
     ```
 
-### Configure Database Connection in Code
+#### Configure Database Connection in Code
 
 1. Navigate to the `config.py` file located in the `back-end/src` directory:
 
@@ -131,7 +137,7 @@ Replace `[your_username]`, `[your_password]`, and `[your_database]` with the MyS
 
 After completing these steps, your database should be initialized and your application configured to connect to it.
 
-## Step 7: Set Up Front-end
+### Step 7: Set Up Front-end
 
 1. Change your current directory to the `front-end` folder:
 
@@ -151,7 +157,7 @@ npm install
 npm start
 ```
 
-## Step 8: Set Up Back-end
+### Step 8: Set Up Back-end
 
 1. Change your current directory to the root directory and then navigate to `back-end`:
 
@@ -166,7 +172,7 @@ cd back-end
 pip install -r requirements.txt
 ```
 
-## Step 9: Run the Application
+### Step 9: Run the Application
 
 1. **Navigate to the `src` directory**:
 
