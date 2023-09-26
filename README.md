@@ -1,7 +1,8 @@
 # Anchoring AI
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Discord](https://img.shields.io/discord/1154665991305965628)](https://discord.gg/rZ6ne9HRq4)
+<a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache"></a>
+<a href="https://discord.gg/rZ6ne9HRq4"><img src="https://img.shields.io/badge/Discord-Join-blue?logo=discord&logoColor=white&color=blue" alt="Discord Follow"></a>
+<a href="https://docs.anchoring.ai/"><img src="https://img.shields.io/badge/document-English-blue.svg" alt="EN doc"></a>
 
 [**Why Anchoring AI?**](#why-anchoring-ai) |
 [**Live Demo and Screenshots**](#live-demo-and-screenshots) |
