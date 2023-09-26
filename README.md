@@ -3,6 +3,10 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Discord](https://img.shields.io/discord/1154665991305965628)](https://discord.gg/rZ6ne9HRq4)
 
+[**Why Anchoring AI?**](#why-anchoring-ai) |
+[**Live Demo and Screenshots**](#live-demo-and-screenshots) |
+[**Installation Guide**](#installation-guide)
+
 ## Why Anchoring AI?
 
 Anchoring AI is the next-generation platform for teams to build, evaluate and host applications powered by language models.
@@ -20,7 +24,7 @@ We provide:
 
 Upcoming features:
 
-- **Expanded Language Model Support**: Integration with additional language models.
+- **Expanded Language Model Support**: Integration with more language models.
 - **Extended Capabilities**: Additional extensions and a new chat mode.
 - **Advanced Evaluation Metrics**: Custom modules for calculating evaluation metrics.
 - **Robust Security**: Strengthened security measures.
