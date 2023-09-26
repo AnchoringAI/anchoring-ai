@@ -18,6 +18,7 @@ We provide:
 - **Modular Design**: Easily add your own models, datasets and extensions.
 - **Drag-and-Drop**: Chain components to create powerful apps.
 - **Batch Processing**: Efficiently handle evaluations and repetitive tasks.
+- **Prompt Management**: Effortlessly manage your prompt and chains.
 - **Easy Sharing**: Streamline collaboration and sharing.
 - **Secure Access**: Customizable authentication for team management.
 - **Langchain Integration**: Seamless compatibility with Langchain (Python).
