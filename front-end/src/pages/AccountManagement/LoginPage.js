@@ -3,6 +3,7 @@ import { Row, Col, Card, Button } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "../../components/AccountManagement/LoginForm";
 import loginCover from "../../assets/platform_cover.svg";
+import logo from "../../assets/text_logo_dark.png";
 import "./Styles.less";
 
 const LoginPage = () => {
@@ -22,8 +23,10 @@ const LoginPage = () => {
     >
       <Card
         className="login-card"
-        title={<span className="centered-title">Sign in to Anchoring.ai</span>}
       >
+        <img className="logo" src={logo} alt="Logo" />
+        <span className="centered-title">Hello!</span>
+        <span className="centered-description">Let's build together.</span>
         <LoginForm />
         <Row justify="center">
           <Button type="link" className="white-button">

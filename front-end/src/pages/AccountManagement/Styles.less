@@ -6,26 +6,46 @@
   align-items: center;
   background-size: cover;
 }
-.centered-title {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 24px;
-  color: white;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .white-button {
   color: white;
 }
 
 .login-card {
-  width: 30em;
+  width: 360px;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
   border-color: transparent;
+  display: block;
+  flex-direction: column;
+  align-items: center;
+
+  .centered-title {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 36px;
+    font-weight: 500;
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .centered-description {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 16px;
+    color: rgb(228, 228, 228);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .logo {
+    width: 120px;
+    margin: auto;
+    display: flex;
+  }
 
   .ant-card-head {
     border-bottom: none;
