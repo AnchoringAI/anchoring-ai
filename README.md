@@ -30,7 +30,7 @@ We provide:
 You can check out our Alpha Release [here](https://platform.anchoring.ai/).
 
 ### Videos
-https://github.com/AnchoringAI/anchoring-ai/assets/20156958/b7aeb356-4404-496c-a63f-b12003eb4573
+https://github.com/AnchoringAI/anchoring-ai/assets/20156958/eece7096-7e54-476e-a0f9-93926918ada1
 
 ## Upcoming Features
 
