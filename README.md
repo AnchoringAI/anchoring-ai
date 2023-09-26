@@ -22,14 +22,6 @@ We provide:
 - **Langchain Integration**: Seamless compatibility with Langchain (Python).
 - **Optimized Caching**: Reduce costs and boost performance.
 
-Upcoming features:
-
-- **Expanded Language Model Support**: Integration with more language models.
-- **Extended Capabilities**: Additional extensions and a new chat mode.
-- **Advanced Evaluation Metrics**: Custom modules for calculating evaluation metrics.
-- **Robust Security**: Strengthened security measures.
-- **Enhanced Modularity**: Improved standard components for increased flexibility.
-
 ## Live Demo and Screenshots
 
 ### Live Website
@@ -37,6 +29,14 @@ You can check out our Alpha Release [here](https://platform.anchoring.ai/).
 
 ### Screenshots
 [Project Screenshot]
+
+## Upcoming Features
+
+- **Expanded Language Model Support**: Integration with more language models.
+- **Extended Capabilities**: Additional extensions and a new chat mode.
+- **Advanced Evaluation Metrics**: Custom modules for calculating evaluation metrics.
+- **Robust Security**: Strengthened security measures.
+- **Enhanced Modularity**: Improved standard components for increased flexibility.
 
 ## Installation Guide
 
