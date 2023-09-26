@@ -5,7 +5,7 @@
 <a href="https://docs.anchoring.ai/"><img src="https://img.shields.io/badge/document-English-blue.svg" alt="EN doc"></a>
 
 [**Why Anchoring AI?**](#why-anchoring-ai) |
-[**Live Demo and Screenshots**](#live-demo-and-screenshots) |
+[**Live Demo and Videos**](#live-demo-and-videos) |
 [**Installation Guide**](#installation-guide)
 
 ## Why Anchoring AI?
@@ -28,8 +28,8 @@ We provide:
 ### Live Website
 You can check out our Alpha Release [here](https://platform.anchoring.ai/).
 
-### Screenshots
-[Project Screenshot]
+### Videos
+https://github.com/AnchoringAI/anchoring-ai/assets/20156958/b7aeb356-4404-496c-a63f-b12003eb4573
 
 ## Upcoming Features
 
