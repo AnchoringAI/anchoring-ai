@@ -161,13 +161,14 @@ def download_file(file_id):
     if file_id is None:
         return jsonify(error='No file id provided'), 400
 
-    file_data = DbFile.query.filter_by(id=file_id, deleted_at=None).first()
+    file_data = (DbFile.query.filter(DbFile.id == file_id, 
+                                     DbFile.deleted_at.is_(None), 
+                                     (DbFile.uploaded_by == g.current_user_id) | 
+                                     (DbFile.published == True))
+                             .first())
     
     if file_data is None:
-        return jsonify(error='File not found'), 404
-
-    if file_data.uploaded_by != g.current_user_id:
-        return jsonify(error='Not authorized to delete this file'), 403
+        return jsonify(error='File not found or not authorized'), 404
 
     file_name = file_data.name
     raw_content = file_data.raw_content
