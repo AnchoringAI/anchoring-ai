@@ -238,6 +238,5 @@ pip install -r requirements.txt
         python celery_worker.py >> logs/celery_worker_log.txt 2>&1
         ```
 
-After completing these steps, you should be able to see the app running on localhost:3000.
+After completing these steps, you should be able to see the app running at localhost:3000.
 
-## Git Development Process
