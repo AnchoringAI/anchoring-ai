@@ -45,7 +45,7 @@ const RegisterForm = () => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <Form name="register" onFinish={onFinish}>

@@ -1,6 +1,7 @@
 import re
 from langchain import PromptTemplate
 
+
 def generate_valid_prompt(text, input_variables=None):
     if input_variables is None:
         input_variables = {}
@@ -11,7 +12,8 @@ def generate_valid_prompt(text, input_variables=None):
     escaped_text = replace_single_braces(text)
 
     for variable in input_variables:
-        escaped_text = re.sub(r"{{" + re.escape(variable) + r"}}", "{" + variable + "}", escaped_text)
+        escaped_text = re.sub(
+            r"{{" + re.escape(variable) + r"}}", "{" + variable + "}", escaped_text)
 
     prompt = PromptTemplate.from_template(escaped_text)
     valid_input_variables = {}

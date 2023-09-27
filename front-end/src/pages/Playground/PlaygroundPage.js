@@ -68,7 +68,7 @@ const PlaygroundPage = () => {
 
   useEffect(() => {
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
@@ -625,83 +625,83 @@ const PlaygroundPage = () => {
   }, [appId, isReloading]);
 
   return (
-      <div className="myLayout">
-        <MainHeader />
-        <PlaygroundSider onMenuClick={handleMenuClick} />
-        <Layout className="layout">
-          <Layout>
-            <Content className="playgroundContent">
-              <TitleCard
-                title={title}
-                setTitle={setTitle}
-                appId={appId}
-                setAppId={setAppId}
-                setIsReloading={setIsReloading}
-                tags={tags}
-                setTags={setTags}
-                description={description}
-                setDescription={setDescription}
-                onRunAllComponents={runAllComponents}
-                onStopAllComponents={stopAllComponents}
-                isLoading={isLoading}
-                isRunning={isRunning}
-                isCreator={isCreator}
-                isPublished={isPublished}
-                setIsChangeSaved={setIsChangeSaved}
-                setIsEditMode={setIsEditMode}
-                isEditMode={isEditMode}
-              />
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppableComponents">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {components.map((component, index) => (
-                        <Draggable
-                          key={component.id}
-                          draggableId={component.id.toString()}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                            >
-                              <ComponentCard
-                                component={component}
-                                index={index}
-                                components={components}
-                                refMap={refMap}
-                                deleteComponent={deleteComponent}
-                                updateComponentTitle={updateComponentTitle}
-                                updateComponentOutput={updateComponentOutput}
-                                updateComponentInput={updateComponentInput}
-                                updateComponentFileId={updateComponentFileId}
-                                updateComponentUserInput={
-                                  updateComponentUserInput
-                                }
-                                updateComponentIsAppInput={
-                                  updateComponentIsAppInput
-                                }
-                                updateComponentIsAppOutput={
-                                  updateComponentIsAppOutput
-                                }
-                                dragHandleProps={provided.dragHandleProps}
-                                isChangeSaved={isChangeSaved}
-                                isEditMode={isEditMode}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </Content>
-          </Layout>
+    <div className="myLayout">
+      <MainHeader />
+      <PlaygroundSider onMenuClick={handleMenuClick} />
+      <Layout className="layout">
+        <Layout>
+          <Content className="playgroundContent">
+            <TitleCard
+              title={title}
+              setTitle={setTitle}
+              appId={appId}
+              setAppId={setAppId}
+              setIsReloading={setIsReloading}
+              tags={tags}
+              setTags={setTags}
+              description={description}
+              setDescription={setDescription}
+              onRunAllComponents={runAllComponents}
+              onStopAllComponents={stopAllComponents}
+              isLoading={isLoading}
+              isRunning={isRunning}
+              isCreator={isCreator}
+              isPublished={isPublished}
+              setIsChangeSaved={setIsChangeSaved}
+              setIsEditMode={setIsEditMode}
+              isEditMode={isEditMode}
+            />
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppableComponents">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {components.map((component, index) => (
+                      <Draggable
+                        key={component.id}
+                        draggableId={component.id.toString()}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                          >
+                            <ComponentCard
+                              component={component}
+                              index={index}
+                              components={components}
+                              refMap={refMap}
+                              deleteComponent={deleteComponent}
+                              updateComponentTitle={updateComponentTitle}
+                              updateComponentOutput={updateComponentOutput}
+                              updateComponentInput={updateComponentInput}
+                              updateComponentFileId={updateComponentFileId}
+                              updateComponentUserInput={
+                                updateComponentUserInput
+                              }
+                              updateComponentIsAppInput={
+                                updateComponentIsAppInput
+                              }
+                              updateComponentIsAppOutput={
+                                updateComponentIsAppOutput
+                              }
+                              dragHandleProps={provided.dragHandleProps}
+                              isChangeSaved={isChangeSaved}
+                              isEditMode={isEditMode}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Content>
         </Layout>
-      </div>
+      </Layout>
+    </div>
   );
 };
 

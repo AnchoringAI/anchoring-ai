@@ -14,7 +14,8 @@ from model.application import TaskStatus
 class DbFile(DbBase):
     __tablename__ = 't_file'
 
-    id = db.Column(db.String(36), primary_key=True, nullable=False, unique=True)
+    id = db.Column(db.String(36), primary_key=True,
+                   nullable=False, unique=True)
     name = db.Column(db.String(120))
     type = db.Column(db.String(50))
     uploaded_by = db.Column(

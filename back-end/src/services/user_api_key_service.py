@@ -28,13 +28,15 @@ def get_current_user_api_key_type_or_public(t):
     api_key = get_current_user_api_key_type_or_none(t)
     if api_key:
         return api_key['api_key']
-    return current_app.config.get("OPENAI_API_KEY")  # currently only openai is supported
+    # currently only openai is supported
+    return current_app.config.get("OPENAI_API_KEY")
 
 
 def get_current_user_specified_api_key(t, key):
     user = get_current_user()
     return DbUserApiKey.query.filter_by(
         user_id=user.get_id(), api_type=t, api_key=key).first()
+
 
 def get_selected_user_api_key_type_or_none(t, user_id):
     api_keys = DbUserApiKey.query.filter_by(user_id=user_id, api_type=t).all()

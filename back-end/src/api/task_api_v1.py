@@ -97,7 +97,7 @@ def complete_func():
         QuotaService.update_user_quota(user_id, quota_needed)
 
         return jsonify({"result": res})
-    
+
     except ValueError as e:
         # Step 4: Catch the exception and return the error message
         return jsonify({"error": str(e)}), 403
@@ -139,14 +139,14 @@ def run_chain_func():
             action_list,
             input_variables=input_variables,
             llm_api_key_dict=llm_api_key_dict)
-        
+
         QuotaService.update_user_quota(user_id, quota_needed)
 
         return jsonify({"result": res})
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 403
-    
+
     except KeyError as e:
         return jsonify({"error": f"Missing key in request data: {str(e)}"}), 400
 
@@ -182,21 +182,21 @@ def run_chain_v2_func():
             return jsonify({"error": "Quota limit exceeded. Please provide your API key."}), 403
 
         res = run_chain(action_list, input_variables=input_variables,
-            llm_api_key_dict=llm_api_key_dict)
-        
+                        llm_api_key_dict=llm_api_key_dict)
+
         QuotaService.update_user_quota(user_id, quota_needed)
 
-        return jsonify({"result": res})         
+        return jsonify({"result": res})
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 403
-    
+
     except KeyError as e:
         return jsonify({"error": f"Missing key in request data: {str(e)}"}), 400
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 
 @task_api_v1.route('/start', methods=['POST'])
 @login_required
@@ -245,7 +245,7 @@ def start_batch_task_func():
         return {"message": "File is empty"}, 400
 
     task_id = start_batch_task(action_list, input_variables, table_list, task_name,
-        created_by, created_at, app_id, file_id, llm_api_key_dict=llm_api_key_dict)
+                               created_by, created_at, app_id, file_id, llm_api_key_dict=llm_api_key_dict)
     if task_id is None:
         return jsonify({"task_id": None, "success": False})
 
@@ -257,7 +257,7 @@ def start_batch_task_func():
 def batch_task_status_func(task_id):
     task_build = DbAppTask.query.filter(
         DbAppTask.id == task_id, DbAppTask.deleted_at.is_(
-        None), (DbAppTask.created_by == g.current_user_id) |
+            None), (DbAppTask.created_by == g.current_user_id) |
         (DbAppTask.published == True)).first()
 
     if task_build is None:
@@ -290,7 +290,7 @@ def batch_task_status_func(task_id):
 def batch_task_load_func(task_id):
     task_build = DbAppTask.query.join(DbUser).filter(
         DbAppTask.id == task_id, DbAppTask.deleted_at.is_(
-        None), (DbAppTask.created_by == g.current_user_id) |
+            None), (DbAppTask.created_by == g.current_user_id) |
         (DbAppTask.published == True)).first()
     if task_build is None:
         return jsonify({"message": "Task id is invalid"}), 400
@@ -316,9 +316,10 @@ def batch_task_load_func(task_id):
     if task_build.status is not None:
         task_build_dict["status"] = TaskStatus.get_key_from_value(
             task_build.status)
-    
+
     if 'result' in task_build_dict and task_build_dict['result']:
-        sample_result = task_build_dict['result']['result'][0] if task_build_dict['result']['result'] else {}
+        sample_result = task_build_dict['result']['result'][0] if task_build_dict['result']['result'] else {
+        }
         task_build_dict['column_order'] = list(sample_result.keys())
     else:
         task_build_dict['column_order'] = []
@@ -331,7 +332,7 @@ def batch_task_load_func(task_id):
 def stop_batch_task_func(task_id):
     task_build = DbAppTask.query.filter(
         DbAppTask.id == task_id, DbAppTask.deleted_at.is_(
-        None), DbAppTask.created_by == g.current_user_id).first()
+            None), DbAppTask.created_by == g.current_user_id).first()
 
     if task_build is None:
         return jsonify({"message": "Task id is invalid"}), 400
@@ -406,7 +407,7 @@ def list_batch_task_func():
 def delete_batch_task_func(task_id):
     task_build = DbAppTask.query.filter(
         DbAppTask.id == task_id, DbAppTask.deleted_at.is_(
-        None), DbAppTask.created_by == g.current_user_id).first()
+            None), DbAppTask.created_by == g.current_user_id).first()
 
     if task_build is None:
         return jsonify({"message": "task id is invalid"}), 400
@@ -433,4 +434,3 @@ def publish_task(task_id):
     db.session.commit()
 
     return {"success": True, "message": "Embedded file published successfully"}, 200
-

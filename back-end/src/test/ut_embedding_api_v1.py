@@ -1,11 +1,10 @@
+from app import app
 import json
 import sys
 import time
 import unittest
 
 sys.path.append("../")
-
-from app import app
 
 
 class TestTaskAPI(unittest.TestCase):
@@ -30,33 +29,33 @@ class TestTaskAPI(unittest.TestCase):
         embedding_name = "test_db"
 
         doc_transformer = {
-                "type": "text_splitter",
-                "parameters":
+            "type": "text_splitter",
+            "parameters":
                     {
                         "chunk_size": 100,
                         "chunk_overlap": 0
                     }
-            }
+        }
 
         embedding_model = {
-                "model_provider": "openai",
-                "parameters":
-                    {
-                        "model": "text-embedding-ada-002",
-                        "embedding_ctx_length": 8191,
-                        "chunk_size": 100,
-                        "max_retries": 6,
-                        "request_timeout": 60
-                    }
+            "model_provider": "openai",
+            "parameters":
+            {
+                "model": "text-embedding-ada-002",
+                "embedding_ctx_length": 8191,
+                "chunk_size": 100,
+                "max_retries": 6,
+                "request_timeout": 60
             }
+        }
 
         vector_store = {
             "vector_store_provider": "lancedb",
             "parameters":
                 {
-                    "mode": "overwrite" # create, overwrite
+                    "mode": "overwrite"  # create, overwrite
                 }
-            }
+        }
 
         request_obj = {
             "created_by": created_by,
@@ -67,7 +66,8 @@ class TestTaskAPI(unittest.TestCase):
             "vector_store": vector_store
         }
 
-        response = self.client.post("/v1/embedding/create", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/embedding/create", headers={"XAuthorization": self.token}, json=request_obj)
 
         print(response.text)
 
@@ -86,7 +86,8 @@ class TestTaskAPI(unittest.TestCase):
 
         while not success:
             time.sleep(1)
-            response = self.client.get("/v1/embedding/status/{}".format(embedding_id), headers={"XAuthorization": self.token})
+            response = self.client.get(
+                "/v1/embedding/status/{}".format(embedding_id), headers={"XAuthorization": self.token})
             # Assert that the returned status code is 200
             self.assertEqual(200, response.status_code)
 
@@ -144,14 +145,16 @@ class TestTaskAPI(unittest.TestCase):
             "vector_store": vector_store
         }
 
-        response = self.client.post("/v1/embedding/create", json=request_obj, headers={"XAuthorization": self.token})
+        response = self.client.post(
+            "/v1/embedding/create", json=request_obj, headers={"XAuthorization": self.token})
         res = json.loads(response.text)
         print(res)
         embedding_id = res["embedding_id"]
 
         time.sleep(5)
 
-        response = self.client.get("/v1/embedding/stop/{}".format(embedding_id), headers={"XAuthorization": self.token})
+        response = self.client.get(
+            "/v1/embedding/stop/{}".format(embedding_id), headers={"XAuthorization": self.token})
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
 
@@ -177,7 +180,8 @@ class TestTaskAPI(unittest.TestCase):
     def test_delete_batch_task(self):
         embedding_id = "0668f20d-e6bb-41f2-bffe-b836a2e253fd"
 
-        response = self.client.delete("/v1/embedding/delete/{}".format(embedding_id), headers={"XAuthorization": self.token})
+        response = self.client.delete(
+            "/v1/embedding/delete/{}".format(embedding_id), headers={"XAuthorization": self.token})
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -198,7 +202,8 @@ class TestTaskAPI(unittest.TestCase):
             "parameters": {"top_n": top_n}
         }
 
-        response = self.client.post("/v1/embedding/search", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/embedding/search", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)

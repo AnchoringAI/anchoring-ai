@@ -1,11 +1,10 @@
+from app import app
 import json
 import sys
 import time
 import unittest
 
 sys.path.append("../")
-
-from app import app
 
 
 class TestTaskAPI(unittest.TestCase):
@@ -25,7 +24,8 @@ class TestTaskAPI(unittest.TestCase):
         input_variables = {"a": "11", "c": "22"}
 
         request_obj = {"input": text, "input_variables": input_variables}
-        response = self.client.post("/v1/task/text_convert", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/text_convert", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -40,15 +40,15 @@ class TestTaskAPI(unittest.TestCase):
         input = "What is a good name for a company that makes {product}?"
         input_variables = {"product": "colorful socks"}
         parameters = dict(model_name="text-davinci-003",
-            temperature=0.7,
-            max_tokens=256,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-            n=1,
-            request_timeout=600,
-            logit_bias=None,
-            cache_enable=True)
+                          temperature=0.7,
+                          max_tokens=256,
+                          top_p=1,
+                          frequency_penalty=0,
+                          presence_penalty=0,
+                          n=1,
+                          request_timeout=600,
+                          logit_bias=None,
+                          cache_enable=True)
 
         request_obj = {"model_provider": "openai", "input": input, "input_variables": input_variables,
                        "parameters": parameters}
@@ -56,7 +56,8 @@ class TestTaskAPI(unittest.TestCase):
         print(request_obj)
 
         # res = requests.get("http://127.0.0.1:5001/v1/task/complete")
-        response = self.client.post("/v1/task/complete", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/complete", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -70,22 +71,23 @@ class TestTaskAPI(unittest.TestCase):
         input = "What is a good name for a company that makes {product}? Output Format: <Name>XXX</Name>"
         input_variables = {"product": "colorful socks"}
         parameters = dict(model_name="text-davinci-003",
-            temperature=0.7,
-            max_tokens=256,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-            n=1,
-            request_timeout=600,
-            logit_bias=None,
-            cache_enable=True
-        )
+                          temperature=0.7,
+                          max_tokens=256,
+                          top_p=1,
+                          frequency_penalty=0,
+                          presence_penalty=0,
+                          n=1,
+                          request_timeout=600,
+                          logit_bias=None,
+                          cache_enable=True
+                          )
 
         request_obj = {"model_provider": "openai", "input": input, "input_variables": input_variables,
                        "parameters": parameters}
 
         # res = requests.get("http://127.0.0.1:5001/v1/task/complete")
-        response = self.client.post("/v1/task/complete", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/complete", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -107,7 +109,8 @@ class TestTaskAPI(unittest.TestCase):
         print(request_obj)
 
         # res = requests.get("http://127.0.0.1:5001/v1/task/tag_parse")
-        response = self.client.post("/v1/task/tag_parse", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/tag_parse", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -233,7 +236,8 @@ class TestTaskAPI(unittest.TestCase):
                        "input_variables": input_variables}
 
         # res = requests.get("http://127.0.0.1:5001/v1/task/run_chain")
-        response = self.client.post("/v1/task/run_chain", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/run_chain", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -252,7 +256,8 @@ class TestTaskAPI(unittest.TestCase):
         request_obj = {"app_id": app_id, "input_variables": input_variables}
 
         # res = requests.get("http://127.0.0.1:5001/v1/task/run_chain")
-        response = self.client.post("/v1/task/run_chain_v2", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/run_chain_v2", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -275,7 +280,8 @@ class TestTaskAPI(unittest.TestCase):
                        "app_id": app_id, "file_id": file_id, "input_variables": input_variables}
 
         # res = requests.post("http://127.0.0.1:5001/v1/task/start_batch_task", json=data)
-        response = self.client.post("/v1/task/start", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/start", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -293,7 +299,8 @@ class TestTaskAPI(unittest.TestCase):
         while not success:
             time.sleep(1)
             # res = requests.get("http://127.0.0.1:5001/v1/task/batch_task_status/{}".format(task_id)).json()
-            response = self.client.get("/v1/task/status/{}".format(task_id), headers={"XAuthorization": self.token})
+            response = self.client.get(
+                "/v1/task/status/{}".format(task_id), headers={"XAuthorization": self.token})
             # Assert that the returned status code is 200
             self.assertEqual(200, response.status_code)
 
@@ -309,7 +316,8 @@ class TestTaskAPI(unittest.TestCase):
                 success = True
 
         # res = requests.get("http://127.0.0.1:5001/v1/task/batch_task_result/{}".format(task_id)).json()
-        response = self.client.get("/v1/task/load/{}".format(task_id), headers={"XAuthorization": self.token})
+        response = self.client.get(
+            "/v1/task/load/{}".format(task_id), headers={"XAuthorization": self.token})
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
 
@@ -330,7 +338,8 @@ class TestTaskAPI(unittest.TestCase):
         request_obj = {"task_name": task_name, "created_by": created_by,
                        "app_id": app_id, "file_id": file_id, "input_variables": input_variables}
 
-        response = self.client.post("/v1/task/start", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/task/start", headers={"XAuthorization": self.token}, json=request_obj)
         res = json.loads(response.text)
         print(res)
         task_id = res["task_id"]
@@ -354,7 +363,8 @@ class TestTaskAPI(unittest.TestCase):
         file_id = "2834a1eg"
 
         response = self.client.get(
-            "/v1/task/list?created_by={}&app_id={}&file_id={}".format(created_by, app_id, file_id),
+            "/v1/task/list?created_by={}&app_id={}&file_id={}".format(
+                created_by, app_id, file_id),
             headers={"XAuthorization": self.token})
 
         # Assert that the returned status code is 200
@@ -366,7 +376,8 @@ class TestTaskAPI(unittest.TestCase):
     def test_delete_batch_task(self):
         task_id = '07e2ab41-ca9f-4fd0-85a1-4973fd2b25ae'
 
-        response = self.client.delete("/v1/task/delete/{}".format(task_id), headers={"XAuthorization": self.token})
+        response = self.client.delete(
+            "/v1/task/delete/{}".format(task_id), headers={"XAuthorization": self.token})
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)

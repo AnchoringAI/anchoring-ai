@@ -9,7 +9,8 @@ class TextSplitter:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
 
-        self.text_splitter = TokenTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        self.text_splitter = TokenTextSplitter(
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
     def split_text(self, text):
         chunk_list = self.text_splitter.split_text(text)
@@ -32,5 +33,3 @@ class TextSplitter:
             params_dict["chunk_overlap"] = 0
 
         return params_dict
-
-

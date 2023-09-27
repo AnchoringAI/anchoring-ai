@@ -46,11 +46,11 @@ const DataPage = () => {
     const validTypes = ["text/tab-separated-values", "text/plain", "text/csv"];
     return validTypes.includes(file.type);
   };
-  
+
   const isValidFileSize = (file) => {
     return file.size / 1024 / 1024 < 15;
   };
-  
+
   const logError = (error) => {
     console.error("Error Message: ", error.message);
     if (error.response) {
@@ -59,37 +59,37 @@ const DataPage = () => {
       console.error("Request: ", error.request);
     }
   };
-  
+
   const beforeUpload = (file) => {
     if (!isValidFileType(file)) {
       message.error("Only TSV/TXT/CSV files are supported.");
       return false;
     }
-  
+
     if (!isValidFileSize(file)) {
       message.error("Only files smaller than 15MB are supported.");
       return false;
     }
-  
+
     return true;
   };
-  
+
   useEffect(() => {
     setUploaderId(user?.id);
   }, [user]);
-  
+
   useEffect(() => {
     fetchFileData();
   }, [currentPage, pageSize, user, searchTerm]);
-  
+
   const handleUpload = async (file) => {
     if (!file) {
       message.error("Please select a file to upload.");
       return;
     }
-  
+
     setShowUploadProgress(true);
-  
+
     try {
       const response = await uploadFile(file, uploaderId, (progressEvent) => {
         const percentCompleted = Math.round(
@@ -97,9 +97,9 @@ const DataPage = () => {
         );
         setUploadProgress(percentCompleted);
       });
-  
+
       setShowUploadProgress(false);
-  
+
       if (response.data.success) {
         message.success("File uploaded successfully!");
         setUploadProgress(0);
@@ -111,15 +111,15 @@ const DataPage = () => {
     } catch (error) {
       setShowUploadProgress(false);
       logError(error);
-  
+
       if (error.response?.data?.error) {
         message.error(error.response.data.error);
       } else {
         message.error("An error occurred while uploading the file.");
       }
     }
-  };  
-  
+  };
+
   const fetchFileData = () => {
     fetchFiles(currentPage, pageSize, filterByUploader)
       .then((response) => {
@@ -296,7 +296,7 @@ const DataPage = () => {
                     onOk() {
                       handlePublish(record.id);
                     },
-                    onCancel() {},
+                    onCancel() { },
                   });
                 }}
               >
@@ -316,7 +316,7 @@ const DataPage = () => {
                     onOk() {
                       handleDelete(record.id);
                     },
-                    onCancel() {},
+                    onCancel() { },
                   });
                 }}
               >

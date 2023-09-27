@@ -18,6 +18,7 @@ app_api_v1 = Blueprint('app_api_v1', __name__, url_prefix='/v1/app')
 class LLMApp:
     pass
 
+
 @app_api_v1.before_request
 @login_required
 def load_user_id():
@@ -37,7 +38,7 @@ def get_app_list():
     query = DbAppBuild.query.join(DbUser).filter(
         DbAppBuild.deleted_at.is_(None), (DbAppBuild.created_by == g.current_user_id) |
         (DbAppBuild.published == True))
-    
+
     query = query.order_by(
         case(
             [(DbAppBuild.created_by == g.current_user_id, 1)],
@@ -113,11 +114,12 @@ def modify_application():
     description = data.get('description', None)
     published = data.get('published', False)
     chain = data.get('chain', None)
-    
+
     if new:
         if app_name is None:
             return Response("Required fields missing!", status=400)
-        app_build = DbAppBuild(id, app_name, created_by, tags, description, published, chain)
+        app_build = DbAppBuild(id, app_name, created_by,
+                               tags, description, published, chain)
         db.session.add(app_build)
     else:
         app_build = DbAppBuild.query.filter(

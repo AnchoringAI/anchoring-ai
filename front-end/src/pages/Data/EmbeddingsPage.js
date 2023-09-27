@@ -183,7 +183,7 @@ const EmbeddingsPage = () => {
                       onOk() {
                         handlePublish(record.id);
                       },
-                      onCancel() {},
+                      onCancel() { },
                     });
                   }}
                 >
@@ -204,7 +204,7 @@ const EmbeddingsPage = () => {
                       onOk() {
                         handleStop(record.id);
                       },
-                      onCancel() {},
+                      onCancel() { },
                     });
                   }}
                 >
@@ -224,7 +224,7 @@ const EmbeddingsPage = () => {
                       onOk() {
                         handleDelete(record.id);
                       },
-                      onCancel() {},
+                      onCancel() { },
                     });
                   }}
                 >

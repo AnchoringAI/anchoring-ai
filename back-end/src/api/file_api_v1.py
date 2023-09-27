@@ -55,13 +55,14 @@ def upload_file():
         if size > 1024 * 1024 * 15:  # 15MB
             return jsonify(success=False, error='Only files smaller than 15MB are supported.'), 400
 
-        file_type, df_content, row_count = determine_file_type_and_content(file)
+        file_type, df_content, row_count = determine_file_type_and_content(
+            file)
 
         # Check row count for table types
         if file_type == "Table":
             if row_count > 3000:
                 return jsonify(success=False, error='Only tables with less than 3000 rows are supported.'), 400
-            
+
         uploaded_files = DbFile(
             id=file_id,
             name=filename,
@@ -108,9 +109,9 @@ def get_uploaded_files():
 
     query = (DbFile.query.join(DbUser)
              .filter(DbFile.deleted_at.is_(None), (DbFile.uploaded_by == g.current_user_id) |
-        (DbFile.published == True))
+                     (DbFile.published == True))
              .order_by(DbFile.uploaded_at.desc()))
-    
+
     print("query: ", query)
 
     if uploaded_by is not None:
@@ -130,6 +131,7 @@ def get_uploaded_files():
 
     return jsonify({"files": file_list, "total_pages": total_pages})
 
+
 @file_api_v1.route('/load/<file_id>', methods=['GET'])
 @login_required
 def load_file(file_id):
@@ -138,12 +140,12 @@ def load_file(file_id):
 
     file_data = (DbFile.query.join(DbUser)
                              .filter(DbFile.id == file_id, DbFile.deleted_at.is_(None), (DbFile.uploaded_by == g.current_user_id) |
-        (DbFile.published == True))
-                             .first())
+                                     (DbFile.published == True))
+                 .first())
     if file_data is None:
         return jsonify(error='File not found'), 404
 
-    file_data_dict = file_data.as_dict(exclude=['raw_content'])  
+    file_data_dict = file_data.as_dict(exclude=['raw_content'])
     file_data_dict['uploaded_by_username'] = file_data.user.username
 
     if file_data_dict['type'] == "Table":
@@ -155,18 +157,19 @@ def load_file(file_id):
 
     return jsonify(success=True, file=file_data_dict)
 
+
 @file_api_v1.route('/download/<file_id>', methods=['GET'])
 @login_required
 def download_file(file_id):
     if file_id is None:
         return jsonify(error='No file id provided'), 400
 
-    file_data = (DbFile.query.filter(DbFile.id == file_id, 
-                                     DbFile.deleted_at.is_(None), 
-                                     (DbFile.uploaded_by == g.current_user_id) | 
+    file_data = (DbFile.query.filter(DbFile.id == file_id,
+                                     DbFile.deleted_at.is_(None),
+                                     (DbFile.uploaded_by == g.current_user_id) |
                                      (DbFile.published == True))
-                             .first())
-    
+                 .first())
+
     if file_data is None:
         return jsonify(error='File not found or not authorized'), 404
 
@@ -180,6 +183,7 @@ def download_file(file_id):
     )
     response.headers["X-File-Name"] = file_name
     return response
+
 
 @file_api_v1.route('/delete/<file_id>', methods=['DELETE'])
 @login_required
@@ -210,6 +214,7 @@ def delete_file(file_id):
     db.session.commit()
 
     return jsonify(success=True, message='File deleted successfully')
+
 
 @file_api_v1.route('/publish/<file_id>', methods=['POST'])
 @login_required

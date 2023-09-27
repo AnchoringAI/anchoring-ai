@@ -285,7 +285,7 @@ const OpenAIInput = forwardRef((props, ref) => {
       )}
     </div>
   );
-  
+
 });
 
 export default OpenAIInput;
