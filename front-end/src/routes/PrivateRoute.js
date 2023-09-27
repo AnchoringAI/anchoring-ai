@@ -10,7 +10,6 @@ const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
   const redirectToLogin = (errorMessage) => {
-    console.log("redirectPath", location.pathname);
     localStorage.setItem("redirectPath", location.pathname);
     localStorage.removeItem("token");
     navigate("/login");

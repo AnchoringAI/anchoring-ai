@@ -154,7 +154,6 @@ const OpenAIInput = forwardRef((props, ref) => {
       return output;
     } catch (err) {
       console.error("API call failed:", err);
-      console.log("Error message:", err.message);
       setError(err.message);
       setIsLoading(false);
       return new Error("There was an error with the API call.");

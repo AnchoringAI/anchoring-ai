@@ -73,7 +73,6 @@ const BatchInput = forwardRef(
         .then((response) => {
           if (response.data.success) {
             const fileData = response.data.file;
-            console.log(fileData)
             onUpdateOutput(fileData);
 
             if (!fileData.content) {

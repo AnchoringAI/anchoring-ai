@@ -17,7 +17,6 @@ const LoginForm = () => {
     try {
       const data = await login(values.email, values.password, dispatch);
       if (data.success) {
-        console.log(localStorage.getItem("redirectPath"))
         const redirectPath = localStorage.getItem("redirectPath") || "/home";
         navigate(redirectPath);
         localStorage.removeItem("redirectPath");
