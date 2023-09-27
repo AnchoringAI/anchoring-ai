@@ -159,4 +159,3 @@ class OpenAIEmbedding:
             params_dict["openai_api_key"] = ""
 
         return params_dict
-

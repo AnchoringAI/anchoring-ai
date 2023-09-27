@@ -34,7 +34,8 @@ class DevelopmentConfig(BaseConfig):
     )
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     VECTOR_STORE = dict(
-        db_path= os.path.join(os.path.dirname(os.path.abspath(__file__)), "vector_store/lancedb")
+        db_path=os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), "vector_store/lancedb")
     )
 
 

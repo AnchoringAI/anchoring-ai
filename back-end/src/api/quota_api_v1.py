@@ -5,10 +5,12 @@ from core.auth.authenticator import login_required, get_current_user
 
 quota_api_v1 = Blueprint('quota_api_v1', __name__, url_prefix='/v1/quota')
 
+
 @quota_api_v1.before_request
 @login_required
 def load_user_id():
     g.current_user_id = get_current_user().get_id()
+
 
 @quota_api_v1.route('/check', methods=['GET'])
 @login_required

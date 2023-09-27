@@ -8,7 +8,9 @@ from model.shared_link import DbSharedLink
 from model.application import DbAppBuild, DbAppTask
 from util.uid_gen import gen_uuid
 
-shared_link_api_v1 = Blueprint('shared_link_api_v1', __name__, url_prefix='/v1/shared')
+shared_link_api_v1 = Blueprint(
+    'shared_link_api_v1', __name__, url_prefix='/v1/shared')
+
 
 @shared_link_api_v1.before_request
 @login_required
@@ -38,9 +40,11 @@ def load_share_link_generic(link_id, expected_type):
     resource_id = share_link_record.resource_id
 
     if resource_type == 'APP':
-        resource = DbAppBuild.query.filter_by(id=resource_id).filter(DbAppBuild.deleted_at.is_(None)).first()
+        resource = DbAppBuild.query.filter_by(id=resource_id).filter(
+            DbAppBuild.deleted_at.is_(None)).first()
     elif resource_type == 'TASK':
-        resource = DbAppTask.query.filter_by(id=resource_id).filter(DbAppTask.deleted_at.is_(None)).first()
+        resource = DbAppTask.query.filter_by(id=resource_id).filter(
+            DbAppTask.deleted_at.is_(None)).first()
     else:
         return {"message": "Invalid resource type."}, 400
 
@@ -54,7 +58,7 @@ def load_share_link_generic(link_id, expected_type):
 @login_required
 def generate_share_link():
     request_data = request.get_json()
-    
+
     # Extract necessary data from the request
     resource_type = request_data.get('resource_type')
     resource_id = request_data.get('resource_id')
@@ -66,16 +70,16 @@ def generate_share_link():
     # Verify if the resource can be shared (created by the user or is published)
     if resource_type == 'APP':
         resource = DbAppBuild.query.filter(
-            DbAppBuild.id == resource_id, 
-            DbAppBuild.deleted_at.is_(None), 
-            (DbAppBuild.created_by == created_by) | 
+            DbAppBuild.id == resource_id,
+            DbAppBuild.deleted_at.is_(None),
+            (DbAppBuild.created_by == created_by) |
             (DbAppBuild.published == True)
         ).first()
     elif resource_type == 'TASK':
         resource = DbAppTask.query.filter(
-            DbAppTask.id == resource_id, 
-            DbAppTask.deleted_at.is_(None), 
-            (DbAppTask.created_by == created_by) | 
+            DbAppTask.id == resource_id,
+            DbAppTask.deleted_at.is_(None),
+            (DbAppTask.created_by == created_by) |
             (DbAppTask.published == True)
         ).first()
     else:
@@ -86,13 +90,13 @@ def generate_share_link():
 
     # Generate a unique ID for the share link
     share_link_id = gen_uuid()
-    
+
     # Create a new DbSharedLink object
     new_share_link = DbSharedLink(
-        id=share_link_id, 
-        created_by=created_by, 
-        resource_id=resource_id, 
-        resource_type=resource_type, 
+        id=share_link_id,
+        created_by=created_by,
+        resource_id=resource_id,
+        resource_type=resource_type,
         expires_at=expires_at
     )
 

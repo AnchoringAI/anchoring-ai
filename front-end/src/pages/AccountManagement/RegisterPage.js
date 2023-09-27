@@ -16,7 +16,7 @@ const RegisterPage = () => (
     <Card className="login-card">
       <img className="logo" src={logo} alt="Logo" />
       <span className="centered-title">Create Account</span>
-        <span className="centered-description">Join our community.</span>
+      <span className="centered-description">Join our community.</span>
       <RegisterForm />
       {/* <Row justify="center" style={{ marginTop: "10px", marginBottom: "20px" }}>
         <Col>

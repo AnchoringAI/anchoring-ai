@@ -151,38 +151,38 @@ const TagParser = forwardRef(
 
     return (
       <div className="tag-parser-container">
-      {isEditMode && (
-        <>
-        <div className="action-row">
-          <Select
-            className="select-field"
-            placeholder="Select Data"
-            disabled={!selectEnabled}
-            value={input || undefined}
-            onChange={(value) => {
-              setInput(value);
-              onUpdateInput(value);
-            }}
-            options={menuProps.items.map((item) => ({
-              value: `{${item.label}}`,
-              label: item.label,
-              key: item.key,
-            }))}
-          />
-          <div className="input-field">
-            <Input
-              addonBefore="Pattern"
-              placeholder="Enter your pattern (case insensitive)"
-              value={extractPattern}
-              onChange={(e) => setExtractPattern(e.target.value)}
-            />
-          </div>
-          <Button type="primary" onClick={handleRunClick} loading={isLoading}>
-            Run
-          </Button>
-        </div>
-        </>
-      )}
+        {isEditMode && (
+          <>
+            <div className="action-row">
+              <Select
+                className="select-field"
+                placeholder="Select Data"
+                disabled={!selectEnabled}
+                value={input || undefined}
+                onChange={(value) => {
+                  setInput(value);
+                  onUpdateInput(value);
+                }}
+                options={menuProps.items.map((item) => ({
+                  value: `{${item.label}}`,
+                  label: item.label,
+                  key: item.key,
+                }))}
+              />
+              <div className="input-field">
+                <Input
+                  addonBefore="Pattern"
+                  placeholder="Enter your pattern (case insensitive)"
+                  value={extractPattern}
+                  onChange={(e) => setExtractPattern(e.target.value)}
+                />
+              </div>
+              <Button type="primary" onClick={handleRunClick} loading={isLoading}>
+                Run
+              </Button>
+            </div>
+          </>
+        )}
 
         {(output || noResult || !isEditMode) && (
           <ResponseCard

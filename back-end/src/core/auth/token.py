@@ -39,8 +39,9 @@ class JwtToken:
             version: int = 0,
     ):
         token = cls(user_id=user_id,
-            expire_timestamp=get_future_timestamp(secs=expire_timespan_sec),
-            version=version)
+                    expire_timestamp=get_future_timestamp(
+                        secs=expire_timespan_sec),
+                    version=version)
 
         return token
 
@@ -56,7 +57,8 @@ class JwtToken:
         }
 
         # since jwt transport payload in plain text, encrypt the payload
-        encrypt_payload = self.encryptor.encrypt(json.dumps(payload).encode("utf-8"))
+        encrypt_payload = self.encryptor.encrypt(
+            json.dumps(payload).encode("utf-8"))
         return "Bearer " + jwt.encode(
             {
                 "enc": encrypt_payload.hex(),
@@ -70,7 +72,8 @@ class JwtToken:
         for necessary_field in ["u", "exp", "vs"]:
             if necessary_field not in payload_dict:
                 raise jwt.InvalidTokenError(
-                    "payload dict has no required field {}".format(necessary_field)
+                    "payload dict has no required field {}".format(
+                        necessary_field)
                 )
         if has_passed_timestamp(float(payload_dict["exp"])):
             raise jwt.ExpiredSignatureError("token has expired")
@@ -93,9 +96,11 @@ class JwtToken:
             raise jwt.InvalidTokenError("token has no payload")
         try:
             # If payload parsing fails, prompt the user to log in again
-            payload = json.loads(cls.encryptor.decrypt(encrypt_payload).decode("utf-8"))
+            payload = json.loads(cls.encryptor.decrypt(
+                encrypt_payload).decode("utf-8"))
         except Exception as e:
-            raise jwt.InvalidTokenError("token cannot digest, {}".format(str(e)))
+            raise jwt.InvalidTokenError(
+                "token cannot digest, {}".format(str(e)))
         cls.validate(payload)
         return cls(
             user_id=payload["u"],

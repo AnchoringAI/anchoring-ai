@@ -4,6 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from connection import db
 from services.user_api_key_service import get_selected_user_api_key_type_or_none
 
+
 class QuotaService:
 
     @staticmethod
@@ -21,7 +22,8 @@ class QuotaService:
             if user_quota:
                 user_quota.update_quota(amount)
             else:
-                user_quota = DbUserQuota(user_id=user_id, quota_available=100 - amount, quota_used=amount, updated_at=datetime.utcnow())
+                user_quota = DbUserQuota(
+                    user_id=user_id, quota_available=100 - amount, quota_used=amount, updated_at=datetime.utcnow())
                 db.session.add(user_quota)
             db.session.commit()
             return {"message": "Quota updated successfully"}, 200
@@ -58,7 +60,7 @@ class QuotaService:
                 quota_needed += 4
 
         return quota_needed
-    
+
     # @staticmethod
     # def record_api_usage(user_id, api_name):
     #     try:

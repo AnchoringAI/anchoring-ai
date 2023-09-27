@@ -52,7 +52,8 @@ class TestUserAPI(unittest.TestCase):
         self.assertEqual(resp.status_code, 401)
 
     def test_get_api_key(self):
-        resp = self.client.get('/v1/user/apikey', headers={"XAuthorization": self.token})
+        resp = self.client.get(
+            '/v1/user/apikey', headers={"XAuthorization": self.token})
 
         # Assert that the returned status code is 200
         self.assertEqual(resp.status_code, 200)
@@ -68,7 +69,8 @@ class TestUserAPI(unittest.TestCase):
         # Assert that the returned status code is 200
         self.assertEqual(resp.status_code, 200)
 
-        resp = self.client.get('/v1/user/apikey', headers={"XAuthorization": self.token})
+        resp = self.client.get(
+            '/v1/user/apikey', headers={"XAuthorization": self.token})
         res = json.loads(resp.text)
         self.assertEqual(random_key, res['data'][0]['api_key'])
         self.assertEqual(api_type, res['data'][0]['api_type'])
@@ -77,7 +79,8 @@ class TestUserAPI(unittest.TestCase):
             "api_type": api_type
         })
         self.assertEqual(resp.status_code, 200)
-        resp = self.client.get('/v1/user/apikey', headers={"XAuthorization": self.token})
+        resp = self.client.get(
+            '/v1/user/apikey', headers={"XAuthorization": self.token})
         res = json.loads(resp.text)
         exists = False
         for ak in res['data']:

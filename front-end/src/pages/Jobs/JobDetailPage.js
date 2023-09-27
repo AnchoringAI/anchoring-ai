@@ -175,19 +175,19 @@ const JobDetailPage = () => {
             </Card>
           </div>
           <Card title="Progress" className="progressCard">
-          <div className="progressContainer">
-            <Progress
-              className="progressStyle"
-              percent={progress}
-              status="active"
-            />
-            <p className="progressText">
-              <span>
-                {`${completedTasks} out of ${totalTasks} successful`}
-                <span className="greyText"> ({`${failedTasks} failed`})</span>
-              </span>
-            </p>
-          </div>
+            <div className="progressContainer">
+              <Progress
+                className="progressStyle"
+                percent={progress}
+                status="active"
+              />
+              <p className="progressText">
+                <span>
+                  {`${completedTasks} out of ${totalTasks} successful`}
+                  <span className="greyText"> ({`${failedTasks} failed`})</span>
+                </span>
+              </p>
+            </div>
           </Card>
         </div>
         <Table

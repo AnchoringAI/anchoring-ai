@@ -35,7 +35,8 @@ class VectorStoreLanceDB:
                                              }
                                          ])
 
-        self.vec_db = LanceDB(connection=table, embedding=self.embedding_model.embedding_model)
+        self.vec_db = LanceDB(
+            connection=table, embedding=self.embedding_model.embedding_model)
 
     def drop_table(self, table_name):
         self.db.drop_table(table_name)
@@ -58,7 +59,3 @@ class VectorStoreLanceDB:
         text_list = [doc.page_content for doc in docs]
 
         return text_list
-
-
-
-

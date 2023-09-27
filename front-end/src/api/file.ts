@@ -72,24 +72,24 @@ export const fetchFile = (fileId: string): Promise<AxiosResponse<DbFile>> => {
 
 export const downloadFile = async (fileId: string): Promise<void> => {
   const originalResponseType = api.defaults.responseType;
-  
+
   api.defaults.responseType = 'blob';
 
   try {
     const response = await api.get(`${BASE_URL}/download/${fileId}`);
-  
+
     const blob = new Blob([response.data], { type: response.headers['content-type'] });
     const url = window.URL.createObjectURL(blob);
-  
+
     const link = document.createElement('a');
     const fileName = response.headers['x-file-name'] || `file_${fileId}.extension`;
-  
+
     link.href = url;
     link.setAttribute('download', fileName);
-  
+
     document.body.appendChild(link);
     link.click();
-  
+
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   } catch (error) {

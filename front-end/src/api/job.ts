@@ -55,7 +55,7 @@ const api = axios.create({
           return data;
         }
       }
-  
+
       if (data?.result?.result) {
         const originalResult = data.result.result;
         data = camelizeKeys(data);
@@ -63,7 +63,7 @@ const api = axios.create({
       } else {
         data = camelizeKeys(data);
       }
-  
+
       return data;
     },
   ],

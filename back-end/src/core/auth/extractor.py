@@ -19,20 +19,24 @@ class JwtTokenExtractor:
         raw_token_str = flask_request.headers.get(self._header_field, "")
 
         if raw_token_str == "":
-            raw_token_str = flask_request.headers.environ.get("HTTP_XAUTHORIZATION", "")
+            raw_token_str = flask_request.headers.environ.get(
+                "HTTP_XAUTHORIZATION", "")
             if raw_token_str == "":
-                raw_token_str = flask_request.headers.environ.get("XAuthorization", "")
+                raw_token_str = flask_request.headers.environ.get(
+                    "XAuthorization", "")
 
         if not raw_token_str:
             raise jwt.InvalidTokenError(
-                "missing {} field in request header".format(HTTP_HEADER_AUTHORIZATION_FIELD)
+                "missing {} field in request header".format(
+                    HTTP_HEADER_AUTHORIZATION_FIELD)
             )
 
         parsed_token = re.findall(r" *Bearer +(\S*)$", raw_token_str)
         if not parsed_token:
             raise jwt.InvalidTokenError(
                 "{} header is not in format of Bearer <token>,"
-                " got {}".format(HTTP_HEADER_AUTHORIZATION_FIELD, raw_token_str)
+                " got {}".format(
+                    HTTP_HEADER_AUTHORIZATION_FIELD, raw_token_str)
             )
 
         token_str = parsed_token[0]

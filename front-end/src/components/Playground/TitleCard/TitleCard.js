@@ -166,7 +166,7 @@ const TitleCard = ({
           message.error("Error deleting application");
         }
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -195,7 +195,7 @@ const TitleCard = ({
           message.error("Error publishing application");
         }
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 

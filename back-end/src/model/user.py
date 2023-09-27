@@ -11,7 +11,8 @@ from util.uid_gen import gen_uuid
 class DbUser(DbBase):
     __tablename__ = 't_user'
 
-    id = db.Column(String(36), primary_key=True, nullable=False, unique=True, default=gen_uuid)
+    id = db.Column(String(36), primary_key=True, nullable=False,
+                   unique=True, default=gen_uuid)
     username = db.Column(String(20), nullable=False, unique=False)
     email = db.Column(String(120), nullable=False, unique=True)
     password_hash = db.Column(String(128), nullable=False)
@@ -47,7 +48,8 @@ class DbUser(DbBase):
 class DbUserApiKey(DbBase):
     __tablename__ = 't_user_api_key'
 
-    id = db.Column(String(36), primary_key=True, nullable=False, default=gen_uuid())
+    id = db.Column(String(36), primary_key=True,
+                   nullable=False, default=gen_uuid())
     user_id = db.Column(String(200), nullable=False, )
     api_key = db.Column(String(200), nullable=False)
     api_type = db.Column(String(200), nullable=False)
@@ -67,4 +69,5 @@ class DbUserQuota(DbBase):
         self.quota_available -= amount
         self.updated_at = datetime.utcnow()
         if self.quota_available < 0:
-            raise ValueError("Quota limit exceeded. Please provide your API key.")
+            raise ValueError(
+                "Quota limit exceeded. Please provide your API key.")

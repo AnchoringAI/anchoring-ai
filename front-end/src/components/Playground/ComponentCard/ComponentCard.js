@@ -51,36 +51,36 @@ const ComponentCard = (props) => {
       <Row {...props.dragHandleProps} align="middle" justify="space-between">
         {(props.component.isAppInput ||
           (!props.component.isAppInput && props.isEditMode)) && (
-          <>
-            {" "}
-            <Col>
-              <h3>
-                {props.component.title}{" "}
-                <small style={{ fontSize: "0.8em" }}>
-                  ({modelComponents[props.component.type]})
-                </small>
-              </h3>
-            </Col>
-            <Col>
-              {props.isEditMode && (
-                <>
-                  <Tooltip title="Edit">
-                    <EditOutlined
-                      className="edit-icon"
-                      onClick={() => setModalVisible(true)}
-                    />
-                  </Tooltip>
-                  <Tooltip title="Delete">
-                    <DeleteOutlined
-                      className="delete-icon"
-                      onClick={() => props.deleteComponent(props.component.id)}
-                    />
-                  </Tooltip>
-                </>
-              )}
-            </Col>
-          </>
-        )}
+            <>
+              {" "}
+              <Col>
+                <h3>
+                  {props.component.title}{" "}
+                  <small style={{ fontSize: "0.8em" }}>
+                    ({modelComponents[props.component.type]})
+                  </small>
+                </h3>
+              </Col>
+              <Col>
+                {props.isEditMode && (
+                  <>
+                    <Tooltip title="Edit">
+                      <EditOutlined
+                        className="edit-icon"
+                        onClick={() => setModalVisible(true)}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <DeleteOutlined
+                        className="delete-icon"
+                        onClick={() => props.deleteComponent(props.component.id)}
+                      />
+                    </Tooltip>
+                  </>
+                )}
+              </Col>
+            </>
+          )}
       </Row>
       {modelComponents.hasOwnProperty(props.component.type) && (
         <ModelInput

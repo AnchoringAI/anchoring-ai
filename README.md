@@ -239,3 +239,5 @@ pip install -r requirements.txt
         ```
 
 After completing these steps, you should be able to see the app running on localhost:3000.
+
+## Git Development Process

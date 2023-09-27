@@ -44,25 +44,25 @@ const BatchInput = forwardRef(
       const validTypes = ["text/tab-separated-values", "text/plain", "text/csv"];
       return validTypes.includes(file.type);
     };
-    
+
     const isValidFileSize = (file) => {
       return file.size / 1024 / 1024 < 15;
     };
-    
+
     const beforeUpload = (file) => {
       if (!isValidFileType(file)) {
         message.error("Only TSV/TXT/CSV files are supported.");
         return false;
       }
-    
+
       if (!isValidFileSize(file)) {
         message.error("Only files smaller than 15MB are supported.");
         return false;
       }
-    
+
       return true;
     };
-    
+
     const fetchFileData = (fileId) => {
       if (!fileId) {
         console.error("No fileId provided");
@@ -378,20 +378,20 @@ const BatchInput = forwardRef(
             columns={
               fileData
                 ? Object.keys(fileData).map((key) => {
-                    const newKey = key === "key" ? "key_user" : key;
-                    return {
-                      title: newKey,
-                      dataIndex: newKey,
-                      render: (text) => (
-                        <Tooltip
-                          title={text.toString()}
-                          overlayStyle={{ maxWidth: 600 }}
-                        >
-                          <div className="table-column">{text.toString()}</div>
-                        </Tooltip>
-                      ),
-                    };
-                  })
+                  const newKey = key === "key" ? "key_user" : key;
+                  return {
+                    title: newKey,
+                    dataIndex: newKey,
+                    render: (text) => (
+                      <Tooltip
+                        title={text.toString()}
+                        overlayStyle={{ maxWidth: 600 }}
+                      >
+                        <div className="table-column">{text.toString()}</div>
+                      </Tooltip>
+                    ),
+                  };
+                })
                 : []
             }
             pagination={false}

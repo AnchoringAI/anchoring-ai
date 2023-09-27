@@ -119,7 +119,8 @@ def load_vector_store(embedding_id, llm_api_key_dict):
     embedding_model_provider = embedding_config["embedding_model"]["model_provider"]
     embedding_model_params_dict = embedding_config["embedding_model"]["parameters"]
 
-    embedding_model = select_embedding_model(embedding_model_provider, embedding_model_params_dict, llm_api_key_dict)
+    embedding_model = select_embedding_model(
+        embedding_model_provider, embedding_model_params_dict, llm_api_key_dict)
 
     if embedding_model is None:
         return None
@@ -130,7 +131,8 @@ def load_vector_store(embedding_id, llm_api_key_dict):
     vector_store_params_dict["embedding_model"] = embedding_model
     vector_store_params_dict["table_name"] = embedding_id
     vector_store_params_dict["mode"] = "read"
-    vector_store = select_vector_store(vector_store_provider, vector_store_params_dict)
+    vector_store = select_vector_store(
+        vector_store_provider, vector_store_params_dict)
 
     if vector_store is None:
         return None
@@ -196,14 +198,16 @@ def load_chain(action_list, llm_api_key_dict=None):
                 is_input = action["is_app_input"]
                 is_output = action["is_app_output"]
 
-                vector_store = load_vector_store(embedding_id, llm_api_key_dict)
+                vector_store = load_vector_store(
+                    embedding_id, llm_api_key_dict)
 
                 if vector_store is None:
                     return None
 
                 top_n = params_dict.get("top_n", 3)
                 doc_search_obj = DocSearch(vector_store, text_template, top_n)
-                chain_obj.add_doc_search(doc_search_obj, name, is_input, is_output)
+                chain_obj.add_doc_search(
+                    doc_search_obj, name, is_input, is_output)
 
         return chain_obj
     except Exception as e:
@@ -259,11 +263,13 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
     try:
         for table in table_list:
 
-            quota_needed = QuotaService.calculate_app_quota(created_by, action_list)
+            quota_needed = QuotaService.calculate_app_quota(
+                created_by, action_list)
             current_quota = QuotaService.check_user_quota(created_by)
 
             if current_quota.get('quota_available') < quota_needed:
-                raise InsufficientQuotaException(f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
+                raise InsufficientQuotaException(
+                    f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
 
             current_input_variables = copy.deepcopy(input_variables)
             current_input_variables.update(table)
@@ -277,7 +283,7 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
             db.session.commit()
             current_task.update_state(state="RUNNING",
                                       meta={"progress": {"total": total, "completed": count}})
-            
+
             QuotaService.update_user_quota(created_by, quota_needed)
 
         if task_build is None:
@@ -326,10 +332,12 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
     db.session.commit()
 
     try:
-        doc_transformer = select_doc_transformer(doc_transformer_type, doc_transformer_params_dict)
+        doc_transformer = select_doc_transformer(
+            doc_transformer_type, doc_transformer_params_dict)
     except Exception as e:
         embedding_build.status = TaskStatus.failed.value
-        embedding_build.message = {"message": "doc_transformer load failure. " + str(e)}
+        embedding_build.message = {
+            "message": "doc_transformer load failure. " + str(e)}
         embedding_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
         return
@@ -342,10 +350,12 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         return
 
     try:
-        embedding_model = select_embedding_model(embedding_model_provider, embedding_model_params_dict, llm_api_key_dict)
+        embedding_model = select_embedding_model(
+            embedding_model_provider, embedding_model_params_dict, llm_api_key_dict)
     except Exception as e:
         embedding_build.status = TaskStatus.failed.value
-        embedding_build.message = {"message": "embedding_model load failure. " + str(e)}
+        embedding_build.message = {
+            "message": "embedding_model load failure. " + str(e)}
         embedding_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
         return
@@ -359,10 +369,12 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
     try:
         vector_store_params_dict["embedding_model"] = embedding_model
         vector_store_params_dict["table_name"] = embedding_id
-        vector_store = select_vector_store(vector_store_provider, vector_store_params_dict)
+        vector_store = select_vector_store(
+            vector_store_provider, vector_store_params_dict)
     except Exception as e:
         embedding_build.status = TaskStatus.failed.value
-        embedding_build.message = {"message": "vector_store load failure. " + str(e)}
+        embedding_build.message = {
+            "message": "vector_store load failure. " + str(e)}
         embedding_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
         return
@@ -380,7 +392,8 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
     count = 0
 
     is_first_or_hundredth_iteration = (count % 100 == 0 or count == 1)
-    is_openai_api_key_not_provided = (get_selected_user_api_key_type_or_none("openai", created_by) is None)
+    is_openai_api_key_not_provided = (
+        get_selected_user_api_key_type_or_none("openai", created_by) is None)
 
     try:
         for chunk in chunk_list:
@@ -391,19 +404,20 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
                 quota_needed = 1
             else:
                 quota_needed = 0
-            
+
             current_quota = QuotaService.check_user_quota(created_by)
 
             if current_quota.get('quota_available') < quota_needed:
-                raise InsufficientQuotaException(f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
-            
+                raise InsufficientQuotaException(
+                    f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
+
             embedding_build.status = TaskStatus.running.value
             embedding_build.result = {"progress": {
                 "total": total, "completed": count}}
             db.session.commit()
             current_task.update_state(state="RUNNING",
-                                    meta={"progress": {"total": total, "completed": count}})
-            
+                                      meta={"progress": {"total": total, "completed": count}})
+
             QuotaService.update_user_quota(created_by, quota_needed)
 
         if embedding_build is None:
@@ -452,5 +466,3 @@ def doc_search(embedding_id, text_template, params_dict, llm_api_key_dict, input
     res = doc_search_obj.search(input_variables=input_variables)
 
     return res
-
-

@@ -239,7 +239,7 @@ def search_func():
 
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id, DbEmbedding.deleted_at.is_(
-        None), (DbEmbedding.created_by == g.current_user_id) |
+            None), (DbEmbedding.created_by == g.current_user_id) |
         (DbEmbedding.published == True)).first()
 
     if embedding_build is None:

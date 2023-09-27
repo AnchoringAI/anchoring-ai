@@ -1,9 +1,10 @@
+from app import app
 import json
 import sys
 import unittest
 
 sys.path.append("../")
-from app import app
+
 
 class TestAppAPI(unittest.TestCase):
 
@@ -28,7 +29,8 @@ class TestAppAPI(unittest.TestCase):
         request_obj = {
             "id": "",  # Include ID for updates, omit for new entries
             "app_name": "Test 1743",  # optional if update
-            "created_by": "b6c326ed",  # Optional for updates. Will add permission system and JWT authentication in the future.
+            # Optional for updates. Will add permission system and JWT authentication in the future.
+            "created_by": "b6c326ed",
             "tags": ["Programming", "GPT-3.5", "Code Generation", "Unit Test"],
             "description": "This is a test application",
             "published": False,
@@ -55,7 +57,7 @@ class TestAppAPI(unittest.TestCase):
                     "type": "text-input",
                     "input": "I want to take a {vehicle} to visit {city} ",
                     "title": "input 3",
-                    "is_app_input": 0, # Determine if this component‘s input will be required
+                    "is_app_input": 0,  # Determine if this component‘s input will be required
                     "is_app_output": 1  # Determine if this component‘s output will be returned and displayed
                 },
                 {
@@ -142,7 +144,8 @@ class TestAppAPI(unittest.TestCase):
         }
 
         # res = requests.get("http://127.0.0.1:5001/v1/app/modify")
-        response = self.client.post("/v1/app/modify", headers={"XAuthorization": self.token}, json=request_obj)
+        response = self.client.post(
+            "/v1/app/modify", headers={"XAuthorization": self.token}, json=request_obj)
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -153,7 +156,8 @@ class TestAppAPI(unittest.TestCase):
         self.__class__.app_id = res.get("id")
 
     def test_list_app(self):
-        response = self.client.get("/v1/app/list", headers={"XAuthorization": self.token})
+        response = self.client.get(
+            "/v1/app/list", headers={"XAuthorization": self.token})
 
         # Assert that the returned status code is 200
         self.assertEqual(200, response.status_code)
@@ -163,7 +167,8 @@ class TestAppAPI(unittest.TestCase):
 
     def test_load_app(self):
         if self.__class__.app_id is not None:  # Check if app_id was set
-            response = self.client.get("/v1/app/load/{}".format(self.__class__.app_id), headers={"XAuthorization": self.token})
+            response = self.client.get(
+                "/v1/app/load/{}".format(self.__class__.app_id), headers={"XAuthorization": self.token})
             self.assertEqual(200, response.status_code)
 
             res = json.loads(response.data.decode('utf-8'))
@@ -171,7 +176,8 @@ class TestAppAPI(unittest.TestCase):
 
     def test_delete_app(self):
         if self.__class__.app_id is not None:  # Check if app_id was set
-            response = self.client.delete("/v1/app/delete/{}".format(self.__class__.app_id), headers={"XAuthorization": self.token})
+            response = self.client.delete(
+                "/v1/app/delete/{}".format(self.__class__.app_id), headers={"XAuthorization": self.token})
             self.assertEqual(200, response.status_code)
 
             res = json.loads(response.data.decode('utf-8'))

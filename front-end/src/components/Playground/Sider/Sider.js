@@ -49,7 +49,7 @@ const PlaygroundSider = ({ onMenuClick }) => {
         defaultOpenKeys={["models", "data", "plugins"]}
         selectedKeys={selectedKeys}
         onClick={(e) => {
-          if(onMenuClick) {
+          if (onMenuClick) {
             onMenuClick(e);
           }
           setSelectedKeys([]);

@@ -221,7 +221,7 @@ const JobsPage = () => {
                       onOk() {
                         handlePublish(record.id);
                       },
-                      onCancel() {},
+                      onCancel() { },
                     });
                   }}
                 >
@@ -242,7 +242,7 @@ const JobsPage = () => {
                       onOk() {
                         handleStop(record.id);
                       },
-                      onCancel() {},
+                      onCancel() { },
                     });
                   }}
                 >
@@ -264,7 +264,7 @@ const JobsPage = () => {
                       onOk() {
                         handleDelete(record.id);
                       },
-                      onCancel() {},
+                      onCancel() { },
                     });
                   }}
                 >

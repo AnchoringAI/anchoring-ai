@@ -21,7 +21,7 @@ export const useFileHandler = ({ file, fetchFileData, setFile }) => {
       setUploadedBy(user.id);
     }
   }, [user]);
-  
+
   useEffect(() => {
     if (file) {
       uploadFile(file, uploadedBy)
@@ -36,7 +36,7 @@ export const useFileHandler = ({ file, fetchFileData, setFile }) => {
         })
         .catch((error) => {
           logError(error);
-      
+
           if (error.response?.data?.error) {
             message.error(error.response.data.error);
           } else {

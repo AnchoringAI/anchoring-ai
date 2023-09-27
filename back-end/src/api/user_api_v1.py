@@ -62,9 +62,10 @@ def register():
     db.session.add(user)
     db.session.flush()
 
-    initial_quota = DbUserQuota(user_id=user.id, quota_available=100, quota_used=0, updated_at=datetime.utcnow())
+    initial_quota = DbUserQuota(
+        user_id=user.id, quota_available=100, quota_used=0, updated_at=datetime.utcnow())
     db.session.add(initial_quota)
-    
+
     db.session.commit()
 
     access_token = JwtToken.generate(user.id)
@@ -76,9 +77,9 @@ def register():
 @user_api_v1.route('/logout', methods=['POST'])
 @login_required
 def logout():
-    # You would add logic here to blacklist the token, perhaps saving its ID 
+    # You would add logic here to blacklist the token, perhaps saving its ID
     # to a database of revoked tokens with a timestamp of when it was revoked.
-    # You would then update your token validation logic to check this database 
+    # You would then update your token validation logic to check this database
     # and reject tokens that have been revoked.
 
     # Here, we'll just return a success message

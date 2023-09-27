@@ -3,7 +3,7 @@ import enum
 
 class LlmApiType(enum.Enum):
     OPENAI = "openai"
-    
+
     @staticmethod
     def keys():
         return LlmApiType.__members__.keys()

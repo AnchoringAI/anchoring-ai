@@ -53,7 +53,7 @@ const ApplicationHomePage = () => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop <
-        document.documentElement.offsetHeight - 300 ||
+      document.documentElement.offsetHeight - 300 ||
       loading ||
       currentPage >= totalPages
     ) {

@@ -33,7 +33,7 @@ const PrivateRoute = ({ children }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);  
+  }, []);
 
   if (isLoading) {
     return (
