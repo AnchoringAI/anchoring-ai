@@ -6,6 +6,7 @@
 
 [**Why Anchoring AI?**](#why-anchoring-ai) |
 [**Live Demo and Videos**](#live-demo-and-videos) |
+[**Docker Deployment**](#docker-deployment) |
 [**Installation Guide**](#installation-guide)
 
 ## Why Anchoring AI?
@@ -24,7 +25,7 @@ We provide:
 - **Langchain Integration**: Seamless compatibility with Langchain (Python).
 - **Optimized Caching**: Reduce costs and boost performance.
 
-## Live Demo and Screenshots
+## Live Demo and Videos
 
 ### Live Website
 You can check out our Alpha Release [here](https://platform.anchoring.ai/).
@@ -39,6 +40,57 @@ https://github.com/AnchoringAI/anchoring-ai/assets/20156958/eece7096-7e54-476e-a
 - **Advanced Evaluation Metrics**: Custom modules for calculating evaluation metrics.
 - **Robust Security**: Strengthened security measures.
 - **Enhanced Modularity**: Improved standard components for increased flexibility.
+
+## Docker Deployment
+
+If you prefer to deploy Anchoring AI using Docker, this section provides a step-by-step guide to do so.
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/products/docker-desktop) must be installed on your system.
+
+### Instructions
+
+1. **Clone the GitHub Repository**  
+   If you haven't already, clone the repository to your local machine.
+
+    ```bash
+    git clone https://github.com/AnchoringAI/anchoring-ai.git
+    ```
+
+2. **Navigate to the Project Root Directory**
+
+    ```bash
+    cd anchoring-ai
+    ```
+
+3. **Build the Docker Image**
+
+    ```bash
+    docker-compose build
+    ```
+
+4. **Run Docker Containers**
+
+    ```bash
+    docker-compose up
+    ```
+
+Your application should now be accessible at `localhost:3000`.  
+
+### Teardown
+
+- **Stop Docker Containers**
+
+    ```bash
+    docker-compose down
+    ```
+
+- **Remove All Docker Resources (Optional)**
+
+    ```bash
+    docker system prune -a
+    ```
 
 ## Installation Guide
 
