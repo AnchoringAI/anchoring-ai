@@ -2,6 +2,7 @@ import json
 
 from flask import Blueprint, Response, request, jsonify, g
 from datetime import datetime
+import requests
 
 from connection import db
 from core.auth.authenticator import login_required, get_current_user
@@ -96,6 +97,44 @@ def get_application(app_id):
         return Response(json.dumps(app_dict))
     else:
         return {"message": "No application found with given ID."}, 400
+
+
+@app_api_v1.route('/lcgen', methods=['POST'])
+@login_required
+def langcode_application():
+    data = request.get_json()
+    create_with_inst = data.get('create_with_inst', None)
+
+    json_data = {
+        "agent_inst": create_with_inst
+    }
+    response = requests.post(
+        'https://lang-py-522564686dd7.herokuapp.com/anchoring',
+        json = json_data
+    )
+    if response.status_code != 200:
+        raise SystemError(
+            f'Failed to get valid response from server: {response.status_code}')
+    
+    data = json.loads(response.content)['agent']
+    id = gen_uuid()
+    app_name = data.get('app_name', None)
+    created_by = g.current_user_id
+    tags = data.get('tags', None)
+    description = data.get('description', None)
+    published = data.get('published', False)
+    chain = data.get('chain', None)
+
+    if app_name is None:
+        return Response("Required fields missing!", status=400)
+    app_build = DbAppBuild(id, app_name, created_by,
+                            tags, description, published, chain)
+    db.session.add(app_build)
+    
+    app_build_dict = app_build.as_dict()
+    db.session.commit()
+
+    return Response(json.dumps(app_build_dict))
 
 
 @app_api_v1.route('/modify', methods=['POST'])
