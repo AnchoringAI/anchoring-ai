@@ -25,6 +25,7 @@ const PlaygroundPage = lazy(() => import("./pages/Playground/PlaygroundPage"));
 const PlaygroundLoader = lazy(() =>
   import("./pages/Playground/PlaygroundLoader")
 );
+const PlaygroundGenerationPage = lazy(() => import("./pages/Playground/PlaygroundGenerationPage"));
 const JobsPage = lazy(() => import("./pages/Jobs/JobsPage"));
 const JobDetailPage = lazy(() => import("./pages/Jobs/JobDetailPage"));
 const DataPage = lazy(() => import("./pages/Data/DataPage"));
@@ -75,6 +76,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <PlaygroundPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/playground/generate"
+              element={
+                <PrivateRoute>
+                  <PlaygroundGenerationPage />
                 </PrivateRoute>
               }
             />
