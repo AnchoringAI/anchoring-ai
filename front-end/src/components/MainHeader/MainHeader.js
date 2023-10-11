@@ -1,11 +1,11 @@
-import React from "react";
-import { Layout, Menu, Dropdown } from "antd";
+import React, { useState } from "react";
+import { Layout, Menu, Dropdown, Modal, Button, Card } from "antd";
 import {
   GithubOutlined,
-  QuestionCircleOutlined,
   BookOutlined,
   LogoutOutlined,
   SettingOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import DiscordIcon from "../../assets/discord-mark-black.svg";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,6 +26,29 @@ const MainHeader = () => {
   const firstLetter = username[0].toUpperCase();
   const avatarColor = stringToColor(username);
   const darkAvatarColor = color(avatarColor).darken(0.5).hex();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCreateNewApp = () => {
+    navigate("/playground/new");
+    setIsModalVisible(false);
+  };
+
+  const handleGenerateNewApp = () => {
+    navigate("/playground/generate");
+    setIsModalVisible(false);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -104,6 +127,9 @@ const MainHeader = () => {
         />
       </div>
       <div className="input-group">
+        <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+          New App
+        </Button>
         <div className="icon-row">
           <a
             href="https://github.com/AnchoringAI/anchoring-ai"
@@ -147,6 +173,32 @@ const MainHeader = () => {
           </div>
         </Dropdown>
       </div>
+      <Modal
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+        className="create-app-modal"
+      >
+        <div className="modal-option" onClick={handleCreateNewApp}>
+          <Card bordered={true} hoverable={true}>
+            <p className="modal-card-title">Build on your own</p>
+            <p className="modal-card-text">
+              Create a new application from scratch using our intuitive
+              application building tools.
+            </p>
+          </Card>
+        </div>
+        <div className="modal-option" onClick={handleGenerateNewApp}>
+          <Card bordered={true} hoverable={true}>
+            <p className="modal-card-title">Build with AI</p>
+            <p className="modal-card-text">
+              Provide some simple instructions, and let AI automatically
+              generate a new application for you.
+            </p>
+          </Card>
+        </div>
+      </Modal>
     </Header>
   );
 };

@@ -167,3 +167,12 @@ export const publishApplication = async (id: string): Promise<any> => {
     throw error;
   }
 };
+
+export const autoGenerateApplication = async (
+  instruction: string
+): Promise<AppResponse> => {
+  const response: AxiosResponse = await api.post("/auto_generate", {
+    instruction: instruction,
+  });
+  return { application: fromApiResponse(response.data) };
+};
