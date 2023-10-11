@@ -1,11 +1,9 @@
 import json
 import requests
 import pandas as pd
-import io
 from datetime import datetime
-from flask import Blueprint, request, jsonify, send_file, g
+from flask import Blueprint, Response, request, jsonify, g
 from werkzeug.utils import secure_filename
-from sqlalchemy.exc import SQLAlchemyError
 from math import ceil
 
 from connection import db
@@ -176,11 +174,8 @@ def download_file(file_id):
     file_name = file_data.name
     raw_content = file_data.raw_content
 
-    response = send_file(
-        io.BytesIO(raw_content),
-        download_name=file_name,
-        as_attachment=True
-    )
+    response = Response(raw_content, mimetype='application/octet-stream')
+    response.headers.set('Content-Disposition', 'attachment', filename=file_name)
     response.headers["X-File-Name"] = file_name
     return response
 
