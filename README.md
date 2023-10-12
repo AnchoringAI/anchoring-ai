@@ -11,7 +11,7 @@
 
 ## Why Anchoring AI?
 
-Anchoring AI is the next-generation platform for teams to build, evaluate and host applications powered by language models.
+Anchoring AI is your gateway to effortless AI integration. Our open-source, no-code platform empowers teams to create, assess, share, and host applications powered by Large Language Models (LLMs), complete with rich component support. With Anchoring AI, managing access, controlling budgets, and running batch jobs is a breeze. We aim to be the destination of choice for transforming your team into an AI-centric powerhouse.
 
 We provide:
 
