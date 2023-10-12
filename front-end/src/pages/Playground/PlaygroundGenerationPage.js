@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Input, Button, message, Progress } from "antd"; // 1. Import Progress
+import { Layout, Input, Button, message, Progress } from "antd";
 import { autoGenerateApplication } from "../../api/applications.ts";
 import MainHeader from "../../components/MainHeader/MainHeader";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ const { TextArea } = Input;
 const PlaygroundGenerationPage = () => {
   const [instruction, setInstruction] = useState("");
   const [loading, setLoading] = useState(false);
-  const [percent, setPercent] = useState(0); // 2. Create a new state variable
+  const [percent, setPercent] = useState(0);
 
   const navigate = useNavigate();
 
@@ -25,12 +25,14 @@ const PlaygroundGenerationPage = () => {
 
   useEffect(() => {
     let timer;
-    if (loading && percent < 100) {
+    if (loading && percent < 99) {
       timer = setInterval(() => {
-        setPercent((prev) => Math.min(prev + 1, 100)); // 3. Update the percent value over time
-      }, 600); // Update every 600ms to simulate progress over 1 minute
+        setPercent((prev) => Math.min(prev + 1, 99));
+      }, 600);
+    } else if (!loading && percent === 99) {
+      setPercent(100);
     }
-    return () => clearInterval(timer); // Cleanup timer on component unmount or when loading is false
+    return () => clearInterval(timer);
   }, [loading, percent]);
 
   const handleGenerateClick = async () => {
@@ -42,15 +44,19 @@ const PlaygroundGenerationPage = () => {
     try {
       message.success("Your application is being created.");
       const response = await autoGenerateApplication(instruction);
-      message.success("Application generated successfully!");
-      setLoading(false);
-      setPercent(0); // 4. Reset percent to 0 and hide progress bar
-      const appId = response.application.appId;
-      navigate(`/playground/${appId}`);
+      if (response && response.application) {
+        message.success("Application generated successfully!");
+        setLoading(false);
+        setPercent(0);
+        const appId = response.application.appId;
+        navigate(`/playground/${appId}`);
+      } else {
+        throw new Error("No data returned");
+      }
     } catch (error) {
       message.error("Failed to generate application.");
       setLoading(false);
-      setPercent(0); // 4. Reset percent to 0 and hide progress bar
+      setPercent(0);
     }
   };
 
@@ -61,11 +67,10 @@ const PlaygroundGenerationPage = () => {
         <Content className="generation-content">
           <p className="instruction-title">Build with AI</p>
           <p className="instruction-description">
-            Provide a detailed description of the tasks you want AI to assist
-            with. The more detailed your instructions, the better AI can tailor
-            the generated application to your needs. After submitting, please
-            allow a minute for the application to be generated and appear in
-            your app list.
+            Tell us what tasks you'd like AI to help with. The more you share,
+            the better we can tailor the app to your needs. After you hit
+            submit, give us a minute to create your custom app. We'll take you
+            right to your new app once it's ready!
           </p>
           <TextArea
             value={instruction}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Card, Divider, Tag, Button } from "antd";
+import { Card, Divider, Tag, Button, Tooltip } from "antd";
 import MainHeader from "../../components/MainHeader/MainHeader";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { formatTime } from "../../utils/formatUtils";
@@ -22,6 +22,21 @@ const Avatar = ({ username }) => {
       {avatarLetter}
     </div>
   );
+};
+
+const truncateText = (text, maxLength = 90) => {
+  if (!text) return { truncatedText: '', wasTruncated: false };
+  
+  const regex = new RegExp(`^.{1,${maxLength}}\\b`);
+  const match = text.match(regex);
+
+  const truncatedText = match ? match[0] : text;
+  const wasTruncated = truncatedText.length < text.length;
+
+  return {
+    truncatedText: wasTruncated ? truncatedText + '...' : truncatedText,
+    wasTruncated,
+  };
 };
 
 const ApplicationHomePage = () => {
@@ -53,7 +68,7 @@ const ApplicationHomePage = () => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop <
-      document.documentElement.offsetHeight - 300 ||
+        document.documentElement.offsetHeight - 300 ||
       loading ||
       currentPage >= totalPages
     ) {
@@ -78,48 +93,61 @@ const ApplicationHomePage = () => {
       <MainHeader />
       <div className="app-page">
         <div className="app-card-container">
-          {applications.map((app) => (
-            <Link
-              to={`/apps/${app.appId}`}
-              key={app.appId}
-              className="app-card-link"
-            >
-              <Card className="app-card" bordered={false}>
-                <div className="built-by-container">
-                  <div className="built-by">
-                    <Avatar username={app.createdByUsername} />
-                    <span>{app.createdByUsername}</span>
+          {applications.map((app) => {
+            const { truncatedText, wasTruncated } = truncateText(
+              app.description
+            );
+            return (
+              <Link
+                to={`/apps/${app.appId}`}
+                key={app.appId}
+                className="app-card-link"
+              >
+                <Card className="app-card" bordered={false}>
+                  <div className="built-by-container">
+                    <div className="built-by">
+                      <Avatar username={app.createdByUsername} />
+                      <span>{app.createdByUsername}</span>
+                    </div>
                   </div>
-                </div>
-                <Divider className="card-divider" />
-                <div className="app-card-appname">
-                  <span className="app-card-appname-text">{app.appName}</span>
-                </div>
-                {app.description && (
-                  <div className="app-card-description">{app.description}</div>
-                )}
-                {app.tags && app.tags.length > 0 && (
-                  <div className="app-card-tags">
-                    {app.tags.map((tag, index) => (
-                      <Tag key={`${app.appId}-${index}`} color="default">
-                        {tag}
-                      </Tag>
-                    ))}
+                  <Divider className="card-divider" />
+                  <div className="app-card-appname">
+                    <span className="app-card-appname-text">{app.appName}</span>
                   </div>
-                )}
-                <Divider className="card-divider" />
-                <div className="app-card-username">
-                  <div className="app-card-createdat">
-                    <ClockCircleOutlined className="app-card-createdat-icon" />
-                    <span>{formatTime(app.createdAt)}</span>
+                  {app.description && (
+                    <div className="app-card-description">
+                      {wasTruncated ? (
+                        <Tooltip title={app.description}>
+                          {truncatedText}
+                        </Tooltip>
+                      ) : (
+                        truncatedText
+                      )}
+                    </div>
+                  )}
+                  {app.tags && app.tags.length > 0 && (
+                    <div className="app-card-tags">
+                      {app.tags.map((tag, index) => (
+                        <Tag key={`${app.appId}-${index}`} color="default">
+                          {tag}
+                        </Tag>
+                      ))}
+                    </div>
+                  )}
+                  <Divider className="card-divider" />
+                  <div className="app-card-username">
+                    <div className="app-card-createdat">
+                      <ClockCircleOutlined className="app-card-createdat-icon" />
+                      <span>{formatTime(app.createdAt)}</span>
+                    </div>
+                    <Button type="primary" ghost="true" className="open-button">
+                      Open
+                    </Button>
                   </div>
-                  <Button type="primary" ghost="true" className="open-button">
-                    Open
-                  </Button>
-                </div>
-              </Card>
-            </Link>
-          ))}
+                </Card>
+              </Link>
+            );
+          })}
         </div>
       </div>
       {loading && <div>Loading...</div>}

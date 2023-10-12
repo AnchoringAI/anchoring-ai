@@ -42,7 +42,7 @@ create table t_app
     created_at DATETIME     not null,
     updated_at DATETIME     not null,
     tags       JSON,
-    description       varchar(200),
+    description       varchar(1000),
     chain      JSON,
     published  boolean      not null default false,
     deleted_at DATETIME,
