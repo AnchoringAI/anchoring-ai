@@ -382,7 +382,7 @@ const ApplicationPage = () => {
               isEditMode={isEditMode}
             />
 
-            <div>
+            <div className="component-wrapper">
               {components.map((component, index) => (
                 <div key={component.id}>
                   <ComponentCard

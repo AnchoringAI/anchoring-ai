@@ -67,10 +67,10 @@ const PlaygroundPage = () => {
   }, [isChangeSaved]);
 
   useEffect(() => {
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [isChangeSaved]);
 
@@ -654,7 +654,11 @@ const PlaygroundPage = () => {
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="droppableComponents">
                 {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="component-wrapper"
+                  >
                     {components.map((component, index) => (
                       <Draggable
                         key={component.id}
