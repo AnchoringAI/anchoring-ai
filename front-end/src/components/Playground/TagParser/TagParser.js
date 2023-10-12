@@ -8,15 +8,7 @@ import "./TagParser.less";
 
 const TagParser = forwardRef(
   (
-    {
-      components,
-      id,
-      index,
-      onUpdateOutput,
-      onUpdateInput,
-      isEditMode,
-      title,
-    },
+    { components, id, index, onUpdateOutput, onUpdateInput, isEditMode, title },
     ref
   ) => {
     const [extractPattern, setExtractPattern] = useState("");
@@ -48,10 +40,6 @@ const TagParser = forwardRef(
     useEffect(() => {
       dispatch(setComponentParam(id, "extractPattern", extractPattern));
     }, [extractPattern, dispatch, id]);
-
-    useEffect(() => {
-      onUpdateOutput(output);
-    }, [output]);
 
     const handleRunClick = async () => {
       setIsLoading(true);
@@ -91,19 +79,21 @@ const TagParser = forwardRef(
         onUpdateOutput(extracted);
         setNoResult(extracted ? "" : "No data extracted.");
         await new Promise((resolve) => setTimeout(resolve, 100));
+        setIsLoading(false);
+        return extracted;
       }
       setIsLoading(false);
     };
 
     const extractPatternFromText = (text, pattern) => {
-      const regex = new RegExp(`<${pattern}>(.*?)</${pattern}>`, "i");
+      const regex = new RegExp(`<${pattern}>(.*?)<\/${pattern}>`, "is");
       const match = text.match(regex);
       return match ? match[1] : null;
     };
 
     useImperativeHandle(ref, () => ({
       async run() {
-        return handleRunClick();
+        return await handleRunClick();
       },
       getInput() {
         return input;
@@ -177,7 +167,11 @@ const TagParser = forwardRef(
                   onChange={(e) => setExtractPattern(e.target.value)}
                 />
               </div>
-              <Button type="primary" onClick={handleRunClick} loading={isLoading}>
+              <Button
+                type="primary"
+                onClick={handleRunClick}
+                loading={isLoading}
+              >
                 Run
               </Button>
             </div>
