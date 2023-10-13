@@ -195,14 +195,20 @@ def generate_application():
         "agent_inst": instruction
     }
     response = requests.post(
-        'http://sls-510-1.csail.mit.edu:8000/anchoring',
-        json = json_data
+        'https://lang-py-522564686dd7.herokuapp.com/anchoring_stream',
+        json = json_data, stream = True
     )
     if response.status_code != 200:
         raise SystemError(
             f'Failed to get valid response from server: {response.status_code}')
     
-    data = json.loads(response.content)['agent']
+    response_list = []
+    for line in response.iter_lines(decode_unicode=True):
+        chunk = json.loads(line)
+        response_list.append(chunk['choices'][0]['delta'].get('content', ''))
+    response_str = ''.join(response_list)
+    
+    data = json.loads(response_str)
     id = gen_uuid()
     app_name = data.get('app_name', None)
     created_by = g.current_user_id
