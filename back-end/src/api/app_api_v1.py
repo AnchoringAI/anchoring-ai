@@ -195,7 +195,7 @@ def generate_application():
         "agent_inst": instruction
     }
     response = requests.post(
-        'http://sls-510-1.csail.mit.edu:8000/anchoring_stream',
+        'https://lang-py-522564686dd7.herokuapp.com/anchoring_stream',
         json = json_data, stream = True
     )
     if response.status_code != 200:
