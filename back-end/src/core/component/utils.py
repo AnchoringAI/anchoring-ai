@@ -11,7 +11,7 @@ def generate_valid_prompt(text, input_variables=None):
             placeholder = f"{{{key}}}"
             template = template.replace(placeholder, str(value))
         return template
-    
+
     def escape_f_string(text):
         return text.replace('{', '{{').replace('}', '}}')
 

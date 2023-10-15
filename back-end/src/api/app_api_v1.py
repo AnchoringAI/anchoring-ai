@@ -1,44 +1,42 @@
+"""App API."""
 import json
 
-from flask import Blueprint, Response, request, jsonify, g
 from datetime import datetime
+from math import ceil
+from flask import Blueprint, Response, request, jsonify, g
+from sqlalchemy import desc, case
+
 import requests
 
 from connection import db
 from core.auth.authenticator import login_required, get_current_user
-from core.task import completion
 from model.application import DbAppBuild
 from model.user import DbUser
 from util.uid_gen import gen_uuid
-from math import ceil
-from sqlalchemy import desc, case
 
 app_api_v1 = Blueprint('app_api_v1', __name__, url_prefix='/v1/app')
-
-
-class LLMApp:
-    pass
 
 
 @app_api_v1.before_request
 @login_required
 def load_user_id():
+    """Load user ID."""
     g.current_user_id = get_current_user().get_id()
 
 
 @app_api_v1.route('/list', methods=['GET'])
 @login_required
 def get_app_list():
+    """Get app list."""
     params = request.args
     page = int(params.get('page', 1))
     size = int(params.get('size', 20))
     app_name = params.get('app_name', None)
     created_by = params.get('created_by', None)
     tags = params.get('tags', None)
-    description = params.get('description', None)
     query = DbAppBuild.query.join(DbUser).filter(
         DbAppBuild.deleted_at.is_(None), (DbAppBuild.created_by == g.current_user_id) |
-        (DbAppBuild.published == True))
+        (DbAppBuild.published is True))
 
     query = query.order_by(
         case(
@@ -80,9 +78,11 @@ def get_app_list():
 @app_api_v1.route('/load/<app_id>', methods=['GET'])
 @login_required
 def get_application(app_id):
+    """Get application."""
     app_build = DbAppBuild.query.filter(
-        DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None), (DbAppBuild.created_by == g.current_user_id) |
-        (DbAppBuild.published == True)).first()
+        DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None),
+        (DbAppBuild.created_by == g.current_user_id) |
+        (DbAppBuild.published is True)).first()
     if app_build:
         # app_dict = {
         #     "id": app_build.id,
@@ -95,19 +95,20 @@ def get_application(app_id):
         # }
         app_dict = app_build.as_dict()
         return Response(json.dumps(app_dict))
-    else:
-        return {"message": "No application found with given ID."}, 400
+
+    return {"message": "No application found with given ID."}, 400
 
 
 @app_api_v1.route('/modify', methods=['POST'])
 @login_required
 def modify_application():
+    """Modify application"""
     data = request.get_json()
 
-    id = data.get('id', None)
+    app_id = data.get('id', None)
     new = False
-    if id is None or id == "":
-        id = gen_uuid()
+    if app_id is None or app_id == "":
+        app_id = gen_uuid()
         new = True
     app_name = data.get('app_name', None)
     created_by = g.current_user_id
@@ -124,7 +125,8 @@ def modify_application():
         db.session.add(app_build)
     else:
         app_build = DbAppBuild.query.filter(
-            DbAppBuild.id == id, DbAppBuild.deleted_at.is_(None), DbAppBuild.created_by == g.current_user_id).first()
+            DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None),
+            DbAppBuild.created_by == g.current_user_id).first()
 
         app_build.updated_at = datetime.utcnow()
         app_build.published = published
@@ -149,11 +151,13 @@ def modify_application():
 @app_api_v1.route('/delete/<app_id>', methods=['DELETE'])
 @login_required
 def delete_application(app_id):
+    """Delete application"""
     if not app_id:
         return {"message": "Missing app_id in request body."}, 400
 
     app_build = DbAppBuild.query.filter(
-        DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None), DbAppBuild.created_by == g.current_user_id).first()
+        DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None),
+        DbAppBuild.created_by == g.current_user_id).first()
 
     if not app_build:
         return {"message": "No application found with given ID."}, 400
@@ -167,11 +171,13 @@ def delete_application(app_id):
 @app_api_v1.route('/publish/<app_id>', methods=['POST'])
 @login_required
 def publish_application(app_id):
+    """Publish application."""
     if not app_id:
         return {"message": "Missing app_id in the URL."}, 400
 
     app_build = DbAppBuild.query.filter(
-        DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None), DbAppBuild.created_by == g.current_user_id).first()
+        DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None),
+        DbAppBuild.created_by == g.current_user_id).first()
 
     if not app_build:
         return {"message": "No application found with given ID."}, 400
@@ -188,28 +194,27 @@ def publish_application(app_id):
 # Let LLM automatically generate applications based on users' requirements.
 @login_required
 def generate_application():
+    """Generate application."""
     data = request.get_json()
     instruction = data.get('instruction', None)
 
-    json_data = {
-        "agent_inst": instruction
-    }
     response = requests.post(
         'https://lang-py-522564686dd7.herokuapp.com/anchoring_stream',
-        json = json_data, stream = True
+        json={"agent_inst": instruction},
+        stream=True,
+        timeout=300
     )
     if response.status_code != 200:
         raise SystemError(
             f'Failed to get valid response from server: {response.status_code}')
-    
+
     response_list = []
     for line in response.iter_lines(decode_unicode=True):
         chunk = json.loads(line)
         response_list.append(chunk['choices'][0]['delta'].get('content', ''))
-    response_str = ''.join(response_list)
-    
-    data = json.loads(response_str)
-    id = gen_uuid()
+
+    data = json.loads(''.join(response_list))
+    app_id = gen_uuid()
     app_name = data.get('app_name', None)
     created_by = g.current_user_id
     tags = data.get('tags', None)
@@ -219,10 +224,10 @@ def generate_application():
 
     if app_name is None:
         return Response("Required fields missing!", status=400)
-    app_build = DbAppBuild(id, app_name, created_by,
-                            tags, description, published, chain)
+    app_build = DbAppBuild(app_id, app_name, created_by,
+                           tags, description, published, chain)
     db.session.add(app_build)
-    
+
     app_build_dict = app_build.as_dict()
     db.session.commit()
 

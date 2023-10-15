@@ -26,7 +26,7 @@ const Avatar = ({ username }) => {
 
 const truncateText = (text, maxLength = 90) => {
   if (!text) return { truncatedText: '', wasTruncated: false };
-  
+
   const regex = new RegExp(`^.{1,${maxLength}}\\b`);
   const match = text.match(regex);
 
@@ -68,7 +68,7 @@ const ApplicationHomePage = () => {
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop <
-        document.documentElement.offsetHeight - 300 ||
+      document.documentElement.offsetHeight - 300 ||
       loading ||
       currentPage >= totalPages
     ) {
