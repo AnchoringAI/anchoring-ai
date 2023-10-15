@@ -6,27 +6,21 @@ def generate_valid_prompt(text, input_variables=None):
     if input_variables is None:
         input_variables = {}
 
-    def replace_single_braces(text):
-        return re.sub(r"(?<!\{)\{([^{}]*)\}(?!\})", r"{{\1}}", text)
+    def replace_placeholders(template, variables):
+        for key, value in variables.items():
+            placeholder = f"{{{key}}}"
+            template = template.replace(placeholder, str(value))
+        return template
+    
+    def escape_f_string(text):
+        return text.replace('{', '{{').replace('}', '}}')
 
-    escaped_text = replace_single_braces(text)
+    replaced_text = replace_placeholders(text, input_variables)
+    escaped_text = escape_f_string(replaced_text)
 
-    for variable in input_variables:
-        escaped_text = re.sub(
-            r"{{" + re.escape(variable) + r"}}", "{" + variable + "}", escaped_text)
-
-    prompt = PromptTemplate.from_template(escaped_text)
+    prompt = PromptTemplate.from_template("")
+    prompt.template = escaped_text
+    prompt.validate_template = False
     valid_input_variables = {}
-
-    for variable in prompt.input_variables:
-        if variable in input_variables:
-            valid_input_variables[variable] = input_variables[variable]
-
-    for variable in prompt.input_variables:
-        if variable not in valid_input_variables:
-            prompt.template = re.sub(
-                r"{" + variable + r"}", "{{" + variable + "}}", prompt.template)
-
-    prompt.input_variables = list(valid_input_variables.keys())
 
     return prompt, valid_input_variables
