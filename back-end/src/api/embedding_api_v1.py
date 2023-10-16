@@ -40,7 +40,7 @@ def create_embedding_func():
         file_id is None or
         doc_transformer is None or
         embedding_model is None or
-            vector_store is None):
+        vector_store is None):
         return {
             "message":
             "Must provide: embedding_name, file_id, doc_transformer, embedding_model, vector_store"
