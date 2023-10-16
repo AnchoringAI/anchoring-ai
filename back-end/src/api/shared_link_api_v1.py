@@ -1,6 +1,7 @@
+"""Shared link API."""
 import json
 
-from flask import Blueprint, Response, request, jsonify, g, url_for
+from flask import Blueprint, Response, request, jsonify, g
 
 from connection import db
 from core.auth.authenticator import login_required, get_current_user
@@ -15,22 +16,25 @@ shared_link_api_v1 = Blueprint(
 @shared_link_api_v1.before_request
 @login_required
 def load_user_id():
+    """Load user ID."""
     g.current_user_id = get_current_user().get_id()
 
 
 @shared_link_api_v1.route('/app/<link_id>', methods=['GET'])
 @login_required
 def load_share_link_app(link_id):
-    return load_share_link_generic(link_id, 'APP')
+    """Load share link app."""
+    return _load_share_link_generic(link_id, 'APP')
 
 
 @shared_link_api_v1.route('/task/<link_id>', methods=['GET'])
 @login_required
 def load_share_link_task(link_id):
-    return load_share_link_generic(link_id, 'TASK')
+    """Load share link task."""
+    return _load_share_link_generic(link_id, 'TASK')
 
 
-def load_share_link_generic(link_id, expected_type):
+def _load_share_link_generic(link_id, expected_type):
     share_link_record = DbSharedLink.query.filter_by(id=link_id).first()
 
     if not share_link_record or share_link_record.resource_type != expected_type:
@@ -50,13 +54,14 @@ def load_share_link_generic(link_id, expected_type):
 
     if resource:
         return Response(json.dumps(resource.as_dict()))
-    else:
-        return {"message": "Resource not found or deleted."}, 404
+
+    return {"message": "Resource not found or deleted."}, 404
 
 
 @shared_link_api_v1.route('/generate', methods=['POST'])
 @login_required
 def generate_share_link():
+    """Generate share link."""
     request_data = request.get_json()
 
     # Extract necessary data from the request
@@ -73,14 +78,14 @@ def generate_share_link():
             DbAppBuild.id == resource_id,
             DbAppBuild.deleted_at.is_(None),
             (DbAppBuild.created_by == created_by) |
-            (DbAppBuild.published == True)
+            (DbAppBuild.published is True)
         ).first()
     elif resource_type == 'TASK':
         resource = DbAppTask.query.filter(
             DbAppTask.id == resource_id,
             DbAppTask.deleted_at.is_(None),
             (DbAppTask.created_by == created_by) |
-            (DbAppTask.published == True)
+            (DbAppTask.published is True)
         ).first()
     else:
         return {"message": "Invalid resource type."}, 400
@@ -105,4 +110,6 @@ def generate_share_link():
     db.session.commit()
 
     # Return the shareable URL as the response
-    return jsonify({"message": "Share link generated successfully", "share_link_id": share_link_id, "resource_type": resource_type}), 201
+    return jsonify({"message": "Share link generated successfully",
+                    "share_link_id": share_link_id,
+                    "resource_type": resource_type}), 201
