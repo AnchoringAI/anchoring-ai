@@ -1,3 +1,4 @@
+"""Connection."""
 import redis
 from flask_sqlalchemy import SQLAlchemy
 
