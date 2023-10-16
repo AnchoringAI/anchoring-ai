@@ -1,13 +1,17 @@
+"""User API."""
+from datetime import datetime
 from flask import Blueprint, request
 from werkzeug.exceptions import BadRequest
-from datetime import datetime
 
 from connection import db
 from core.auth.authenticator import login_required, get_current_user
 from core.auth.token import JwtToken
 from model.types import LlmApiType
 from model.user import DbUser, DbUserApiKey, DbUserQuota
-from services.user_api_key_service import get_current_user_api_keys, get_current_user_specified_api_key
+from services.user_api_key_service import (
+    get_current_user_api_keys,
+    get_current_user_specified_api_key,
+)
 from util.resp import response
 
 user_api_v1 = Blueprint('user_api_v1', __name__, url_prefix='/v1/user')
@@ -16,6 +20,7 @@ user_api_v1 = Blueprint('user_api_v1', __name__, url_prefix='/v1/user')
 @user_api_v1.route('/login_required_test', methods=['GET'])
 @login_required
 def login_required_test():
+    """Login required test."""
     user = get_current_user()
     if user:
         return response("The protected page is successfully accessed.")
@@ -24,6 +29,7 @@ def login_required_test():
 
 @user_api_v1.route('/login', methods=['POST'])
 def login():
+    """Login."""
     data = request.json
     email = data.get('email')
     password = data.get('password')
@@ -38,11 +44,13 @@ def login():
         return response("Login successful. Welcome back!", data={"token": access_token.to_str(),
                                                                  "username": user.username,
                                                                  "id": user.get_id()})
-    return response("The provided email or password is incorrect. Please try again.", False, None), 401
+    return response("The provided email or password is incorrect. Please try again.",
+                    False, None), 401
 
 
 @user_api_v1.route('/register', methods=['POST'])
 def register():
+    """Register."""
     data = request.json
     username = data.get('username')
     email = data.get('email')
@@ -77,6 +85,7 @@ def register():
 @user_api_v1.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    """Logout."""
     # You would add logic here to blacklist the token, perhaps saving its ID
     # to a database of revoked tokens with a timestamp of when it was revoked.
     # You would then update your token validation logic to check this database
@@ -89,6 +98,7 @@ def logout():
 @user_api_v1.route('/apikey', methods=['POST'])
 @login_required
 def register_api_key_for_user():
+    """Register API key for user."""
     data = request.json
     api_type = data.get('api_type')
     api_key = data.get('api_key')
@@ -111,6 +121,7 @@ def register_api_key_for_user():
 @user_api_v1.route('/apikey', methods=['DELETE'])
 @login_required
 def delete_user_api_key():
+    """Delete user API key."""
     data = request.json
     api_type = data.get('api_type')
     api_key = data.get('api_key')
@@ -129,5 +140,6 @@ def delete_user_api_key():
 @user_api_v1.route('/apikey', methods=['GET'])
 @login_required
 def get_user_api_keys():
+    """Get user API keys."""
     tokens = get_current_user_api_keys()
     return response(data=tokens)

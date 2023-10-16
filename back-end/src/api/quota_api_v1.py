@@ -1,3 +1,4 @@
+"""Quota API."""
 from flask import Blueprint, jsonify, g
 from werkzeug.exceptions import BadRequest
 from services.quota_service import QuotaService
@@ -9,12 +10,14 @@ quota_api_v1 = Blueprint('quota_api_v1', __name__, url_prefix='/v1/quota')
 @quota_api_v1.before_request
 @login_required
 def load_user_id():
+    """Load user ID."""
     g.current_user_id = get_current_user().get_id()
 
 
 @quota_api_v1.route('/check', methods=['GET'])
 @login_required
 def get_quota():
+    """Get quota."""
     try:
         user_id = g.current_user_id
         result = QuotaService.check_user_quota(user_id)

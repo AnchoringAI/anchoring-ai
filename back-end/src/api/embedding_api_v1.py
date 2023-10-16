@@ -1,3 +1,4 @@
+"""Embedding API."""
 import json
 from datetime import datetime
 from math import ceil
@@ -20,44 +21,36 @@ embedding_api_v1 = Blueprint(
 @embedding_api_v1.before_request
 @login_required
 def load_user_id():
+    """Load user ID."""
     g.current_user_id = get_current_user().get_id()
 
 
 @embedding_api_v1.route('/create', methods=['POST'])
 @login_required
 def create_embedding_func():
+    """Create embedding function."""
     data = json.loads(request.data)
+
     embedding_name = data.get("embedding_name", None)
-    if embedding_name is None:
-        return {"message": "No embedding_name id provided"}, 400
+    file_id = data.get("file_id", None)
+    doc_transformer = data.get("doc_transformer", None)
+    embedding_model = data.get("embedding_model", None)
+    vector_store = data.get("vector_store", None)
+    if (embedding_name is None or
+        file_id is None or
+        doc_transformer is None or
+        embedding_model is None or
+        vector_store is None):
+        return {
+            "message":
+            "Must provide: embedding_name, file_id, doc_transformer, embedding_model, vector_store"
+        }, 400
 
     created_by = g.current_user_id
     if created_by is None:
         return {"message": "No created_by id provided"}, 400
 
-    file_id = data.get("file_id", None)
-    if file_id is None:
-        return {"message": "No file id provided"}, 400
 
-    doc_transformer = data.get("doc_transformer", None)
-    if doc_transformer is None:
-        return {"message": "No doc_transformer provided"}, 400
-
-    embedding_model = data.get("embedding_model", None)
-    if embedding_model is None:
-        return {"message": "No embedding_model provided"}, 400
-
-    vector_store = data.get("vector_store", None)
-    if vector_store is None:
-        return {"message": "No vector_store provided"}, 400
-
-    doc_transformer_type = doc_transformer["type"]
-    doc_transformer_params_dict = doc_transformer["parameters"]
-
-    embedding_model_provider = embedding_model["model_provider"]
-    embedding_model_params_dict = embedding_model["parameters"]
-
-    vector_store_provider = vector_store["vector_store_provider"]
     vector_store_params_dict = vector_store["parameters"]
     vector_store_params_dict["db_path"] = current_app.config["VECTOR_STORE"]["db_path"]
 
@@ -69,8 +62,9 @@ def create_embedding_func():
                         "vector_store": vector_store}
 
     file_data = DbFile.query.filter(
-        DbFile.id == file_id, DbFile.deleted_at.is_(None), (DbFile.uploaded_by == g.current_user_id) |
-        (DbFile.published == True)).first()
+        DbFile.id == file_id, DbFile.deleted_at.is_(None),
+        (DbFile.uploaded_by == g.current_user_id) |
+        (DbFile.published is True)).first()
     if file_data is None:
         return {"message": "File not found"}, 400
 
@@ -79,10 +73,14 @@ def create_embedding_func():
     if text is None or len(text) == 0:
         return {"message": "File is empty"}, 400
 
-    embedding_id = start_embedding_task(doc_transformer_type, doc_transformer_params_dict,
-                                        embedding_model_provider, embedding_model_params_dict,
-                                        vector_store_provider, vector_store_params_dict,
-                                        text, embedding_name, created_by, file_id, llm_api_key_dict, embedding_config)
+    embedding_id = start_embedding_task(doc_transformer["type"],
+                                        doc_transformer["parameters"],
+                                        embedding_model["model_provider"],
+                                        embedding_model["parameters"],
+                                        vector_store["vector_store_provider"],
+                                        vector_store_params_dict,
+                                        text, embedding_name, created_by, file_id, llm_api_key_dict,
+                                        embedding_config)
 
     if embedding_id is None:
         return jsonify({"embedding_id": None, "success": False})
@@ -93,9 +91,11 @@ def create_embedding_func():
 @embedding_api_v1.route('/status/<embedding_id>', methods=['GET'])
 @login_required
 def embedding_task_status_func(embedding_id):
+    """Embedding task status function."""
     embedding_build = DbEmbedding.query.filter(
-        DbEmbedding.id == embedding_id,  (DbEmbedding.created_by == g.current_user_id) |
-        (DbEmbedding.published == True)).first()
+        DbEmbedding.id == embedding_id,
+        (DbEmbedding.created_by == g.current_user_id) |
+        (DbEmbedding.publish is True)).first()
 
     if embedding_build is None:
         return {"message": "embedding id is invalid"}, 400
@@ -125,6 +125,7 @@ def embedding_task_status_func(embedding_id):
 @embedding_api_v1.route('/stop/<embedding_id>', methods=['GET'])
 @login_required
 def stop_embedding_task_func(embedding_id):
+    """Stop embedding task function."""
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id, DbEmbedding.created_by == g.current_user_id).first()
 
@@ -153,6 +154,7 @@ def stop_embedding_task_func(embedding_id):
 @embedding_api_v1.route('/list', methods=['GET'])
 @login_required
 def list_embedding_task_func():
+    """List embedding task function."""
     params = request.args
     page = int(params.get('page', 1))
     size = int(params.get('size', 20))
@@ -161,7 +163,7 @@ def list_embedding_task_func():
 
     query = DbEmbedding.query.join(DbUser).filter(DbEmbedding.deleted_at.is_(
         None), (DbEmbedding.created_by == g.current_user_id) |
-        (DbEmbedding.published == True)).order_by(DbEmbedding.created_at.desc())
+        (DbEmbedding.published is True)).order_by(DbEmbedding.created_at.desc())
 
     if created_by is not None:
         query = query.filter(DbEmbedding.created_by == created_by)
@@ -195,8 +197,11 @@ def list_embedding_task_func():
 @embedding_api_v1.route('/delete/<embedding_id>', methods=['DELETE'])
 @login_required
 def delete_embedding_task_func(embedding_id):
+    """Delete embedding task function."""
     embedding_build = DbEmbedding.query.filter(
-        DbEmbedding.id == embedding_id, DbEmbedding.deleted_at.is_(None), DbEmbedding.created_by == g.current_user_id).first()
+        DbEmbedding.id == embedding_id,
+        DbEmbedding.deleted_at.is_(None),
+        DbEmbedding.created_by == g.current_user_id).first()
 
     if embedding_build is None:
         return jsonify({"message": "embedding id is invalid"}), 400
@@ -210,11 +215,15 @@ def delete_embedding_task_func(embedding_id):
 @embedding_api_v1.route('/publish/<embedding_id>', methods=['POST'])
 @login_required
 def publish_embedding(embedding_id):
+    """Publish embedding."""
     if not embedding_id:
         return {"message": "Missing embedding id in the URL."}, 400
 
     embedding_build = DbEmbedding.query.filter(
-        DbEmbedding.id == embedding_id, DbEmbedding.deleted_at.is_(None), DbEmbedding.created_by == g.current_user_id, DbEmbedding.status == 3).first()
+        DbEmbedding.id == embedding_id,
+        DbEmbedding.deleted_at.is_(None),
+        DbEmbedding.created_by == g.current_user_id,
+        DbEmbedding.status == 3).first()
 
     if not embedding_build:
         return {"message": "No embedded file found with given ID."}, 400
@@ -228,9 +237,10 @@ def publish_embedding(embedding_id):
 @embedding_api_v1.route('/search', methods=['POST'])
 @login_required
 def search_func():
+    """Search function."""
     data = json.loads(request.data)
     embedding_id = data["embedding_id"]
-    input = data["input"]
+    data_input = data["input"]
     params_dict = data["parameters"]
     input_variables = data.get("input_variables", None)
 
@@ -240,12 +250,12 @@ def search_func():
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id, DbEmbedding.deleted_at.is_(
             None), (DbEmbedding.created_by == g.current_user_id) |
-        (DbEmbedding.published == True)).first()
+        (DbEmbedding.published is True)).first()
 
     if embedding_build is None:
         return jsonify({"message": "embedding id is invalid"}), 400
 
-    res = doc_search(embedding_id, input, params_dict,
+    res = doc_search(embedding_id, data_input, params_dict,
                      llm_api_key_dict, input_variables)
 
     return jsonify({"result": res})
