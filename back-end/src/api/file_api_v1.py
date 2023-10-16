@@ -211,8 +211,8 @@ def delete_file(file_id):
 
             if not chroma_resp.ok:
                 return jsonify(error='Failed to delete embeddings from Chroma DB'), 500
-        except (requests.ConnectionError, requests.RequestException) as e:
-            return jsonify(error=f'Failed to delete embeddings from Chroma DB: {e}'), 500
+        except (requests.ConnectionError, requests.RequestException):
+            return jsonify(error='Failed to delete embeddings from Chroma DB'), 500
 
     file_data.deleted_at = datetime.utcnow()
     db.session.commit()
