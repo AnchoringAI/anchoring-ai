@@ -175,7 +175,8 @@ def download_file(file_id):
     raw_content = file_data.raw_content
 
     response = Response(raw_content, mimetype='application/octet-stream')
-    response.headers.set('Content-Disposition', 'attachment', filename=file_name)
+    response.headers.set('Content-Disposition',
+                         'attachment', filename=file_name)
     response.headers["X-File-Name"] = file_name
     return response
 
