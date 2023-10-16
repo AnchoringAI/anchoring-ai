@@ -1,7 +1,9 @@
+"""Task progress."""
 from connection import r
 
 
 class TaskRedisRecords:
+    """Task redis records."""
     def __init__(self, task_id, total=0):
         self.task_id = task_id
         self.redis_name = self._assemble_task_redis_name(task_id)
@@ -20,38 +22,49 @@ class TaskRedisRecords:
         ])
 
     def get_task_total(self):
+        """Get task total."""
         return r.hget(self.redis_name, self._total_key())
 
     def get_task_progress(self):
+        """Get task progress."""
         return r.hget(self.redis_name, self._done_key())
 
     def increase_task_progress(self):
+        """Increase task progress."""
         r.hincrby(self.redis_name, self._done_key())
 
     def get_task_fail(self):
+        """Get task fail."""
         return r.hget(self.redis_name, self._fail_key())
 
     def increase_task_fail(self):
+        """Increase task fail."""
         r.hincrby(self.redis_name, self._fail_key())
 
     def get_task_result(self):
+        """Get task result."""
         return r.hget(self.redis_name, self._result_key())
 
     def append_result(self, target):
+        """Append result."""
         result = self.get_task_result()
         result.append(target)
         r.hset(self.redis_name, self._result_key(), result)
 
     def is_active(self):
+        """Is active."""
         return r.hget(self.redis_name, self._active_key()) > 0
 
     def deactivate(self):
+        """Deactivate."""
         r.hset(self.redis_name, self._active_key(), 0)
 
     def get_fail_message(self):
+        """Get fail message."""
         return r.hget(self.redis_name, self._fail_key())
 
     def append_fail_message(self, msg):
+        """Append fail message."""
         messages = self.get_fail_message()
         messages.append(msg)
         r.hset(self.redis_name, self._fail_key(), messages)

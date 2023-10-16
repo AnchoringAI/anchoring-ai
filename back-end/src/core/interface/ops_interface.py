@@ -240,21 +240,21 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
 
     task_build = DbAppTask(id=task_id, task_name=task_name, created_by=created_by,
                            created_at=created_at, app_id=app_id, file_id=file_id, published=False)
-    task_build.status = TaskStatus.queued.value
+    task_build.status = TaskStatus.QUEUED.value
     db.session.add(task_build)
     db.session.commit()
 
     try:
         chain_obj = load_chain(action_list, llm_api_key_dict=llm_api_key_dict)
     except Exception as e:
-        task_build.status = TaskStatus.failed.value
+        task_build.status = TaskStatus.FAILED.value
         task_build.message = {"message": "application load failure. " + str(e)}
         task_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
         return
 
     if chain_obj is None:
-        task_build.status = TaskStatus.failed.value
+        task_build.status = TaskStatus.FAILED.value
         task_build.message = {"message": "application load failure"}
         task_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
@@ -277,7 +277,7 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
             res_list.append(res)
             count += 1
 
-            task_build.status = TaskStatus.running.value
+            task_build.status = TaskStatus.RUNNING.value
             task_build.result = {"progress": {
                 "total": total, "completed": count}, "result": res_list}
             db.session.commit()
@@ -289,14 +289,14 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
         if task_build is None:
             return
 
-        task_build.status = TaskStatus.completed.value
+        task_build.status = TaskStatus.COMPLETED.value
         task_build.completed_at = datetime.datetime.utcnow()
         task_build.result = {"progress": {"total": total,
                                           "completed": count}, "result": res_list}
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        task_build.status = TaskStatus.failed.value
+        task_build.status = TaskStatus.FAILED.value
 
         if isinstance(e, InsufficientQuotaException):
             task_build.message = {"message": str(e)}
@@ -327,7 +327,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
 
     embedding_build = DbEmbedding(id=embedding_id, embedding_name=embedding_name, created_by=created_by,
                                   file_id=file_id, config=embedding_config, published=False)
-    embedding_build.status = TaskStatus.queued.value
+    embedding_build.status = TaskStatus.QUEUED.value
     db.session.add(embedding_build)
     db.session.commit()
 
@@ -335,7 +335,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         doc_transformer = select_doc_transformer(
             doc_transformer_type, doc_transformer_params_dict)
     except Exception as e:
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         embedding_build.message = {
             "message": "doc_transformer load failure. " + str(e)}
         embedding_build.completed_at = datetime.datetime.utcnow()
@@ -343,7 +343,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         return
 
     if doc_transformer is None:
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         embedding_build.message = {"message": "doc_transformer load failure"}
         embedding_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
@@ -353,7 +353,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         embedding_model = select_embedding_model(
             embedding_model_provider, embedding_model_params_dict, llm_api_key_dict)
     except Exception as e:
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         embedding_build.message = {
             "message": "embedding_model load failure. " + str(e)}
         embedding_build.completed_at = datetime.datetime.utcnow()
@@ -361,7 +361,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         return
 
     if embedding_model is None:
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         embedding_build.message = {"message": "embedding_model load failure"}
         embedding_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
@@ -372,7 +372,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         vector_store = select_vector_store(
             vector_store_provider, vector_store_params_dict)
     except Exception as e:
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         embedding_build.message = {
             "message": "vector_store load failure. " + str(e)}
         embedding_build.completed_at = datetime.datetime.utcnow()
@@ -380,7 +380,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         return
 
     if vector_store is None:
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         embedding_build.message = {"message": "vector_store load failure"}
         embedding_build.completed_at = datetime.datetime.utcnow()
         db.session.commit()
@@ -411,7 +411,7 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
                 raise InsufficientQuotaException(
                     f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
 
-            embedding_build.status = TaskStatus.running.value
+            embedding_build.status = TaskStatus.RUNNING.value
             embedding_build.result = {"progress": {
                 "total": total, "completed": count}}
             db.session.commit()
@@ -423,14 +423,14 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         if embedding_build is None:
             return
 
-        embedding_build.status = TaskStatus.completed.value
+        embedding_build.status = TaskStatus.COMPLETED.value
         embedding_build.completed_at = datetime.datetime.utcnow()
         embedding_build.result = {"progress": {"total": total,
                                                "completed": count}}
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        embedding_build.status = TaskStatus.failed.value
+        embedding_build.status = TaskStatus.FAILED.value
         if isinstance(e, InsufficientQuotaException):
             embedding_build.message = {"message": str(e)}
         else:

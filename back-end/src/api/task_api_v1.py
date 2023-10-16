@@ -360,7 +360,7 @@ def stop_batch_task_func(task_id):
     async_result.revoke(terminate=True, signal="SIGTERM", wait=True, timeout=5)
 
     # Task successfully terminated
-    task_build.status = TaskStatus.stopped.value
+    task_build.status = TaskStatus.STOPPED.value
     task_build.completed_at = datetime.utcnow()
     db.session.commit()
 

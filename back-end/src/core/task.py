@@ -1,7 +1,9 @@
+"""Task."""
 import openai
 
 
 def completion(prompt, parameters):
+    """Completion."""
     params = {
         "prompt": prompt,
         **parameters

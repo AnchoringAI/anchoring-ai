@@ -1,3 +1,4 @@
+"""Authenticator."""
 from functools import wraps
 
 from flask import request, g
@@ -8,10 +9,12 @@ from services.user_service import get_user_by_id
 
 
 class Authenticator:
+    """Authenticator."""
     def __init__(self, token_extractor: JwtTokenExtractor):
         self._token_extractor = token_extractor
 
     def authenticate(self, req) -> JwtToken:
+        """Authenticate."""
         token = self.extract_token_from_request(req)
         self.assert_login_uniqueness(token)
         self.assert_token_version_up_to_date(token)
@@ -28,10 +31,11 @@ class Authenticator:
 
     @staticmethod
     def assert_login_uniqueness(token: JwtToken):
-        # todo: session id
+        # TO-DO: session id
         return True
 
     def extract_token_from_request(self, req):
+        """Extract token from request."""
         return self._token_extractor.extract_from(req)
 
 
@@ -39,14 +43,17 @@ authenticator = Authenticator(JwtTokenExtractor())
 
 
 def get_current_user():
+    """Get current user."""
     return g.current_user
 
 
 def set_current_user(user):
+    """Set current user."""
     g.current_user = user
 
 
 def login_required(f):
+    """Login required."""
     @wraps(f)
     def wrapper(*args, **kw):
         # NOTES:

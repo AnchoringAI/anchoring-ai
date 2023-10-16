@@ -1,3 +1,4 @@
+"""Token."""
 import json
 
 import jwt
@@ -14,6 +15,7 @@ JWT_AUDIENCE = "LLMOPS"
 
 
 class JwtToken:
+    """JTW token."""
     # -------- Static Parameters --------
     encryptor = Fernet(PAYLOAD_ENC_SALT)
     jwt_sign_salt = JWT_SIGNATURE_SALT
@@ -29,6 +31,7 @@ class JwtToken:
         self.version = version
 
     def to_json(self):
+        """To JSON."""
         return self.__dict__
 
     @classmethod
@@ -69,6 +72,7 @@ class JwtToken:
 
     @classmethod
     def validate(cls, payload_dict) -> None:
+        """Validate."""
         for necessary_field in ["u", "exp", "vs"]:
             if necessary_field not in payload_dict:
                 raise jwt.InvalidTokenError(

@@ -144,7 +144,7 @@ def stop_embedding_task_func(embedding_id):
     async_result.revoke(terminate=True, signal="SIGTERM", wait=True, timeout=5)
 
     # Task successfully terminated
-    embedding_build.status = TaskStatus.stopped.value
+    embedding_build.status = TaskStatus.STOPPED.value
     embedding_build.completed_at = datetime.utcnow()
     db.session.commit()
 

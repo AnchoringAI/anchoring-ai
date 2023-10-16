@@ -1,3 +1,4 @@
+"""Extractor."""
 import re
 
 import jwt
@@ -9,10 +10,12 @@ HTTP_HEADER_AUTHORIZATION_FIELD = "XAuthorization"
 
 
 class JwtTokenExtractor:
+    """JWT token extractor."""
     def __init__(self, request_header_field: str = HTTP_HEADER_AUTHORIZATION_FIELD):
         self._header_field = request_header_field
 
     def extract_from(self, flask_request):
+        """Extract from."""
         if type(flask_request) is not type(request):
             raise TypeError("input item is not a flask request(LocalProxy)")
 
@@ -27,17 +30,13 @@ class JwtTokenExtractor:
 
         if not raw_token_str:
             raise jwt.InvalidTokenError(
-                "missing {} field in request header".format(
-                    HTTP_HEADER_AUTHORIZATION_FIELD)
-            )
+                f"missing {HTTP_HEADER_AUTHORIZATION_FIELD} field in request header")
 
         parsed_token = re.findall(r" *Bearer +(\S*)$", raw_token_str)
         if not parsed_token:
             raise jwt.InvalidTokenError(
-                "{} header is not in format of Bearer <token>,"
-                " got {}".format(
-                    HTTP_HEADER_AUTHORIZATION_FIELD, raw_token_str)
-            )
+                f"{HTTP_HEADER_AUTHORIZATION_FIELD} header is not in format of Bearer <token>,"
+                " got {raw_token_str}")
 
         token_str = parsed_token[0]
         if token_str.startswith("Bearer "):

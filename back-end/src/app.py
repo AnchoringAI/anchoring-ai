@@ -1,7 +1,7 @@
+"""App."""
 import os
 
 import langchain
-from flask import Response
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from langchain.cache import InMemoryCache
@@ -19,7 +19,7 @@ from util.celery_init import celery_init_app
 
 
 CORS(app)
-# todo: Distinguish between environment variables to obtain different configurations
+# TO-DO: Distinguish between environment variables to obtain different configurations
 app.config.from_object(DevelopmentConfig)
 
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
@@ -41,11 +41,6 @@ app.register_blueprint(quota_api_v1)
 app.register_blueprint(file_api_v1)
 app.register_blueprint(embedding_api_v1)
 app.register_blueprint(shared_link_api_v1)
-
-
-@app.route('/ping')
-def ping_pong():  # put application's code here
-    return Response('Pong!')
 
 
 if __name__ == '__main__':

@@ -1,12 +1,16 @@
+"""Shared link."""
 from datetime import datetime
 from sqlalchemy import String, DateTime, ForeignKey, TIMESTAMP
 from sqlalchemy.orm import relationship
-from model.base import DbBase
+
 from connection import db
 from util.uid_gen import gen_uuid
+from model.base import DbBase
 
 
+# pylint: disable=too-few-public-methods
 class DbSharedLink(DbBase):
+    """DB shared link."""
     __tablename__ = 't_shared_link'
 
     id = db.Column(String(36), primary_key=True, nullable=False,
@@ -19,6 +23,9 @@ class DbSharedLink(DbBase):
 
     user = relationship("DbUser", backref='shared_links')
 
+    # pylint: disable=too-many-arguments
+    # pylint: disable=redefined-builtin
+    # pylint: disable=super-init-not-called
     def __init__(self, id, created_by, resource_id, resource_type, expires_at=None):
         self.id = id
         self.created_by = created_by
@@ -27,6 +34,9 @@ class DbSharedLink(DbBase):
         self.expires_at = expires_at
 
     def as_dict(self, exclude=None):
+        """Dict format."""
         if exclude is None:
             exclude = []
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in exclude}
+        return {
+            c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in exclude
+        }
