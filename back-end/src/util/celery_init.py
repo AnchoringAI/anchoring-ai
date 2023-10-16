@@ -9,6 +9,7 @@ def celery_init_app(app: Flask) -> Celery:
     # pylint: disable=abstract-method
     class FlaskTask(Task):
         """Flask task."""
+
         def __call__(self, *args: object, **kwargs: object) -> object:
             with app.app_context():
                 return self.run(*args, **kwargs)

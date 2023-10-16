@@ -22,7 +22,7 @@ class DbUser(DbBase):
     authenticated = db.Column(db.Boolean, default=True)
     anonymous = db.Column(db.Boolean, default=False)
     create_at = db.Column(DateTime, nullable=False, default=datetime.utcnow)
-    
+
     # pylint: disable=super-init-not-called
     def __init__(self, username, email, password):
         self.username = username

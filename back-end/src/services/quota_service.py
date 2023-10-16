@@ -54,7 +54,7 @@ class QuotaService:
         for entry in data:
             model_provider = entry.get("model_provider")
             if (model_provider in model_providers and
-                get_selected_user_api_key_type_or_none(model_provider, user_id) is None):
+                    get_selected_user_api_key_type_or_none(model_provider, user_id) is None):
                 quota_needed += 1
                 if entry.get("parameters", {}).get("model_name") == "gpt-4":
                     quota_needed += 4
@@ -69,7 +69,7 @@ class QuotaService:
 
         model_provider = data.get("model_provider")
         if (model_provider in model_providers and
-            get_selected_user_api_key_type_or_none(model_provider, user_id) is None):
+                get_selected_user_api_key_type_or_none(model_provider, user_id) is None):
             quota_needed += 1
             if data.get("parameters", {}).get("model_name") == "gpt-4":
                 quota_needed += 4

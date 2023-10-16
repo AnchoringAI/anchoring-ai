@@ -86,15 +86,18 @@ class JwtToken:
     def digest(cls, token_str: str):
         """
         digest pure token_str
-        :param token_str: pure token string parsed from request header and get rid of "Bearer" type field
+
+        Args:
+          token_str: pure token string parsed from request header without the "Bearer" type field.
         """
         if token_str.startswith('Bearer '):
             token_str = token_str[len("Bearer "):]
 
         encrypt_payload = bytes.fromhex(
-            jwt.decode(token_str, cls.jwt_sign_salt, algorithms=["HS256"], audience=JWT_AUDIENCE).get(
-                "enc", None
-            )
+            jwt.decode(token_str,
+                       cls.jwt_sign_salt,
+                       algorithms=["HS256"],
+                       audience=JWT_AUDIENCE).get("enc", None)
         )
         if encrypt_payload is None:
             raise jwt.InvalidTokenError("token has no payload")
@@ -104,7 +107,7 @@ class JwtToken:
                 encrypt_payload).decode("utf-8"))
         except Exception as e:
             raise jwt.InvalidTokenError(
-                "token cannot digest, {}".format(str(e)))
+                f"token cannot digest, {e}")
         cls.validate(payload)
         return cls(
             user_id=payload["u"],

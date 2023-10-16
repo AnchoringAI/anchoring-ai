@@ -1,3 +1,4 @@
+"""Open AI."""
 from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chains import LLMChain
@@ -7,7 +8,8 @@ from config import logger
 
 
 class OpenAIProcessor:
-    # Constructor (initialize object)
+    """Open AI processor."""
+    # pylint: disable=too-many-arguments
     def __init__(self, model_name="text-davinci-003",
                  temperature=0.7,
                  max_tokens=256,
@@ -47,17 +49,17 @@ class OpenAIProcessor:
                           cache=cache_enable)
 
     def complete(self, prompt, input_variables=None):
+        """Complete."""
         llm_chain = LLMChain(llm=self.llm, prompt=prompt)
 
         with get_openai_callback() as cb:
             res = llm_chain(inputs=input_variables)
 
-            logger.debug("Total Tokens: {}".format(cb.total_tokens))
-            logger.debug("Prompt Tokens: {}".format(cb.prompt_tokens))
-            logger.debug("Completion Tokens: {}".format(cb.completion_tokens))
-            logger.debug("Successful Requests: {}".format(
-                cb.successful_requests))
-            logger.debug("Total Cost (USD): ${}".format(cb.total_cost))
+            logger.debug(f"Total Tokens: {cb.total_tokens}")
+            logger.debug(f"Prompt Tokens: {cb.prompt_tokens}")
+            logger.debug(f"Completion Tokens: {cb.completion_tokens}")
+            logger.debug(f"Successful Requests: {cb.successful_requests}")
+            logger.debug(f"Total Cost (USD): ${cb.total_cost}")
 
             return {
                 "result": res.get("text", ""),
@@ -70,12 +72,13 @@ class OpenAIProcessor:
 
     @staticmethod
     def check_params_dict(params_dict):
+        """Check params dict."""
         valid_key_set = set(OpenAIProcessor.__init__.__code__.co_varnames)
         keys = list(params_dict.keys())
         for key in keys:
             if key not in valid_key_set:
                 del params_dict[key]
-                logger.warning("{} is not a valid parameter".format(key))
+                logger.warning(f"{key} is not a valid parameter")
 
         if "model_name" not in params_dict:
             params_dict["model_name"] = "text-davinci-003"
@@ -114,7 +117,8 @@ class OpenAIProcessor:
 
 
 class OpenAIEmbedding:
-    # Constructor (initialize object)
+    """Open AI embedding."""
+    # pylint: disable=too-many-arguments
     def __init__(self, model="text-embedding-ada-002",
                  embedding_ctx_length=8191,
                  chunk_size=1000,
@@ -129,16 +133,18 @@ class OpenAIEmbedding:
                                                 openai_api_key=openai_api_key)
 
     def embed_text(self, text):
+        """Embed text."""
         return self.embedding_model.embed_query(text)
 
     @staticmethod
     def check_params_dict(params_dict):
+        """Check params dict."""
         valid_key_set = set(OpenAIEmbedding.__init__.__code__.co_varnames)
         keys = list(params_dict.keys())
         for key in keys:
             if key not in valid_key_set:
                 del params_dict[key]
-                logger.warning("{} is not a valid parameter".format(key))
+                logger.warning(f"{key} is not a valid parameter")
 
         if "model" not in params_dict:
             params_dict["model"] = "text-embedding-ada-002"

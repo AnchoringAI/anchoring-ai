@@ -40,7 +40,7 @@ def create_embedding_func():
         file_id is None or
         doc_transformer is None or
         embedding_model is None or
-        vector_store is None):
+            vector_store is None):
         return {
             "message":
             "Must provide: embedding_name, file_id, doc_transformer, embedding_model, vector_store"
@@ -49,7 +49,6 @@ def create_embedding_func():
     created_by = g.current_user_id
     if created_by is None:
         return {"message": "No created_by id provided"}, 400
-
 
     vector_store_params_dict = vector_store["parameters"]
     vector_store_params_dict["db_path"] = current_app.config["VECTOR_STORE"]["db_path"]

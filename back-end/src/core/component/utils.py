@@ -1,8 +1,9 @@
-import re
-from langchain import PromptTemplate
+"""Utils."""
+from langchain.prompts import PromptTemplate
 
 
 def generate_valid_prompt(text, input_variables=None):
+    """Generate valid prompt."""
     if input_variables is None:
         input_variables = {}
 
