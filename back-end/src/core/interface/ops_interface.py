@@ -1,3 +1,4 @@
+"""Ops interface."""
 import datetime
 import copy
 
@@ -8,7 +9,6 @@ from core.component.text import Text
 from core.component.prompt import Prompt
 from core.component.parser import TagParser
 from core.component.chain import Chain
-from core.component.table import Table
 from core.component.doc_search import DocSearch
 
 from core.doc_search.doc_transformer import TextSplitter
@@ -25,23 +25,22 @@ from config import logger
 
 
 def text_convert(text_template, input_variables=None):
+    """Text convert."""
     text_obj = Text(text_template)
-
     res = text_obj.text_convert(input_variables)
-
     return res
 
 
 def tag_parse(tag, text_template, input_variables=None):
+    """Tag parse."""
     parser_obj = TagParser(tag)
     text_obj = Text(text_template)
-
     res = parser_obj.parse(text_obj, input_variables)
-
     return res
 
 
 def select_llm_processor(model_provider, params_dict, llm_api_key_dict):
+    """Select LLM processor."""
     if model_provider == LlmApiType.OPENAI.value:
         if "openai_api_key" not in llm_api_key_dict:
             logger.warning("No openai_api_key provided")
@@ -49,9 +48,9 @@ def select_llm_processor(model_provider, params_dict, llm_api_key_dict):
         params_dict["openai_api_key"] = llm_api_key_dict["openai_api_key"]
         params_dict = OpenAIProcessor.check_params_dict(params_dict)
         return OpenAIProcessor(**params_dict)
-    else:
-        logger.warning("{} is not supported".format(model_provider))
-        return None
+
+    logger.warning(f"{model_provider} is not supported")
+    return None
 
 
 def complete(prompt,
@@ -59,6 +58,7 @@ def complete(prompt,
              model_provider=LlmApiType.OPENAI.value,
              params_dict=None,
              llm_api_key_dict=None):
+    """Compelete"""
     if params_dict is None:
         params_dict = {}
 
@@ -77,17 +77,19 @@ def complete(prompt,
 
 
 def select_doc_transformer(doc_transformer_type, params_dict):
+    """Select doc transformer."""
     if doc_transformer_type == "text_splitter":
         logger.info(params_dict)
         params_dict = TextSplitter.check_params_dict(params_dict)
         logger.info(params_dict)
         return TextSplitter(**params_dict)
-    else:
-        logger.warning("{} is not supported".format(doc_transformer_type))
-        return None
+
+    logger.warning(f"{doc_transformer_type} is not supported")
+    return None
 
 
 def select_embedding_model(model_provider, params_dict, llm_api_key_dict):
+    """Select embedding model."""
     if model_provider == "openai":
         if "openai_api_key" not in llm_api_key_dict:
             logger.warning("No openai_api_key provided")
@@ -95,20 +97,22 @@ def select_embedding_model(model_provider, params_dict, llm_api_key_dict):
         params_dict["openai_api_key"] = llm_api_key_dict["openai_api_key"]
         params_dict = OpenAIEmbedding.check_params_dict(params_dict)
         return OpenAIEmbedding(**params_dict)
-    else:
-        logger.warning("{} is not supported".format(model_provider))
-        return None
+
+    logger.warning(f"{model_provider} is not supported")
+    return None
 
 
 def select_vector_store(vector_store_provider, params_dict):
+    """Select vector store."""
     if vector_store_provider == "lancedb":
         return VectorStoreLanceDB(**params_dict)
-    else:
-        logger.warning("{} is not supported".format(vector_store_provider))
-        return None
+
+    logger.warning(f"{vector_store_provider} is not supported")
+    return None
 
 
 def load_vector_store(embedding_id, llm_api_key_dict):
+    """Load vectore store."""
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id).first()
 
@@ -141,81 +145,60 @@ def load_vector_store(embedding_id, llm_api_key_dict):
 
 
 def load_chain(action_list, llm_api_key_dict=None):
+    """Load chain."""
     if llm_api_key_dict is None:
         return None
 
-    try:
-        chain_obj = Chain()
+    chain_obj = Chain()
 
-        for action in action_list:
-            # if action["type"] == "table":
-            #     name = action["name"]
-            #     is_input = action["is_app_input"]
-            #     is_output = action["is_app_output"]
-            #
-            #     table_obj = Table(action["is_app_output"])
-            #     chain_obj.add_table(table_obj, name, is_input=is_input, is_output=is_output)
-            if action["type"] == "text":
-                text_template = action["input"]
-                name = action["name"]
-                is_input = action["is_app_input"]
-                is_output = action["is_app_output"]
+    for action in action_list:
+        # if action["type"] == "table":
+        #     name = action["name"]
+        #     is_input = action["is_app_input"]
+        #     is_output = action["is_app_output"]
+        #
+        #     table_obj = Table(action["is_app_output"])
+        #     chain_obj.add_table(table_obj, name, is_input=is_input, is_output=is_output)
+        if action["type"] == "text":
+            chain_obj.add_text(Text(action["input"]), action["name"],
+                               action["is_app_input"], action["is_app_output"])
+        elif action["type"] == "prompt":
+            llm_processor = select_llm_processor(
+                action["model_provider"], action["parameters"], llm_api_key_dict)
+            if llm_processor is None:
+                return None
 
-                text_obj = Text(text_template)
-                chain_obj.add_text(text_obj, name, is_input, is_output)
-            elif action["type"] == "prompt":
-                model_provider = action["model_provider"]
-                params_dict = action["parameters"]
-                prompt_template = action["input"]
-                name = action["name"]
-                is_input = action["is_app_input"]
-                is_output = action["is_app_output"]
+            prompt_obj = Prompt(llm_processor, action["input"])
+            chain_obj.add_prompt(prompt_obj, action["name"],
+                                 action["is_app_input"], action["is_app_output"])
+        elif action["type"] == "tag_parser":
+            parser_obj = TagParser(action["tag"])
+            text_obj = Text(action["input"])
 
-                llm_processor = select_llm_processor(
-                    model_provider, params_dict, llm_api_key_dict)
-                if llm_processor is None:
-                    return None
+            chain_obj.add_parser(parser_obj, text_obj,
+                                 action["name"],
+                                 action["is_app_input"], action["is_app_output"])
+        elif action["type"] == "doc_search":
+            params_dict = action["parameters"]
 
-                prompt_obj = Prompt(llm_processor, prompt_template)
-                chain_obj.add_prompt(prompt_obj, name, is_input, is_output)
-            elif action["type"] == "tag_parser":
-                text_template = action["input"]
-                tag = action["tag"]
-                name = action["name"]
-                is_input = action["is_app_input"]
-                is_output = action["is_app_output"]
+            vector_store = load_vector_store(
+                action["embedding_id"], llm_api_key_dict)
 
-                parser_obj = TagParser(tag)
-                text_obj = Text(text_template)
+            if vector_store is None:
+                return None
 
-                chain_obj.add_parser(parser_obj, text_obj,
-                                     name, is_input, is_output)
-            elif action["type"] == "doc_search":
-                embedding_id = action["embedding_id"]
-                text_template = action["input"]
-                params_dict = action["parameters"]
-                name = action["name"]
-                is_input = action["is_app_input"]
-                is_output = action["is_app_output"]
+            top_n = params_dict.get("top_n", 3)
+            doc_search_obj = DocSearch(
+                vector_store, action["input"], top_n)
+            chain_obj.add_doc_search(
+                doc_search_obj, action["name"],
+                action["is_app_input"], action["is_app_output"])
 
-                vector_store = load_vector_store(
-                    embedding_id, llm_api_key_dict)
-
-                if vector_store is None:
-                    return None
-
-                top_n = params_dict.get("top_n", 3)
-                doc_search_obj = DocSearch(vector_store, text_template, top_n)
-                chain_obj.add_doc_search(
-                    doc_search_obj, name, is_input, is_output)
-
-        return chain_obj
-    except Exception as e:
-        logger.error(e)
-        return None
+    return chain_obj
 
 
 def run_chain(action_list, input_variables=None, llm_api_key_dict=None):
+    """Run chain."""
     chain_obj = load_chain(action_list, llm_api_key_dict=llm_api_key_dict)
 
     if chain_obj is None:
@@ -227,12 +210,16 @@ def run_chain(action_list, input_variables=None, llm_api_key_dict=None):
 
 
 class InsufficientQuotaException(Exception):
-    pass
+    """InsufficientQuotaException."""
 
 
+# pylint: disable=too-many-arguments
+# pylint: disable=too-many-locals
 @shared_task(ignore_result=True)
-def batch_task(action_list, input_variables, table_list, task_name, created_by, created_at, app_id, file_id,
+def batch_task(action_list, input_variables, table_list, task_name, created_by, created_at,
+               app_id, file_id,
                llm_api_key_dict=None):
+    """Batch task."""
     task_id = current_task.request.id
     total = len(table_list)
     res_list = []
@@ -269,7 +256,8 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
 
             if current_quota.get('quota_available') < quota_needed:
                 raise InsufficientQuotaException(
-                    f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
+                    f"Insufficient quota: required {quota_needed}, " +
+                    f"available {current_quota.get('quota_available')}")
 
             current_input_variables = copy.deepcopy(input_variables)
             current_input_variables.update(table)
@@ -278,8 +266,10 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
             count += 1
 
             task_build.status = TaskStatus.RUNNING.value
-            task_build.result = {"progress": {
-                "total": total, "completed": count}, "result": res_list}
+            task_build.result = {
+                "progress": {"total": total, "completed": count},
+                "result": res_list
+            }
             db.session.commit()
             current_task.update_state(state="RUNNING",
                                       meta={"progress": {"total": total, "completed": count}})
@@ -308,24 +298,29 @@ def batch_task(action_list, input_variables, table_list, task_name, created_by, 
         return {"error": str(e)}
 
 
-def start_batch_task(action_list, input_variables, table_list, task_name, created_by, created_at, app_id, file_id,
+def start_batch_task(action_list, input_variables, table_list, task_name, created_by, created_at,
+                     app_id, file_id,
                      llm_api_key_dict=None):
+    """Start batch task."""
     task = batch_task.delay(action_list, input_variables, table_list, task_name,
-                            created_by, created_at, app_id, file_id, llm_api_key_dict=llm_api_key_dict)
+                            created_by, created_at, app_id, file_id,
+                            llm_api_key_dict=llm_api_key_dict)
 
     if task:
         return task.id
-    else:
-        return None
+
+    return None
 
 
 @shared_task(ignore_result=True)
 def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_model_provider,
-                   embedding_model_params_dict, vector_store_provider, vector_store_params_dict, text,
-                   embedding_name, created_by, file_id, llm_api_key_dict, embedding_config):
+                   embedding_model_params_dict, vector_store_provider, vector_store_params_dict,
+                   text, embedding_name, created_by, file_id, llm_api_key_dict, embedding_config):
+    """Embedding task."""
     embedding_id = current_task.request.id
 
-    embedding_build = DbEmbedding(id=embedding_id, embedding_name=embedding_name, created_by=created_by,
+    embedding_build = DbEmbedding(id=embedding_id, embedding_name=embedding_name,
+                                  created_by=created_by,
                                   file_id=file_id, config=embedding_config, published=False)
     embedding_build.status = TaskStatus.QUEUED.value
     db.session.add(embedding_build)
@@ -409,7 +404,8 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
 
             if current_quota.get('quota_available') < quota_needed:
                 raise InsufficientQuotaException(
-                    f"Insufficient quota: required {quota_needed}, available {current_quota.get('quota_available')}")
+                    f"Insufficient quota: required {quota_needed}, " +
+                    f"available {current_quota.get('quota_available')}")
 
             embedding_build.status = TaskStatus.RUNNING.value
             embedding_build.result = {"progress": {
@@ -439,21 +435,27 @@ def embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_
         db.session.commit()
 
 
-def start_embedding_task(doc_transformer_type, doc_transformer_params_dict, embedding_model_provider,
-                         embedding_model_params_dict, vector_store_provider, vector_store_params_dict, text,
+def start_embedding_task(doc_transformer_type, doc_transformer_params_dict,
+                         embedding_model_provider,
+                         embedding_model_params_dict, vector_store_provider,
+                         vector_store_params_dict, text,
                          embedding_name, created_by, file_id, llm_api_key_dict, embedding_config):
-
-    task = embedding_task.delay(doc_transformer_type, doc_transformer_params_dict, embedding_model_provider,
-                                embedding_model_params_dict, vector_store_provider, vector_store_params_dict, text,
-                                embedding_name, created_by, file_id, llm_api_key_dict, embedding_config)
+    """Start embedding task."""
+    task = embedding_task.delay(doc_transformer_type, doc_transformer_params_dict,
+                                embedding_model_provider,
+                                embedding_model_params_dict, vector_store_provider,
+                                vector_store_params_dict, text,
+                                embedding_name, created_by, file_id,
+                                llm_api_key_dict, embedding_config)
 
     if task:
         return task.id
-    else:
-        return None
+
+    return None
 
 
 def doc_search(embedding_id, text_template, params_dict, llm_api_key_dict, input_variables=None):
+    """Doc search."""
     vector_store = load_vector_store(embedding_id, llm_api_key_dict)
 
     if vector_store is None:

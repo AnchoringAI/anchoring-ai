@@ -1,13 +1,16 @@
-from config import logger
-from core.component.utils import generate_valid_prompt
+"""Table."""
+
+# pylint: disable=too-few-public-methods
 
 
 class Table:
-    # Constructor (initialize object)
+    """Table."""
+
     def __init__(self, scheme):
         self.scheme = scheme
 
     def load_variables(self, input_variables=None):
+        """Load variables."""
         result = {}
 
         if input_variables is None:

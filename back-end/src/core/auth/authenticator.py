@@ -10,6 +10,7 @@ from services.user_service import get_user_by_id
 
 class Authenticator:
     """Authenticator."""
+
     def __init__(self, token_extractor: JwtTokenExtractor):
         self._token_extractor = token_extractor
 

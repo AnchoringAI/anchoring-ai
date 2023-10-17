@@ -11,6 +11,7 @@ HTTP_HEADER_AUTHORIZATION_FIELD = "XAuthorization"
 
 class JwtTokenExtractor:
     """JWT token extractor."""
+
     def __init__(self, request_header_field: str = HTTP_HEADER_AUTHORIZATION_FIELD):
         self._header_field = request_header_field
 

@@ -4,6 +4,7 @@ from connection import r
 
 class TaskRedisRecords:
     """Task redis records."""
+
     def __init__(self, task_id, total=0):
         self.task_id = task_id
         self.redis_name = self._assemble_task_redis_name(task_id)

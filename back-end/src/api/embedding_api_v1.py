@@ -50,7 +50,6 @@ def create_embedding_func():
     if created_by is None:
         return {"message": "No created_by id provided"}, 400
 
-
     vector_store_params_dict = vector_store["parameters"]
     vector_store_params_dict["db_path"] = current_app.config["VECTOR_STORE"]["db_path"]
 
