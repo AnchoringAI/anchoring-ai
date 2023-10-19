@@ -1,5 +1,6 @@
 import React from "react";
 import OpenAIInput from "../OpenAI/OpenAIInput";
+import AnthropicInput from "../Anthropic/AnthropicInput";
 import TextInput from "../TextInput/TextInput";
 import BatchInput from "../BatchInput/BatchInput";
 import Output from "../Output/Output";
@@ -10,6 +11,8 @@ const ModelInput = React.forwardRef((props, ref) => {
   switch (props.type) {
     case "openai":
       return <OpenAIInput ref={ref} {...props} />;
+    case "anthropic":
+      return <AnthropicInput ref={ref} {...props} />;
     case "text-input":
       return <TextInput ref={ref} {...props} />;
     case "batch-input":

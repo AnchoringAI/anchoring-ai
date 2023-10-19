@@ -19,6 +19,7 @@ const PlaygroundSider = ({ onMenuClick }) => {
       icon: <CodeOutlined />,
       children: [
         { label: "OpenAI", key: "openai" },
+        { label: "Anthropic", key: "anthropic" },
       ],
     },
     {

@@ -5,6 +5,7 @@ import copy
 from celery import shared_task, current_task
 
 from core.llm_processor.openai import OpenAIProcessor, OpenAIEmbedding
+from core.llm_processor.anthropic_processor import AnthropicProcessor
 from core.component.text import Text
 from core.component.prompt import Prompt
 from core.component.parser import TagParser
@@ -48,7 +49,13 @@ def select_llm_processor(model_provider, params_dict, llm_api_key_dict):
         params_dict["openai_api_key"] = llm_api_key_dict["openai_api_key"]
         params_dict = OpenAIProcessor.check_params_dict(params_dict)
         return OpenAIProcessor(**params_dict)
-
+    elif model_provider == LlmApiType.ANTHROPIC.value:
+        if "anthropic_api_key" not in llm_api_key_dict:
+            logger.warning("No anthropic_api_key provided")
+            return None
+        params_dict["api_key"] = llm_api_key_dict["anthropic_api_key"]
+        params_dict = AnthropicProcessor.check_params_dict(params_dict)
+        return AnthropicProcessor(**params_dict)
     logger.warning(f"{model_provider} is not supported")
     return None
 
@@ -148,6 +155,7 @@ def load_chain(action_list, llm_api_key_dict=None):
     """Load chain."""
     if llm_api_key_dict is None:
         return None
+    print("action list!!!!!!!!!!!!!", action_list)
 
     chain_obj = Chain()
 

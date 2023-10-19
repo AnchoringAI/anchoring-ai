@@ -158,6 +158,7 @@ const ApplicationPage = () => {
 
   const [refMap, setRefMap] = useState({
     openai: useRef([]),
+    anthropic: useRef([]),
     "text-input": useRef([]),
     "batch-input": useRef([]),
     output: useRef([]),
