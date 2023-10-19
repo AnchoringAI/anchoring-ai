@@ -155,7 +155,6 @@ def load_chain(action_list, llm_api_key_dict=None):
     """Load chain."""
     if llm_api_key_dict is None:
         return None
-    print("action list!!!!!!!!!!!!!", action_list)
 
     chain_obj = Chain()
 
