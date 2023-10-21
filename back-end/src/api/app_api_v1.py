@@ -120,7 +120,7 @@ def modify_application():
     if new:
         if app_name is None:
             return Response("Required fields missing!", status=400)
-        app_build = DbAppBuild(id, app_name, created_by,
+        app_build = DbAppBuild(app_id, app_name, created_by,
                                tags, description, published, chain)
         db.session.add(app_build)
     else:
@@ -132,7 +132,7 @@ def modify_application():
         app_build.published = published
 
         if app_build is None:
-            return Response(f"Application {id} not found", status=400)
+            return Response(f"Application {app_id} not found", status=400)
         if app_name is not None:
             app_build.app_name = app_name
         if tags is not None:

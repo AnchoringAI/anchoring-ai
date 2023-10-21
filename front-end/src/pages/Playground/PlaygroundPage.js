@@ -162,6 +162,7 @@ const PlaygroundPage = () => {
 
   const [refMap, setRefMap] = useState({
     openai: useRef([]),
+    anthropic: useRef([]),
     "text-input": useRef([]),
     "batch-input": useRef([]),
     output: useRef([]),
@@ -182,6 +183,7 @@ const PlaygroundPage = () => {
 
     switch (type) {
       case "openai":
+      case "anthropic":
         prefix = "Model ";
         break;
       case "text-input":
@@ -224,6 +226,20 @@ const PlaygroundPage = () => {
             id: Date.now(),
             type: "openai",
             title: generateTitle("openai", prevComponents),
+            isAppInput: 0,
+            isAppOutput: 1,
+            activeSubMenu,
+          },
+        ]);
+        break;
+
+      case "models.anthropic":
+        setComponents((prevComponents) => [
+          ...prevComponents,
+          {
+            id: Date.now(),
+            type: "anthropic",
+            title: generateTitle("anthropic", prevComponents),
             isAppInput: 0,
             isAppOutput: 1,
             activeSubMenu,

@@ -5,6 +5,7 @@ import enum
 class LlmApiType(enum.Enum):
     """LLM API type."""
     OPENAI = "openai"
+    ANTHROPIC = "anthropic"
 
     @staticmethod
     def keys():

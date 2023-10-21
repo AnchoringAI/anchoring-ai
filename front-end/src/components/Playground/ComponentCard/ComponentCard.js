@@ -6,6 +6,7 @@ import "./ComponentCard.less";
 
 const modelComponents = {
   openai: "OpenAI Model",
+  anthropic: "Anthropic Model",
   "text-input": "Text Input",
   "batch-input": "Batch Input",
   output: "Output",

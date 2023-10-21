@@ -13,6 +13,10 @@ class TagParser:
         self.tag = tag
 
     def _construct_tag_parser(self, output_key):
+        # Make the tag case-insensitive
+        tag_insensitive = make_case_insensitive(self.tag)
+        
+        # Create a RegexParser with the case-insensitive and multiline regex
         parser = RegexParser(
             regex=fr"<{self.tag}>(.*?)</{self.tag}>", output_keys=[output_key])
 

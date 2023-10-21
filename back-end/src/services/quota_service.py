@@ -49,7 +49,7 @@ class QuotaService:
     def calculate_app_quota(user_id, data):
         """Calcuate app quota."""
         quota_needed = 0
-        model_providers = {"openai"}
+        model_providers = {"openai", "google", "anthropic"}
 
         for entry in data:
             model_provider = entry.get("model_provider")
@@ -65,7 +65,7 @@ class QuotaService:
     def calculate_model_quota(user_id, data):
         """Calculate model quota."""
         quota_needed = 0
-        model_providers = {"openai"}
+        model_providers = {"openai", "google", "anthropic"}
 
         model_provider = data.get("model_provider")
         if (model_provider in model_providers and

@@ -91,7 +91,8 @@ def complete_func():
         input_variables = data.get("input_variables", None)
         params_dict = data["parameters"]
         llm_api_key_dict = {
-            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value)
+            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
         }
 
         # Step 3: Proceed with the API call
@@ -137,7 +138,9 @@ def run_chain_func():
 
         input_variables = data.get("input_variables", None)
         llm_api_key_dict = {
-            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value)}
+            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+        }
         action_list = _adjust_action_list(action_list)
 
         quota_needed = QuotaService.calculate_app_quota(user_id, action_list)
@@ -172,7 +175,9 @@ def run_chain_v2_func():
 
         input_variables = data.get("input_variables", None)
         llm_api_key_dict = {
-            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value)}
+            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+        }
 
         app_build = DbAppBuild.query.filter(
             DbAppBuild.id == app_id,
@@ -221,7 +226,9 @@ def start_batch_task_func():
 
     input_variables = data.get("input_variables", None)
     llm_api_key_dict = {
-        "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value)}
+        "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
+        "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+    }
 
     app_build = DbAppBuild.query.filter(
         DbAppBuild.id == app_id,
