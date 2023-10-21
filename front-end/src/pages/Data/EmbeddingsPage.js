@@ -169,7 +169,7 @@ const EmbeddingsPage = () => {
       render: (record) => (
         <div>
           {" "}
-          {record.status == "completed" &&
+          {record.status == "COMPLETED" &&
             record.createdBy == user.id &&
             record.published == false && (
               <>
@@ -192,7 +192,7 @@ const EmbeddingsPage = () => {
                 {" | "}
               </>
             )}
-          {(record.status == "running" || record.status == "queued") &&
+          {(record.status == "RUNNING" || record.status == "QUEUED") &&
             record.createdBy == user.id && (
               <>
                 <Button
@@ -212,7 +212,7 @@ const EmbeddingsPage = () => {
                 </Button>
               </>
             )}
-          {(record.status == "completed" || record.status == "failed" || record.status == "stopped") &&
+          {(record.status == "COMPLETED" || record.status == "FAILED" || record.status == "STOPPED") &&
             record.createdBy == user.id && (
               <>
                 <Button
