@@ -12,12 +12,13 @@ from core.interface.ops_interface import (
     text_convert,
     complete,
     tag_parse,
+    google_search,
     run_chain,
     start_batch_task,
 )
 from model.application import DbAppBuild, DbAppTask, TaskStatus
 from model.file import DbFile
-from model.types import LlmApiType
+from model.types import ApiType
 from model.user import DbUser
 from services.user_api_key_service import get_current_user_api_key_type_or_public
 from services.quota_service import QuotaService
@@ -31,7 +32,7 @@ def _adjust_action_list(action_list):
         action["name"] = action["title"]
         index += 1
 
-        if action["type"] in LlmApiType.values():
+        if action["type"] in ApiType.values():
             action["model_provider"] = action["type"]
             action["type"] = "prompt"
 
@@ -44,6 +45,9 @@ def _adjust_action_list(action_list):
         if action["type"] == "tag-parser":
             action["type"] = "tag_parser"
             action["tag"] = action["parameters"]["extract_pattern"]
+
+        if action["type"] == "google-search":
+            action["type"] = "google_search"
 
         if action["type"] == "doc-search":
             action["type"] = "doc_search"
@@ -91,8 +95,8 @@ def complete_func():
         input_variables = data.get("input_variables", None)
         params_dict = data["parameters"]
         llm_api_key_dict = {
-            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
-            "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+            "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
         }
 
         # Step 3: Proceed with the API call
@@ -127,6 +131,23 @@ def tag_parse_func():
     return jsonify({"result": res})
 
 
+@task_api_v1.route('/google_search', methods=['POST'])
+@login_required
+def google_search_func():
+    """Google search function."""
+    try:
+        data = json.loads(request.data)
+        query = data["query"] 
+        api_key = get_current_user_api_key_type_or_public(ApiType.GOOGLE_SEARCH.value)
+        num_results = data.get("num_results", 3)
+
+        res = google_search(query, api_key, num_results)
+
+        return jsonify({"result": res})
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    
 @task_api_v1.route('/run_chain', methods=['POST'])
 @login_required
 def run_chain_func():
@@ -138,8 +159,8 @@ def run_chain_func():
 
         input_variables = data.get("input_variables", None)
         llm_api_key_dict = {
-            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
-            "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+            "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
         }
         action_list = _adjust_action_list(action_list)
 
@@ -175,8 +196,8 @@ def run_chain_v2_func():
 
         input_variables = data.get("input_variables", None)
         llm_api_key_dict = {
-            "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
-            "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+            "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
         }
 
         app_build = DbAppBuild.query.filter(
@@ -226,8 +247,8 @@ def start_batch_task_func():
 
     input_variables = data.get("input_variables", None)
     llm_api_key_dict = {
-        "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value),
-        "anthropic_api_key": get_current_user_api_key_type_or_public(LlmApiType.ANTHROPIC.value)
+        "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
+        "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
     }
 
     app_build = DbAppBuild.query.filter(

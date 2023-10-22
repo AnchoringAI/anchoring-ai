@@ -6,7 +6,7 @@ from werkzeug.exceptions import BadRequest
 from connection import db
 from core.auth.authenticator import login_required, get_current_user
 from core.auth.token import JwtToken
-from model.types import LlmApiType
+from model.types import ApiType
 from model.user import DbUser, DbUserApiKey, DbUserQuota
 from services.user_api_key_service import (
     get_current_user_api_keys,
@@ -104,7 +104,7 @@ def register_api_key_for_user():
     api_key = data.get('api_key')
     if not api_key:
         return response("Must provide token.", False), 400
-    if not api_type or api_type not in LlmApiType.values():
+    if not api_type or api_type not in ApiType.values():
         return response(f"Api type {api_type} not supported.", False), 400
     user_key = get_current_user_specified_api_key(api_type, api_key)
     if not user_key:
@@ -127,7 +127,7 @@ def delete_user_api_key():
     api_key = data.get('api_key')
     if not api_key:
         return response("Must provide token.", False), 400
-    if not api_type or api_type not in LlmApiType.values():
+    if not api_type or api_type not in ApiType.values():
         return response(f"Api type {api_type} not supported.", False), 400
     user_key = get_current_user_specified_api_key(api_type, api_key)
     if not user_key:

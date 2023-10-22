@@ -2,20 +2,21 @@
 import enum
 
 
-class LlmApiType(enum.Enum):
-    """LLM API type."""
+class ApiType(enum.Enum):
+    """API type."""
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
+    GOOGLE_SEARCH = "google_search"
 
     @staticmethod
     def keys():
         """Keys."""
-        return LlmApiType.__members__.keys()
+        return ApiType.__members__.keys()
 
     @staticmethod
     def values():
         """Values."""
-        return [member.value for member in LlmApiType]
+        return [member.value for member in ApiType]
 
 
 class TestType(enum.Enum):

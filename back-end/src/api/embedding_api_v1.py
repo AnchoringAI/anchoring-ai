@@ -10,7 +10,7 @@ from connection import db
 from core.auth.authenticator import login_required, get_current_user
 from core.interface.ops_interface import start_embedding_task, doc_search
 from model.file import DbFile, DbEmbedding, TaskStatus
-from model.types import LlmApiType
+from model.types import ApiType
 from model.user import DbUser
 from services.user_api_key_service import get_current_user_api_key_type_or_public
 
@@ -54,7 +54,7 @@ def create_embedding_func():
     vector_store_params_dict["db_path"] = current_app.config["VECTOR_STORE"]["db_path"]
 
     llm_api_key_dict = {
-        "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value)}
+        "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value)}
 
     embedding_config = {"doc_transformer": doc_transformer,
                         "embedding_model": embedding_model,
@@ -244,7 +244,7 @@ def search_func():
     input_variables = data.get("input_variables", None)
 
     llm_api_key_dict = {
-        "openai_api_key": get_current_user_api_key_type_or_public(LlmApiType.OPENAI.value)}
+        "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value)}
 
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id, DbEmbedding.deleted_at.is_(

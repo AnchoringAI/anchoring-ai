@@ -3,7 +3,7 @@ import sys
 import unittest
 
 from app import app
-from model.types import LlmApiType
+from model.types import ApiType
 from util.uid_gen import gen_uuid
 
 sys.path.append("../")
@@ -60,7 +60,7 @@ class TestUserAPI(unittest.TestCase):
 
     def test_update_delete_api_key(self):
         random_key = gen_uuid()
-        api_type = LlmApiType.OPENAI.value
+        api_type = ApiType.OPENAI.value
         resp = self.client.post('/v1/user/apikey', headers={"XAuthorization": self.token}, json={
             "api_key": random_key,
             "api_type": api_type

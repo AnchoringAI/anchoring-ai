@@ -9,15 +9,16 @@ from core.llm_processor.anthropic_processor import AnthropicProcessor
 from core.component.text import Text
 from core.component.prompt import Prompt
 from core.component.parser import TagParser
-from core.component.chain import Chain
 from core.component.doc_search import DocSearch
+from core.component.google_search import GoogleSearch
+from core.component.chain import Chain
 
 from core.doc_search.doc_transformer import TextSplitter
 from core.doc_search.vector_store import VectorStoreLanceDB
 
 from connection import db
 from model.application import DbAppTask, TaskStatus
-from model.types import LlmApiType
+from model.types import ApiType
 from model.file import DbEmbedding
 from services.quota_service import QuotaService
 from services.user_api_key_service import get_selected_user_api_key_type_or_none
@@ -42,14 +43,14 @@ def tag_parse(tag, text_template, input_variables=None):
 
 def select_llm_processor(model_provider, params_dict, llm_api_key_dict):
     """Select LLM processor."""
-    if model_provider == LlmApiType.OPENAI.value:
+    if model_provider == ApiType.OPENAI.value:
         if "openai_api_key" not in llm_api_key_dict:
             logger.warning("No openai_api_key provided")
             return None
         params_dict["openai_api_key"] = llm_api_key_dict["openai_api_key"]
         params_dict = OpenAIProcessor.check_params_dict(params_dict)
         return OpenAIProcessor(**params_dict)
-    elif model_provider == LlmApiType.ANTHROPIC.value:
+    elif model_provider == ApiType.ANTHROPIC.value:
         if "anthropic_api_key" not in llm_api_key_dict:
             logger.warning("No anthropic_api_key provided")
             return None
@@ -62,7 +63,7 @@ def select_llm_processor(model_provider, params_dict, llm_api_key_dict):
 
 def complete(prompt,
              input_variables=None,
-             model_provider=LlmApiType.OPENAI.value,
+             model_provider=ApiType.OPENAI.value,
              params_dict=None,
              llm_api_key_dict=None):
     """Compelete"""
