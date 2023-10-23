@@ -83,7 +83,7 @@ const DocSearch = forwardRef((props, ref) => {
           if (response.embeddings) {
             setFiles(
               response.embeddings.filter(
-                (embedding) => embedding.status === "completed"
+                (embedding) => embedding.status === "COMPLETED"
               )
             );
           } else {
@@ -217,6 +217,40 @@ const DocSearch = forwardRef((props, ref) => {
     items,
   };
 
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "embeddingName",
+      key: "embeddingName",
+      sorter: (a, b) => a.embeddingName.localeCompare(b.embeddingName),
+    },
+    {
+      title: "Created at",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      render: (createdAt) => {
+        const date = new Date(createdAt);
+        return `${formatTime(date.toISOString())}`;
+      },
+    },
+    {
+      title: "Created by",
+      dataIndex: "createdByUsername",
+      key: "createdByUsername",
+      sorter: (a, b) => a.createdByUsername.localeCompare(b.createdByUsername),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      sorter: (a, b) => a.status.localeCompare(b.status),
+      render: (text) => {
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+      },
+    },
+  ];
+
   return (
     <div className="doc-search">
       {props.isEditMode && (
@@ -290,6 +324,7 @@ const DocSearch = forwardRef((props, ref) => {
         footer={null}
       >
         <Table
+          columns={columns}
           dataSource={files}
           onRow={(record) => ({
             onClick: () => {
@@ -301,26 +336,6 @@ const DocSearch = forwardRef((props, ref) => {
           rowKey="id"
           rowClassName="selectable-row"
         >
-          <Table.Column
-            title="Name"
-            dataIndex="embeddingName"
-            key="embeddingName"
-          />
-          <Table.Column
-            title="Created by"
-            dataIndex="createdByUsername"
-            key="createdByUsername"
-            sorter={(a, b) =>
-              a.createdByUsername.localeCompare(b.createdByUsername)
-            }
-          />
-          <Table.Column
-            title="Created at"
-            dataIndex="createdAt"
-            key="createdAt"
-            sorter={(a, b) => new Date(a.createdAt) - new Date(b.createdAt)}
-            render={(createdAt) => formatTime(createdAt)}
-          />
         </Table>
       </Modal>
     </div>

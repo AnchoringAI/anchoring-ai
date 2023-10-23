@@ -3,6 +3,7 @@ from datetime import datetime
 from math import ceil
 
 import requests
+import json
 import pandas as pd
 from flask import Blueprint, Response, request, jsonify, g
 from werkzeug.utils import secure_filename
@@ -87,13 +88,23 @@ def determine_file_type_and_content(file):
     file.seek(0)
     first_line = file.readline().decode('utf-8')
     file.seek(0)
-    if '\t' in first_line or ',' in first_line:
-        delimiter = '\t' if '\t' in first_line else ','
-        df = pd.read_csv(file, sep=delimiter)
-        row_count = df.shape[0]
+    delimiter = None
+    if '\t' in first_line:
+        delimiter = '\t'
+    elif ',' in first_line:
+        delimiter = ','
+    
+    if delimiter:
+        lines = file.readlines()
         file.seek(0)
-        return 'Table', df.to_dict(orient="records"), row_count
-
+        decoded_lines = [line.decode('utf-8') for line in lines]
+        delimiter_counts = [line.count(delimiter) for line in decoded_lines]
+        if len(set(delimiter_counts)) == 1 and delimiter_counts[0] > 0:
+            df = pd.read_csv(file, sep=delimiter)
+            row_count = df.shape[0]
+            file.seek(0)
+            return 'Table', df.to_dict(orient="records"), row_count
+    
     text_content = file.read().decode('utf-8')
     return 'Plain Text', {"text": text_content}, 0
 
