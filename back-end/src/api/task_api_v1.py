@@ -48,6 +48,7 @@ def _adjust_action_list(action_list):
 
         if action["type"] == "google-search":
             action["type"] = "google_search"
+            action["num_results"] = action["parameters"]["num_results"]
 
         if action["type"] == "doc-search":
             action["type"] = "doc_search"
@@ -137,17 +138,23 @@ def google_search_func():
     """Google search function."""
     try:
         data = json.loads(request.data)
-        query = data["query"] 
-        api_key = get_current_user_api_key_type_or_public(ApiType.GOOGLE_SEARCH.value)
+        query = data["query"]
+        llm_api_key_dict = {
+            "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
+            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value),
+            "google_search_api_key": get_current_user_api_key_type_or_public(ApiType.GOOGLE_SEARCH.value)
+        }
         num_results = data.get("num_results", 3)
+        input_variables = data.get("input_variables", None)
 
-        res = google_search(query, api_key, num_results)
+        res = google_search(query, llm_api_key_dict, num_results, input_variables=input_variables)
 
         return jsonify({"result": res})
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
     
+
 @task_api_v1.route('/run_chain', methods=['POST'])
 @login_required
 def run_chain_func():
@@ -160,7 +167,8 @@ def run_chain_func():
         input_variables = data.get("input_variables", None)
         llm_api_key_dict = {
             "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
-            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
+            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value),
+            "google_search_api_key": get_current_user_api_key_type_or_public(ApiType.GOOGLE_SEARCH.value)
         }
         action_list = _adjust_action_list(action_list)
 
@@ -197,7 +205,8 @@ def run_chain_v2_func():
         input_variables = data.get("input_variables", None)
         llm_api_key_dict = {
             "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
-            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
+            "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value),
+            "google_search_api_key": get_current_user_api_key_type_or_public(ApiType.GOOGLE_SEARCH.value)
         }
 
         app_build = DbAppBuild.query.filter(
@@ -248,7 +257,8 @@ def start_batch_task_func():
     input_variables = data.get("input_variables", None)
     llm_api_key_dict = {
         "openai_api_key": get_current_user_api_key_type_or_public(ApiType.OPENAI.value),
-        "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value)
+        "anthropic_api_key": get_current_user_api_key_type_or_public(ApiType.ANTHROPIC.value),
+        "google_search_api_key": get_current_user_api_key_type_or_public(ApiType.GOOGLE_SEARCH.value)
     }
 
     app_build = DbAppBuild.query.filter(

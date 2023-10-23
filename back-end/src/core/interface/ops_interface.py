@@ -41,6 +41,16 @@ def tag_parse(tag, text_template, input_variables=None):
     return res
 
 
+def google_search(text_template, llm_api_key_dict=None, num_results=3, input_variables=None):
+    """Google search."""
+    text_obj = Text(text_template)
+
+    google_search_obj = GoogleSearch(llm_api_key_dict, num_results)
+    res = google_search_obj.search(text_obj, input_variables)
+
+    return res
+
+
 def select_llm_processor(model_provider, params_dict, llm_api_key_dict):
     """Select LLM processor."""
     if model_provider == ApiType.OPENAI.value:
@@ -186,6 +196,14 @@ def load_chain(action_list, llm_api_key_dict=None):
             chain_obj.add_parser(parser_obj, text_obj,
                                  action["name"],
                                  action["is_app_input"], action["is_app_output"])
+        elif action["type"] == "google_search":
+            google_search_obj = GoogleSearch(
+                llm_api_key_dict, action["num_results"])
+            text_obj = Text(action["input"])
+
+            chain_obj.add_google_search(google_search_obj, text_obj,
+                                        action["name"],
+                                        action["is_app_input"], action["is_app_output"])
         elif action["type"] == "doc_search":
             params_dict = action["parameters"]
 

@@ -32,6 +32,14 @@ class Chain:
              "is_output": is_output})
         self.length += 1
 
+    def add_google_search(self, google_search_obj, text_obj, name, is_input=False, is_output=True):
+        """Add Google search."""
+        self.action_list.append(
+            {"type": "parser", "object": google_search_obj, "text_obj": text_obj, "name": name,
+             "is_input": is_input,
+             "is_output": is_output})
+        self.length += 1
+
     def add_table(self, table_obj, name, is_input=False, is_output=True):
         """Add table."""
         self.action_list.append(
@@ -87,6 +95,16 @@ class Chain:
                 text_obj = action["text_obj"]
                 name = action["name"]
                 res = action["object"].parse(
+                    text_obj, input_variables=input_variables)
+                input_variables[name] = res
+                logger.debug(res)
+
+                if action["is_output"]:
+                    chain_outputs[name] = res
+            elif action["type"] == "google_search":
+                text_obj = action["text_obj"]
+                name = action["name"]
+                res = action["object"].search(
                     text_obj, input_variables=input_variables)
                 input_variables[name] = res
                 logger.debug(res)
