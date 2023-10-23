@@ -36,7 +36,7 @@ def get_app_list():
     tags = params.get('tags', None)
     query = DbAppBuild.query.join(DbUser).filter(
         DbAppBuild.deleted_at.is_(None), (DbAppBuild.created_by == g.current_user_id) |
-        (DbAppBuild.published is True))
+        (DbAppBuild.published.is_(True)))
 
     query = query.order_by(
         case(
@@ -82,7 +82,7 @@ def get_application(app_id):
     app_build = DbAppBuild.query.filter(
         DbAppBuild.id == app_id, DbAppBuild.deleted_at.is_(None),
         (DbAppBuild.created_by == g.current_user_id) |
-        (DbAppBuild.published is True)).first()
+        (DbAppBuild.published.is_(True))).first()
     if app_build:
         # app_dict = {
         #     "id": app_build.id,

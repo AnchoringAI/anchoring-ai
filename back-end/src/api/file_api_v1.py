@@ -121,7 +121,7 @@ def get_uploaded_files():
     query = (DbFile.query.join(DbUser)
              .filter(DbFile.deleted_at.is_(None),
                      (DbFile.uploaded_by == g.current_user_id) |
-                     (DbFile.published is True))
+                     (DbFile.published.is_(True)))
              .order_by(DbFile.uploaded_at.desc()))
 
     print("query: ", query)
@@ -155,7 +155,7 @@ def load_file(file_id):
                              .filter(DbFile.id == file_id,
                                      DbFile.deleted_at.is_(None),
                                      (DbFile.uploaded_by == g.current_user_id) |
-                                     (DbFile.published is True))
+                                     (DbFile.published.is_(True)))
                  .first())
     if file_data is None:
         return jsonify(error='File not found'), 404
@@ -183,7 +183,7 @@ def download_file(file_id):
     file_data = (DbFile.query.filter(DbFile.id == file_id,
                                      DbFile.deleted_at.is_(None),
                                      (DbFile.uploaded_by == g.current_user_id) |
-                                     (DbFile.published is True))
+                                     (DbFile.published.is_(True)))
                  .first())
 
     if file_data is None:

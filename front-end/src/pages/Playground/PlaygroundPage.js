@@ -167,6 +167,7 @@ const PlaygroundPage = () => {
     "batch-input": useRef([]),
     output: useRef([]),
     "tag-parser": useRef([]),
+    "google-search": useRef([]),
     "doc-search": useRef([]),
   });
 
@@ -194,6 +195,7 @@ const PlaygroundPage = () => {
         prefix = "Output ";
         break;
       case "tag-parser":
+      case "google-search":
       case "doc-search":
         prefix = "Plug-in ";
         break;
@@ -322,6 +324,20 @@ const PlaygroundPage = () => {
           },
         ]);
         break;
+
+        case "plugins.google-search":
+          setComponents((prevComponents) => [
+            ...prevComponents,
+            {
+              id: Date.now(),
+              type: "google-search",
+              title: generateTitle("google-search", prevComponents),
+              isAppInput: 0,
+              isAppOutput: 1,
+              activeSubMenu,
+            },
+          ]);
+          break;  
 
       case "plugins.doc-search":
         setComponents((prevComponents) => [

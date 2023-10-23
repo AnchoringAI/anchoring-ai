@@ -38,6 +38,7 @@ const PlaygroundSider = ({ onMenuClick }) => {
       icon: <AppstoreAddOutlined />,
       children: [
         { label: "Tag Parser", key: "tag-parser" },
+        { label: "Google Search", key: "google-search" },
         { label: "Doc Search", key: "doc-search" },
       ],
     },

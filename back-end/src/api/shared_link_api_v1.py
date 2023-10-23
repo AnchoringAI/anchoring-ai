@@ -78,14 +78,14 @@ def generate_share_link():
             DbAppBuild.id == resource_id,
             DbAppBuild.deleted_at.is_(None),
             (DbAppBuild.created_by == created_by) |
-            (DbAppBuild.published is True)
+            (DbAppBuild.published.is_(True))
         ).first()
     elif resource_type == 'TASK':
         resource = DbAppTask.query.filter(
             DbAppTask.id == resource_id,
             DbAppTask.deleted_at.is_(None),
             (DbAppTask.created_by == created_by) |
-            (DbAppTask.published is True)
+            (DbAppTask.published.is_(True))
         ).first()
     else:
         return {"message": "Invalid resource type."}, 400

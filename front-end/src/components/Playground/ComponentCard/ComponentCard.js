@@ -11,6 +11,7 @@ const modelComponents = {
   "batch-input": "Batch Input",
   output: "Output",
   "tag-parser": "Tag Parser",
+  "google-search": "Google Search",
   "doc-search": "Doc Search",
 };
 

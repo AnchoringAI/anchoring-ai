@@ -163,6 +163,7 @@ const ApplicationPage = () => {
     "batch-input": useRef([]),
     output: useRef([]),
     "tag-parser": useRef([]),
+    "google-search": useRef([]),
     "doc-search": useRef([]),
   });
 

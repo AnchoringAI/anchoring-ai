@@ -63,7 +63,7 @@ def create_embedding_func():
     file_data = DbFile.query.filter(
         DbFile.id == file_id, DbFile.deleted_at.is_(None),
         (DbFile.uploaded_by == g.current_user_id) |
-        (DbFile.published is True)).first()
+        (DbFile.published.is_(True))).first()
     if file_data is None:
         return {"message": "File not found"}, 400
 
@@ -94,7 +94,7 @@ def embedding_task_status_func(embedding_id):
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id,
         (DbEmbedding.created_by == g.current_user_id) |
-        (DbEmbedding.publish is True)).first()
+        (DbEmbedding.publish.is_(True))).first()
 
     if embedding_build is None:
         return {"message": "embedding id is invalid"}, 400
@@ -162,7 +162,7 @@ def list_embedding_task_func():
 
     query = DbEmbedding.query.join(DbUser).filter(DbEmbedding.deleted_at.is_(
         None), (DbEmbedding.created_by == g.current_user_id) |
-        (DbEmbedding.published is True)).order_by(DbEmbedding.created_at.desc())
+        (DbEmbedding.published.is_(True))).order_by(DbEmbedding.created_at.desc())
 
     if created_by is not None:
         query = query.filter(DbEmbedding.created_by == created_by)
@@ -249,7 +249,7 @@ def search_func():
     embedding_build = DbEmbedding.query.filter(
         DbEmbedding.id == embedding_id, DbEmbedding.deleted_at.is_(
             None), (DbEmbedding.created_by == g.current_user_id) |
-        (DbEmbedding.published is True)).first()
+        (DbEmbedding.published.is_(True))).first()
 
     if embedding_build is None:
         return jsonify({"message": "embedding id is invalid"}), 400
