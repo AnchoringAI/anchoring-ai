@@ -213,7 +213,7 @@ def run_chain_v2_func():
             DbAppBuild.id == app_id,
             DbAppBuild.deleted_at.is_(None),
             (DbAppBuild.created_by == g.current_user_id) |
-            (DbAppBuild.published is True)).first()
+            (DbAppBuild.published.is_(True))).first()
 
         if app_build is None:
             return {"message": "No application found with given ID."}, 400
@@ -265,7 +265,7 @@ def start_batch_task_func():
         DbAppBuild.id == app_id,
         DbAppBuild.deleted_at.is_(None),
         (DbAppBuild.created_by == g.current_user_id) |
-        (DbAppBuild.published is True)).first()
+        (DbAppBuild.published.is_(True))).first()
     if app_build is None:
         return {"message": "No application found with given ID."}, 400
 
@@ -273,7 +273,7 @@ def start_batch_task_func():
         DbFile.id == file_id,
         DbFile.deleted_at.is_(None),
         (DbFile.uploaded_by == g.current_user_id) |
-        (DbFile.published is True)).first()
+        (DbFile.published.is_(True))).first()
     if file_data is None:
         return {"message": "File not found"}, 400
 
@@ -302,7 +302,7 @@ def batch_task_status_func(task_id):
         DbAppTask.id == task_id,
         DbAppTask.deleted_at.is_(None),
         (DbAppTask.created_by == g.current_user_id) |
-        (DbAppTask.published is True)).first()
+        (DbAppTask.published.is_(True))).first()
 
     if task_build is None:
         return {"message": "Task id is invalid"}, 400
@@ -337,7 +337,7 @@ def batch_task_load_func(task_id):
         DbAppTask.id == task_id,
         DbAppTask.deleted_at.is_(None),
         (DbAppTask.created_by == g.current_user_id) |
-        (DbAppTask.published is True)).first()
+        (DbAppTask.published.is_(True))).first()
     if task_build is None:
         return jsonify({"message": "Task id is invalid"}), 400
 
@@ -418,7 +418,7 @@ def list_batch_task_func():
 
     query = DbAppTask.query.join(DbUser).filter(DbAppTask.deleted_at.is_(
         None), (DbAppTask.created_by == g.current_user_id) |
-        (DbAppTask.published is True)).order_by(DbAppTask.created_at.desc())
+        (DbAppTask.published.is_(True))).order_by(DbAppTask.created_at.desc())
 
     if created_by is not None:
         query = query.filter(DbAppTask.created_by == created_by)
