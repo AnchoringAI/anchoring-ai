@@ -36,8 +36,11 @@ def get_current_user_api_key_type_or_public(t):
         return current_app.config.get("OPENAI_API_KEY")
     elif t == "anthropic":
         return current_app.config.get("ANTHROPIC_API_KEY")
+    elif t == "google_search":
+        return current_app.config.get("GOOGLE_SEARCH_API_KEY")
     else:
         return api_key
+
 
 def get_current_user_specified_api_key(t, key):
     """Get current user specified API key."""

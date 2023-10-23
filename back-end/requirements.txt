@@ -1,7 +1,7 @@
 cryptography==2.8  # use Fernet for authorization
 flask==2.3.2
 flask-cors==4.0.0
-flask-sqlalchemy==3.0.5
+flask-sqlalchemy==3.1.1
 flask-testing==0.8.1
 flask_jwt_extended==4.5.2
 inflection==0.5.1
@@ -16,8 +16,8 @@ pydantic==1.10.12
 redis==4.4.2
 requests==2.31.0
 shortuuid==1.0.11
-sqlalchemy==1.4.46
-uwsgi==2.0.21
+sqlalchemy==2.0.22
+# uwsgi==2.0.21
 virtualenv==20.17.1
 werkzeug==2.3.6
 celery==5.3.1
@@ -26,3 +26,4 @@ chromadb==0.4.8
 lancedb==0.2.2
 chardet==5.2.0
 anthropic==0.3.11
+google-api-python-client==2.104.0
