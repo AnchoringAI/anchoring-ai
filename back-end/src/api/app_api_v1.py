@@ -40,7 +40,7 @@ def get_app_list():
 
     query = query.order_by(
         case(
-            [(DbAppBuild.created_by == g.current_user_id, 1)],
+            (DbAppBuild.created_by == g.current_user_id, 1),
             else_=2
         ),
         desc(DbAppBuild.updated_at)
