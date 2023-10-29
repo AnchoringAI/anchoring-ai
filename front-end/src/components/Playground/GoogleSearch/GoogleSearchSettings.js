@@ -6,7 +6,7 @@ const GoogleSearchSettings = ({
   open,
   onClose,
   numResults,
-  setnumResults,
+  setNumResults,
 }) => {
   return (
     <Drawer
@@ -33,7 +33,7 @@ const GoogleSearchSettings = ({
             defaultValue={numResults}
             min={1}
             max={10}
-            onChange={setnumResults}
+            onChange={setNumResults}
           />
         </Form.Item>
       </Form>
