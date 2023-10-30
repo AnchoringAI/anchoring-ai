@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
@@ -16,6 +16,12 @@ const ResponseCard = ({
   isEditMode,
   title,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   return (
     <Card
       title={
@@ -38,11 +44,18 @@ const ResponseCard = ({
           )}
         </div>
       }
-      className={`response-card ${(!isLoading && !apiResponse && !error) ? "header-only" : `${!isEditMode ? "non-editmode" : ""}`}`}
+      className={`response-card ${
+        !isLoading && !apiResponse && !error
+          ? "header-only"
+          : `${!isEditMode ? "non-editmode" : ""}`
+      }`}
     >
       {isLoading && <p className="running">Waiting for responses...</p>}
       {!isLoading && apiResponse && (
-        <div className="markdown-container">
+        <div
+          className="markdown-container"
+          style={{ maxHeight: isExpanded ? "auto" : "16em", overflowY: "auto" }}
+        >
           <ReactMarkdown
             remarkPlugins={[gfm]}
             rehypePlugins={[rehypeHighlight]}

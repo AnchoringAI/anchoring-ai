@@ -40,6 +40,7 @@ const PlaygroundSider = ({ onMenuClick }) => {
         { label: "Tag Parser", key: "tag-parser" },
         { label: "Google Search", key: "google-search" },
         { label: "Doc Search", key: "doc-search" },
+        { label: "YouTube Transcript", key: "youtube-transcript" },
       ],
     },
   ];

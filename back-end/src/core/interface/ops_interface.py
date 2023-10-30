@@ -11,6 +11,7 @@ from core.component.prompt import Prompt
 from core.component.parser import TagParser
 from core.component.doc_search import DocSearch
 from core.component.google_search import GoogleSearch
+from core.component.youtube_transcript import YouTubeTranscript
 from core.component.chain import Chain
 
 from core.doc_search.doc_transformer import TextSplitter
@@ -48,6 +49,14 @@ def google_search(text_template, llm_api_key_dict=None, num_results=3, input_var
     google_search_obj = GoogleSearch(llm_api_key_dict, num_results)
     res = google_search_obj.search(text_obj, input_variables)
 
+    return res
+
+
+def youtube_transcript(text_template, input_variables=None):
+    """YouTube transcript."""
+    text_obj = Text(text_template)
+    youtube_transcript_obj = YouTubeTranscript()
+    res = youtube_transcript_obj.get_transcript(text_obj, input_variables)
     return res
 
 
@@ -202,6 +211,13 @@ def load_chain(action_list, llm_api_key_dict=None):
             text_obj = Text(action["input"])
 
             chain_obj.add_google_search(google_search_obj, text_obj,
+                                        action["name"],
+                                        action["is_app_input"], action["is_app_output"])
+        elif action["type"] == "youtube_transcript":
+            youtube_transcript_obj = YouTubeTranscript()
+            text_obj = Text(action["input"])
+
+            chain_obj.add_youtube_transcript(youtube_transcript_obj, text_obj,
                                         action["name"],
                                         action["is_app_input"], action["is_app_output"])
         elif action["type"] == "doc_search":

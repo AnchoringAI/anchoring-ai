@@ -165,6 +165,7 @@ const ApplicationPage = () => {
     "tag-parser": useRef([]),
     "google-search": useRef([]),
     "doc-search": useRef([]),
+    "youtube-transcript": useRef([]),
   });
 
   const updateComponentOutput = (id, output) => {
