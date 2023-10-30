@@ -11,7 +11,7 @@
 
 ## Why Anchoring AI?
 
-Anchoring AI is your gateway to effortless AI integration. Our open-source, no-code platform empowers teams to create, assess, share, and host applications powered by Large Language Models (LLMs), complete with rich component support. With Anchoring AI, managing access, controlling budgets, and running batch jobs is a breeze. We aim to be the destination of choice for transforming your team into an AI-centric powerhouse.
+Anchoring AI is an open-source no-code tool for teams to collaborate on building, evaluating, and hosting applications leveraging GPT and other large language models. You could easily build and share LLM-powered apps, manage your budget and run batch jobs. With Anchoring AI, managing access, controlling budgets, and running batch jobs is a breeze. We aim to be the destination of choice for transforming your team into an AI-centric powerhouse.
 
 We provide:
 
