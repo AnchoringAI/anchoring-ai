@@ -13,6 +13,7 @@ from core.interface.ops_interface import (
     complete,
     tag_parse,
     google_search,
+    youtube_transcript,
     run_chain,
     start_batch_task,
 )
@@ -148,6 +149,23 @@ def google_search_func():
         input_variables = data.get("input_variables", None)
 
         res = google_search(query, llm_api_key_dict, num_results, input_variables=input_variables)
+
+        return jsonify({"result": res})
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    
+
+@task_api_v1.route('/youtube_transcript', methods=['POST'])
+@login_required
+def youtube_transcript_func():
+    """YouTube transcript function."""
+    try:
+        data = json.loads(request.data)
+        video_url = data["video_url"]
+        input_variables = data.get("input_variables", None)
+
+        res = youtube_transcript(video_url, input_variables=input_variables)
 
         return jsonify({"result": res})
 

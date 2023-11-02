@@ -111,6 +111,16 @@ class Chain:
 
                 if action["is_output"]:
                     chain_outputs[name] = res
+            elif action["type"] == "youtube_transcript":
+                text_obj = action["text_obj"]
+                name = action["name"]
+                res = action["object"].get_transcript(
+                    text_obj, input_variables=input_variables)
+                input_variables[name] = res
+                logger.debug(res)
+
+                if action["is_output"]:
+                    chain_outputs[name] = res
             elif action["type"] == "doc_search":
                 name = action["name"]
                 res = action["object"].search(

@@ -14,7 +14,6 @@ class TagParser:
     """Tag parser."""
 
     def __init__(self, tag):
-        super().__init__()
         self.tag = tag
 
     def _construct_tag_parser(self, output_key):

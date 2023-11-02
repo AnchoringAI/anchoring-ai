@@ -7,6 +7,7 @@ import Output from "../Output/Output";
 import TagParser from "../TagParser/TagParser";
 import GoogleSearch from "../GoogleSearch/GoogleSearch";
 import DocSearch from "../DocSearch/DocSearch";
+import YouTubeTranscript from "../YouTubeTranscript/YouTubeTranscript";
 
 const ModelInput = React.forwardRef((props, ref) => {
   switch (props.type) {
@@ -26,6 +27,8 @@ const ModelInput = React.forwardRef((props, ref) => {
       return <GoogleSearch ref={ref} {...props} />;
     case "doc-search":
       return <DocSearch ref={ref} {...props} />;
+    case "youtube-transcript":
+      return <YouTubeTranscript ref={ref} {...props} />;
     default:
       return null;
   }

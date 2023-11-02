@@ -9,7 +9,6 @@ class GoogleSearch:
     """Google Search class."""
 
     def __init__(self, llm_api_key_dict, num_results):
-        super().__init__()
         self.cse_id = "741eb9c5cc36f4d43"
         self.num_results = num_results
 

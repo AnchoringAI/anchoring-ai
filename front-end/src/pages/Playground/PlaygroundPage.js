@@ -169,6 +169,7 @@ const PlaygroundPage = () => {
     "tag-parser": useRef([]),
     "google-search": useRef([]),
     "doc-search": useRef([]),
+    "youtube-transcript": useRef([]),
   });
 
   const extractNumberFromTitle = (title, prefix) => {
@@ -197,6 +198,7 @@ const PlaygroundPage = () => {
       case "tag-parser":
       case "google-search":
       case "doc-search":
+      case "youtube-transcript":
         prefix = "Plug-in ";
         break;
       default:
@@ -325,19 +327,19 @@ const PlaygroundPage = () => {
         ]);
         break;
 
-        case "plugins.google-search":
-          setComponents((prevComponents) => [
-            ...prevComponents,
-            {
-              id: Date.now(),
-              type: "google-search",
-              title: generateTitle("google-search", prevComponents),
-              isAppInput: 0,
-              isAppOutput: 1,
-              activeSubMenu,
-            },
-          ]);
-          break;  
+      case "plugins.google-search":
+        setComponents((prevComponents) => [
+          ...prevComponents,
+          {
+            id: Date.now(),
+            type: "google-search",
+            title: generateTitle("google-search", prevComponents),
+            isAppInput: 0,
+            isAppOutput: 1,
+            activeSubMenu,
+          },
+        ]);
+        break;
 
       case "plugins.doc-search":
         setComponents((prevComponents) => [
@@ -346,6 +348,20 @@ const PlaygroundPage = () => {
             id: Date.now(),
             type: "doc-search",
             title: generateTitle("doc-search", prevComponents),
+            isAppInput: 0,
+            isAppOutput: 1,
+            activeSubMenu,
+          },
+        ]);
+        break;
+
+      case "plugins.youtube-transcript":
+        setComponents((prevComponents) => [
+          ...prevComponents,
+          {
+            id: Date.now(),
+            type: "youtube-transcript",
+            title: generateTitle("youtube-transcript", prevComponents),
             isAppInput: 0,
             isAppOutput: 1,
             activeSubMenu,

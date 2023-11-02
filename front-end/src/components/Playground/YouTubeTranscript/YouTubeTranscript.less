@@ -1,0 +1,42 @@
+@alertColor: #721c24;
+@alertBackgroundColor: #f8d7da;
+@alertBorderColor: #f5c6cb;
+
+@runningColor: darkgray;
+
+.transcript-input {
+  width: 100%;
+  min-height: auto;
+
+  .action-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      margin-left: 0;
+      margin-right: 12px;
+      width: 100%;
+    }
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+
+    .left-buttons {
+      .insert-data-button {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.copy-icon {
+  color: inherit;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  size: 14px;
+}
