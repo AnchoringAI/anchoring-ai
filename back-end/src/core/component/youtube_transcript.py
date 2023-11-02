@@ -7,9 +7,6 @@ import os
 class YouTubeTranscript:
     """YouTube Transcript class."""
 
-    def __init__(self):
-        pass
-
     def get_transcript(self, text_obj, input_variables=None):
         """Execute YouTube Transcript Extraction."""
         video_url = text_obj.text_convert(input_variables=input_variables)
