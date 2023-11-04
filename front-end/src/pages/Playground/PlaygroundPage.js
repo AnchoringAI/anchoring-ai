@@ -462,6 +462,7 @@ const PlaygroundPage = () => {
         if (matchingVariable) {
           switch (matchingVariable.type) {
             case "text-input":
+            case "youtube-transcript":
               ref.setUserInput(matchingVariable.userInput);
               break;
             case "batch-input":
@@ -602,7 +603,7 @@ const PlaygroundPage = () => {
         fileId = component.fileId;
       }
 
-      if (component.type === "text-input" && component.input) {
+      if ((component.type === "text-input" || component.type === "youtube-transcript") && component.input) {
         let inputKey = component.input.replace(/[{}]/g, "");
         inputVariables[inputKey] = component.userInput;
       }
@@ -642,7 +643,7 @@ const PlaygroundPage = () => {
     for (const component of components) {
       let variableComponent;
 
-      if (component.type === "text-input") {
+      if (component.type === "text-input" || component.type === "youtube-transcript") {
         variableComponent = {
           id: component.id,
           type: component.type,
