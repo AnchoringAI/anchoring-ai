@@ -89,28 +89,28 @@ class OpenAIProcessor:
         if "max_tokens" not in params_dict:
             params_dict["max_tokens"] = 256
 
-        if "top_p" in params_dict:
+        if "top_p" not in params_dict:
             params_dict["top_p"] = 1
 
-        if "frequency_penalty" in params_dict:
+        if "frequency_penalty" not in params_dict:
             params_dict["frequency_penalty"] = 0
 
-        if "presence_penalty" in params_dict:
+        if "presence_penalty" not in params_dict:
             params_dict["presence_penalty"] = 0
 
-        if "n" in params_dict:
+        if "n" not in params_dict:
             params_dict["n"] = 1
 
-        if "request_timeout" in params_dict:
+        if "request_timeout" not in params_dict:
             params_dict["request_timeout"] = 600
 
-        if "logit_bias" in params_dict:
+        if "logit_bias" not in params_dict:
             params_dict["logit_bias"] = None
 
         if "openai_api_key" not in params_dict:
             params_dict["openai_api_key"] = ""
 
-        if "cache_enable" in params_dict:
+        if "cache_enable" not in params_dict:
             params_dict["cache_enable"] = True
 
         return params_dict
