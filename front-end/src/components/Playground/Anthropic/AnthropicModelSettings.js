@@ -66,7 +66,7 @@ const AnthropicModelSettings = ({
           <Slider
             defaultValue={maxTokens}
             min={1}
-            max={2048}
+            max={4000}
             onChange={setMaxTokens}
           />
         </Form.Item>

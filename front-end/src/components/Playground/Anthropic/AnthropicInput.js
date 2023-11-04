@@ -23,7 +23,7 @@ const AnthropicInput = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
   const [modelName, setModelName] = useState("claude-2");
   const [temperature, setTemperature] = useState(0.1);
-  const [maxTokens, setMaxTokens] = useState(1000);
+  const [maxTokens, setMaxTokens] = useState(2000);
   const [topP, setTopP] = useState(0.8);
   const [input, setInput] = useState("");
   const [apiResponse, setApiResponse] = useState("");
@@ -53,7 +53,7 @@ const AnthropicInput = forwardRef((props, ref) => {
           const parameters = item.parameters;
           setModelName(parameters.modelName || "gpt-3.5-turbo");
           setTemperature(parameters.temperature || 0.1);
-          setMaxTokens(parameters.maxTokens || 300);
+          setMaxTokens(parameters.maxTokens || 2000);
           setTopP(parameters.topP || 0.8);
           setInput(item.input || "");
           break;
