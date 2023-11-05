@@ -23,7 +23,7 @@ const OpenAIInput = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
   const [modelName, setModelName] = useState("gpt-3.5-turbo");
   const [temperature, setTemperature] = useState(0.1);
-  const [maxTokens, setMaxTokens] = useState(300);
+  const [maxTokens, setMaxTokens] = useState(1024);
   const [topP, setTopP] = useState(0.8);
   const [frequencyPenalty, setFrequencyPenalty] = useState(0);
   const [presencePenalty, setPresencePenalty] = useState(0);
@@ -55,7 +55,7 @@ const OpenAIInput = forwardRef((props, ref) => {
           const parameters = item.parameters;
           setModelName(parameters.modelName || "gpt-3.5-turbo");
           setTemperature(parameters.temperature || 0.1);
-          setMaxTokens(parameters.maxTokens || 300);
+          setMaxTokens(parameters.maxTokens || 1024);
           setTopP(parameters.topP || 0.8);
           setFrequencyPenalty(parameters.frequencyPenalty || 0);
           setPresencePenalty(parameters.presencePenalty || 0);

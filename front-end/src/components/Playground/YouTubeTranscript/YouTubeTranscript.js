@@ -17,6 +17,7 @@ import "./YouTubeTranscript.less";
 
 const YouTubeTranscript = forwardRef((props, ref) => {
   // State hooks
+  const [userInput, setUserInput] = useState("");
   const [input, setInput] = useState("");
   const [apiResponse, setApiResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +40,16 @@ const YouTubeTranscript = forwardRef((props, ref) => {
 
   // Effect hooks
   useEffect(() => {
+    setInput(`{${props.title} Content}`);
+    props.onUpdateInput(`{${props.title} Content}`);
+  }, [props.title]);
+
+  useEffect(() => {
+    props.onUpdateOutput(userInput);
+    props.onUpdateUserInput(userInput);
+  }, [userInput]);
+
+  useEffect(() => {
     if (loadedApplicationData && loadedApplicationData.chain) {
       for (const item of loadedApplicationData.chain) {
         if (item.id === props.id) {
@@ -49,31 +60,30 @@ const YouTubeTranscript = forwardRef((props, ref) => {
     }
   }, [loadedApplicationData, props.id]);
 
-  useEffect(() => {
-    props.onUpdateInput(input);
-  }, [input]);
-
   // Imperative handle
   useImperativeHandle(ref, () => ({
     async run() {
       return await handleRunClick();
     },
-    getInput() {
-      return input;
-    },
     setInput(newInput) {
       setInput(newInput);
+    },
+    setUserInput(newInput) {
+      setUserInput(newInput);
+    },
+    getInput() {
+      return input;
     },
   }));
 
   // Function definitions
-  const handleInputChange = (e) => setInput(e.target.value);
+  const handleInputChange = (e) => setUserInput(e.target.value);
   const handleRunClick = async () => {
     setIsLoading(true);
     setError(null);
     setApiResponse(null);
 
-    let processedInput = input;
+    let processedInput = userInput;
 
     previousComponents.forEach((component, i) => {
       if (component.type === "batch-input" && Array.isArray(component.output)) {
@@ -123,54 +133,6 @@ const YouTubeTranscript = forwardRef((props, ref) => {
     });
   };
 
-  const items = previousComponents
-    .map((component, index) => {
-      if (component === null || component === undefined) return null;
-      if (component.type === "batch-input" && Array.isArray(component.output)) {
-        return component.output.map((outputItem) => {
-          const columnName = outputItem.Field;
-          return {
-            label: `${columnName}`,
-            key: `${columnName}`,
-            onClick: () => {
-              const { selectionStart, selectionEnd } =
-                textAreaRef.current.resizableTextArea.textArea;
-              const toInsert = `{${columnName}}`;
-              setInput(
-                (prevInput) =>
-                  prevInput.substring(0, selectionStart) +
-                  toInsert +
-                  prevInput.substring(selectionEnd)
-              );
-            },
-          };
-        });
-      } else {
-        const label = component.title || `Action-${index + 1} Output`;
-        return {
-          label: label,
-          key: index.toString(),
-          onClick: () => {
-            const { selectionStart, selectionEnd } =
-              textAreaRef.current.resizableTextArea.textArea;
-            const toInsert = `{${label}}`;
-            setInput(
-              (prevInput) =>
-                prevInput.substring(0, selectionStart) +
-                toInsert +
-                prevInput.substring(selectionEnd)
-            );
-          },
-        };
-      }
-    })
-    .flat()
-    .filter(Boolean);
-
-  const menuProps = {
-    items,
-  };
-
   return (
     <div className="transcript-input">
       {props.isEditMode && (
@@ -181,7 +143,7 @@ const YouTubeTranscript = forwardRef((props, ref) => {
                 ref={textAreaRef}
                 addonBefore="Video Link"
                 placeholder="URL of the YouTube video"
-                value={input}
+                value={userInput}
                 onChange={handleInputChange}
               />
             </div>
