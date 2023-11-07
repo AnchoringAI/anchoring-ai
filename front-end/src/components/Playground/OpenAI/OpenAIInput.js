@@ -222,6 +222,7 @@ const OpenAIInput = forwardRef((props, ref) => {
         <>
           <div className="input-area">
             <Input.TextArea
+              className="text-area"
               ref={textAreaRef}
               placeholder="Enter your prompt"
               value={input}

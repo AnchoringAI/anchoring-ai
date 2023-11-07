@@ -55,7 +55,7 @@ const TextInput = forwardRef(
     return (
       <div className="text-input-container">
         <Input.TextArea
-          className="input-field"
+          className="text-area"
           placeholder="Enter your text"
           value={userInput}
           onChange={handleInputChange}
