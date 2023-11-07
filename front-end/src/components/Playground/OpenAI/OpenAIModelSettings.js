@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Drawer, Form, Slider, Select, Tooltip } from "antd";
 import "./OpenAIModelSettings.less";
 
@@ -20,6 +20,25 @@ const OpenAIModelSettings = ({
   presencePenalty,
   setPresencePenalty,
 }) => {
+  const [sliderMax, setSliderMax] = useState(2048);
+
+  useEffect(() => {
+    // Define the max tokens and slider max for each model
+    const modelSliderMax = {
+      "gpt-3.5-turbo-16k": 16385,
+      "gpt-4": 8192,
+      "gpt-4-1106-preview": 128000,
+    };
+
+    // Set max tokens and slider max when model name changes
+    if (modelSliderMax[modelName]) {
+      setMaxTokens(
+        Math.min(maxTokens, modelSliderMax[modelName])
+      );
+      setSliderMax(modelSliderMax[modelName]);
+    }
+  }, [modelName, setMaxTokens]);
+
   const handleModelNameChange = (value) => {
     setModelName(value);
   };
@@ -32,16 +51,25 @@ const OpenAIModelSettings = ({
       open={open}
       bodyStyle={{ paddingBottom: 80 }}
     >
-      <Form layout="vertical" hideRequiredMark>
+      <Form layout="vertical">
         <Form.Item label={"Model Name"}>
           <Select defaultValue={modelName} onChange={handleModelNameChange}>
-            <Option value="gpt-3.5-turbo">{"gpt-3.5-turbo"}</Option>
-            <Option value="gpt-4">{"gpt-4"}</Option>
+            <Option value="gpt-3.5-turbo-16k">
+              {"GPT-3.5 Trubo (gpt-3.5-turbo-16k)"}
+            </Option>
+            <Option value="gpt-4">{"GPT-4 (gpt-4)"}</Option>
+            <Option value="gpt-4-1106-preview">
+              {"GPT-4 Turbo (gpt-4-1106-preview)"}
+            </Option>
           </Select>
         </Form.Item>
         <Form.Item
           label={
-            <Tooltip title={"Controls the randomness of the model's responses. Higher values (closer to 1) mean more random output."}>
+            <Tooltip
+              title={
+                "Controls the randomness of the model's responses. Higher values (closer to 1) mean more random output."
+              }
+            >
               <div className="labelContainer">
                 <span>{"Temperature"}</span>
                 <span>{temperature}</span>
@@ -59,7 +87,11 @@ const OpenAIModelSettings = ({
         </Form.Item>
         <Form.Item
           label={
-            <Tooltip title={"The maximum length of the output in tokens. A higher value means a longer output."}>
+            <Tooltip
+              title={
+                "The maximum length of the output in tokens. A higher value means a longer output."
+              }
+            >
               <div className="labelContainer">
                 <span>{"Maximum Tokens"}</span>
                 <span>{maxTokens}</span>
@@ -68,15 +100,19 @@ const OpenAIModelSettings = ({
           }
         >
           <Slider
-            defaultValue={maxTokens}
+            value={maxTokens}
             min={1}
-            max={2048}
+            max={sliderMax}
             onChange={setMaxTokens}
           />
         </Form.Item>
         <Form.Item
           label={
-            <Tooltip title={"Controls the diversity of the model's responses via nucleus sampling. Higher values (closer to 1) mean less diverse output."}>
+            <Tooltip
+              title={
+                "Controls the diversity of the model's responses via nucleus sampling. Higher values (closer to 1) mean less diverse output."
+              }
+            >
               <div className="labelContainer">
                 <span>{"Top P"}</span>
                 <span>{topP}</span>
@@ -94,7 +130,11 @@ const OpenAIModelSettings = ({
         </Form.Item>
         <Form.Item
           label={
-            <Tooltip title={"The penalty for using new tokens in the output. Higher values discourage the model from using new tokens."}>
+            <Tooltip
+              title={
+                "The penalty for using new tokens in the output. Higher values discourage the model from using new tokens."
+              }
+            >
               <div className="labelContainer">
                 <span>{"Frequency Penalty"}</span>
                 <span>{frequencyPenalty}</span>
@@ -112,7 +152,11 @@ const OpenAIModelSettings = ({
         </Form.Item>
         <Form.Item
           label={
-            <Tooltip title={"The penalty for using tokens that were not in the input. Higher values discourage the model from introducing new concepts."}>
+            <Tooltip
+              title={
+                "The penalty for using tokens that were not in the input. Higher values discourage the model from introducing new concepts."
+              }
+            >
               <div className="labelContainer">
                 <span>{"Presence Penalty"}</span>
                 <span>{presencePenalty}</span>
