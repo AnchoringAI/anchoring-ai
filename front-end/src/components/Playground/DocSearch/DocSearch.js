@@ -257,6 +257,7 @@ const DocSearch = forwardRef((props, ref) => {
         <>
           <div className="input-area">
             <Input.TextArea
+              className="text-area"
               ref={textAreaRef}
               placeholder="Enter your search query"
               value={input}

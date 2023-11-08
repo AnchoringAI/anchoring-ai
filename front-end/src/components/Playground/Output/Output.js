@@ -165,7 +165,7 @@ const Output = forwardRef(
             <div className="input-area">
               <Input.TextArea
                 ref={textAreaRef}
-                className="input-field"
+                className="text-area"
                 placeholder="Enter your text"
                 value={input}
                 onChange={handleInputChange}
