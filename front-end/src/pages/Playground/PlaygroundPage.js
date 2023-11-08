@@ -362,7 +362,7 @@ const PlaygroundPage = () => {
             id: Date.now(),
             type: "youtube-transcript",
             title: generateTitle("youtube-transcript", prevComponents),
-            isAppInput: 0,
+            isAppInput: 1,
             isAppOutput: 1,
             activeSubMenu,
           },

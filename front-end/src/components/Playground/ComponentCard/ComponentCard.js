@@ -54,36 +54,36 @@ const ComponentCard = (props) => {
       <Row {...props.dragHandleProps} align="middle" justify="space-between">
         {(props.component.isAppInput ||
           (!props.component.isAppInput && props.isEditMode)) && (
-            <>
-              {" "}
-              <Col>
-                <h3>
-                  {props.component.title}{" "}
-                  <small style={{ fontSize: "0.8em" }}>
-                    ({modelComponents[props.component.type]})
-                  </small>
-                </h3>
-              </Col>
-              <Col>
-                {props.isEditMode && (
-                  <>
-                    <Tooltip title="Edit">
-                      <EditOutlined
-                        className="edit-icon"
-                        onClick={() => setModalVisible(true)}
-                      />
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <DeleteOutlined
-                        className="delete-icon"
-                        onClick={() => props.deleteComponent(props.component.id)}
-                      />
-                    </Tooltip>
-                  </>
-                )}
-              </Col>
-            </>
-          )}
+          <>
+            {" "}
+            <Col>
+              <h3>
+                {props.component.title}{" "}
+                <small style={{ fontSize: "0.8em" }}>
+                  ({modelComponents[props.component.type]})
+                </small>
+              </h3>
+            </Col>
+            <Col>
+              {props.isEditMode && (
+                <>
+                  <Tooltip title="Edit">
+                    <EditOutlined
+                      className="edit-icon"
+                      onClick={() => setModalVisible(true)}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <DeleteOutlined
+                      className="delete-icon"
+                      onClick={() => props.deleteComponent(props.component.id)}
+                    />
+                  </Tooltip>
+                </>
+              )}
+            </Col>
+          </>
+        )}
       </Row>
       {modelComponents.hasOwnProperty(props.component.type) && (
         <ModelInput
@@ -139,9 +139,12 @@ const ComponentCard = (props) => {
             <Switch
               checked={isInput}
               onChange={(checked) => setIsInput(checked)}
-              disabled={["text-input", "batch-input", "output"].includes(
-                props.component.type
-              )}
+              disabled={[
+                "text-input",
+                "batch-input",
+                "output",
+                "youtube-transcript",
+              ].includes(props.component.type)}
             />
           </Col>
         </Row>
@@ -153,9 +156,11 @@ const ComponentCard = (props) => {
             <Switch
               checked={isOutput}
               onChange={(checked) => setIsOutput(checked)}
-              disabled={["batch-input", "output"].includes(
-                props.component.type
-              )}
+              disabled={[
+                "batch-input",
+                "output",
+                "youtube-transcript",
+              ].includes(props.component.type)}
             />
           </Col>
         </Row>
