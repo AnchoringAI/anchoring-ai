@@ -135,7 +135,7 @@ const YouTubeTranscript = forwardRef((props, ref) => {
 
   return (
     <div className="transcript-input">
-      {props.isEditMode && (
+      {
         <>
           <div className="action-row">
             <div className="input-field">
@@ -166,7 +166,7 @@ const YouTubeTranscript = forwardRef((props, ref) => {
             </div>
           </div> */}
         </>
-      )}
+      }
       {(apiResponse || isLoading || error || !props.isEditMode) && (
         <ResponseCard
           isLoading={isLoading}
