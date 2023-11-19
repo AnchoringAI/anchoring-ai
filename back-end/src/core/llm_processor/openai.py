@@ -1,74 +1,57 @@
 """Open AI."""
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.chains import LLMChain
-from langchain.callbacks import get_openai_callback
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 from config import logger
 
 
 class OpenAIProcessor:
     """Open AI processor."""
+
     # pylint: disable=too-many-arguments
-    def __init__(self, model_name="text-davinci-003",
-                 temperature=0.7,
-                 max_tokens=256,
-                 top_p=1,
-                 frequency_penalty=0,
-                 presence_penalty=0,
-                 n=1,
-                 request_timeout=60,
-                 logit_bias=None,
-                 openai_api_key="",
-                 cache_enable=True):
-
-        if logit_bias is None:
-            logit_bias = {}
-
+    def __init__(
+        self,
+        model_name="gpt-3.5-turbo",
+        temperature=0.7,
+        max_tokens=256,
+        n=1,
+        request_timeout=120,
+        openai_api_key="",
+        cache_enable=True,
+    ):
         self.model_name = model_name
         self.temperature = temperature
         self.max_tokens = max_tokens
-        self.top_p = top_p
-        self.frequency_penalty = frequency_penalty
-        self.presence_penalty = presence_penalty
         self.n = n
         self.request_timeout = request_timeout
-        self.logit_bias = logit_bias
         self.openai_api_key = openai_api_key
 
-        self.llm = OpenAI(model_name=model_name,
-                          temperature=temperature,
-                          max_tokens=max_tokens,
-                          top_p=top_p,
-                          frequency_penalty=frequency_penalty,
-                          presence_penalty=presence_penalty,
-                          n=n,
-                          request_timeout=request_timeout,
-                          logit_bias=logit_bias,
-                          openai_api_key=openai_api_key,
-                          cache=cache_enable)
+        self.llm = ChatOpenAI(
+            model_name=model_name,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            n=n,
+            request_timeout=request_timeout,
+            openai_api_key=openai_api_key,
+            cache=cache_enable,
+            streaming=True,
+            callbacks=[StreamingStdOutCallbackHandler()],
+        )
 
-    def complete(self, prompt, input_variables=None):
+    def complete(self, text):
         """Complete."""
-        llm_chain = LLMChain(llm=self.llm, prompt=prompt)
+        chat = self.llm
+        messages = [
+            HumanMessage(content=text),
+        ]
+        response = chat(messages)
+        print("response!!!!!!!!!!",response)
 
-        with get_openai_callback() as cb:
-            res = llm_chain(inputs=input_variables)
-
-            logger.debug(f"Total Tokens: {cb.total_tokens}")
-            logger.debug(f"Prompt Tokens: {cb.prompt_tokens}")
-            logger.debug(f"Completion Tokens: {cb.completion_tokens}")
-            logger.debug(f"Successful Requests: {cb.successful_requests}")
-            logger.debug(f"Total Cost (USD): ${cb.total_cost}")
-
-            return {
-                "result": res.get("text", ""),
-                "total_tokens": cb.total_tokens,
-                "prompt_tokens": cb.prompt_tokens,
-                "completion_tokens": cb.completion_tokens,
-                "successful_requests": cb.successful_requests,
-                "total_cost": cb.total_cost
-            }
+        return {
+            "result": response.content,
+        }
 
     @staticmethod
     def check_params_dict(params_dict):
@@ -89,23 +72,11 @@ class OpenAIProcessor:
         if "max_tokens" not in params_dict:
             params_dict["max_tokens"] = 256
 
-        if "top_p" not in params_dict:
-            params_dict["top_p"] = 1
-
-        if "frequency_penalty" not in params_dict:
-            params_dict["frequency_penalty"] = 0
-
-        if "presence_penalty" not in params_dict:
-            params_dict["presence_penalty"] = 0
-
         if "n" not in params_dict:
             params_dict["n"] = 1
 
         if "request_timeout" not in params_dict:
             params_dict["request_timeout"] = 600
-
-        if "logit_bias" not in params_dict:
-            params_dict["logit_bias"] = None
 
         if "openai_api_key" not in params_dict:
             params_dict["openai_api_key"] = ""
@@ -118,19 +89,25 @@ class OpenAIProcessor:
 
 class OpenAIEmbedding:
     """Open AI embedding."""
+
     # pylint: disable=too-many-arguments
-    def __init__(self, model="text-embedding-ada-002",
-                 embedding_ctx_length=8191,
-                 chunk_size=1000,
-                 max_retries=6,
-                 request_timeout=60,
-                 openai_api_key=""):
-        self.embedding_model = OpenAIEmbeddings(model=model,
-                                                embedding_ctx_length=embedding_ctx_length,
-                                                chunk_size=chunk_size,
-                                                max_retries=max_retries,
-                                                request_timeout=request_timeout,
-                                                openai_api_key=openai_api_key)
+    def __init__(
+        self,
+        model="text-embedding-ada-002",
+        embedding_ctx_length=8191,
+        chunk_size=1000,
+        max_retries=6,
+        request_timeout=60,
+        openai_api_key="",
+    ):
+        self.embedding_model = OpenAIEmbeddings(
+            model=model,
+            embedding_ctx_length=embedding_ctx_length,
+            chunk_size=chunk_size,
+            max_retries=max_retries,
+            request_timeout=request_timeout,
+            openai_api_key=openai_api_key,
+        )
 
     def embed_text(self, text):
         """Embed text."""

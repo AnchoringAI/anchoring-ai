@@ -56,7 +56,9 @@ class QuotaService:
             if (model_provider in model_providers and
                     get_selected_user_api_key_type_or_none(model_provider, user_id) is None):
                 quota_needed += 1
-                if entry.get("parameters", {}).get("model_name") == "gpt-4":
+                model_name =  entry.get("parameters", {}).get("model_name")
+
+                if model_name in ["gpt-4", "gpt-4-1106-preview"]:
                     quota_needed += 4
 
         return quota_needed
@@ -71,7 +73,10 @@ class QuotaService:
         if (model_provider in model_providers and
                 get_selected_user_api_key_type_or_none(model_provider, user_id) is None):
             quota_needed += 1
-            if data.get("parameters", {}).get("model_name") == "gpt-4":
+
+            model_name = data.get("parameters", {}).get("model_name")
+
+            if model_name in ["gpt-4", "gpt-4-1106-preview"]:
                 quota_needed += 4
 
         return quota_needed
