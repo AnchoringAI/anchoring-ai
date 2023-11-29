@@ -83,6 +83,7 @@ class Chain:
                 if action["is_output"]:
                     chain_outputs[name] = res
             elif action["type"] == "prompt":
+                text_obj = action["text_obj"]
                 name = action["name"]
                 res = action["object"].complete(
                     text_obj, input_variables=input_variables)
