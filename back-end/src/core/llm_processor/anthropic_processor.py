@@ -1,31 +1,37 @@
-from langchain.llms import Anthropic
-from langchain.chains import LLMChain
-
+from langchain.chat_models import ChatAnthropic
+from langchain.schema import HumanMessage
 
 class AnthropicProcessor:
     # Constructor (initialize object)
-    def __init__(self,
-                 model_name="claude-2",
-                 temperature=0.7,
-                 max_tokens=256,
-                 top_p=1,
-                 api_key=""):
-
-        self.llm = Anthropic(
+    def __init__(
+        self,
+        model_name="claude-2",
+        temperature=0.7,
+        max_tokens=256,
+        top_p=1,
+        api_key="",
+        cache_enable=True,
+    ):
+        self.llm = ChatAnthropic(
             model=model_name,
-            temperature=temperature,  
+            temperature=temperature,
             max_tokens_to_sample=max_tokens,
             top_p=top_p,
-            anthropic_api_key=api_key
+            anthropic_api_key=api_key,
+            cache=cache_enable,
         )
 
-    def complete(self, prompt, input_variables=None):
-        llm_chain = LLMChain(llm=self.llm, prompt=prompt)
+    def complete(self, text):
+        """Complete."""
+        chat = self.llm
+        messages = [
+            HumanMessage(content=text),
+        ]
+        response = chat(messages)
 
-        res = llm_chain(inputs=input_variables)
-        response_text =  res.get("text", "")
-
-        return {"result": response_text}
+        return {
+            "result": response.content,
+        }
 
     @staticmethod
     def check_params_dict(params_dict):

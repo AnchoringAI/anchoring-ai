@@ -97,8 +97,9 @@ def complete(prompt,
     if llm_processor is None:
         return None
 
-    prompt_obj = Prompt(llm_processor, prompt)
-    res = prompt_obj.complete(input_variables)
+    prompt_obj = Prompt(llm_processor)
+    text_obj = Text(prompt)
+    res = prompt_obj.complete(text_obj, input_variables)
 
     return res
 
@@ -195,8 +196,9 @@ def load_chain(action_list, llm_api_key_dict=None):
             if llm_processor is None:
                 return None
 
-            prompt_obj = Prompt(llm_processor, action["input"])
-            chain_obj.add_prompt(prompt_obj, action["name"],
+            prompt_obj = Prompt(llm_processor)
+            text_obj = Text(action["input"])
+            chain_obj.add_prompt(prompt_obj, text_obj, action["name"],
                                  action["is_app_input"], action["is_app_output"])
         elif action["type"] == "tag_parser":
             parser_obj = TagParser(action["tag"])

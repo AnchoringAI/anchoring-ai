@@ -16,10 +16,10 @@ class Chain:
              "is_input": is_input, "is_output": is_output})
         self.length += 1
 
-    def add_prompt(self, prompt_obj, name, is_input=False, is_output=True):
+    def add_prompt(self, prompt_obj, text_obj, name, is_input=False, is_output=True):
         """Add prompt."""
         self.action_list.append(
-            {"type": "prompt", "object": prompt_obj, "name": name,
+            {"type": "prompt", "object": prompt_obj, "text_obj": text_obj, "name": name,
              "is_input": is_input, "is_output": is_output})
         self.length += 1
 
@@ -83,9 +83,10 @@ class Chain:
                 if action["is_output"]:
                     chain_outputs[name] = res
             elif action["type"] == "prompt":
+                text_obj = action["text_obj"]
                 name = action["name"]
                 res = action["object"].complete(
-                    input_variables=input_variables)
+                    text_obj, input_variables=input_variables)
                 input_variables[name] = res
                 logger.debug(res)
 
